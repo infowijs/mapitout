@@ -16,6 +16,9 @@
 <style>
 @import "~normalize.css";
 </style>
+<style lang="scss">
+@import "style/typography.scss";
+</style>
 <style scoped lang="scss">
 @import "style/variables";
 
@@ -37,22 +40,19 @@ article {
   height: 100%;
   display: flex;
   flex-direction: column;
-
-  @media (min-width: $breakpoint-mobile) {
-    display: block;
-    flex-direction: unset;
-  }
 }
 section {
   flex-grow: 1;
   position: relative;
 
-  @media (min-width: $breakpoint-mobile) {
+  @media (min-width: $breakpoint-tablet) {
     flex-grow: unset;
     position: absolute;
     z-index: 1;
-    width: 100%;
-    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 }
 
@@ -67,7 +67,7 @@ aside {
     height: 100%;
   }
 
-  @media (min-width: $breakpoint-mobile) {
+  @media (min-width: $breakpoint-tablet) {
     height: auto;
     width: -moz-fit-content;
     overflow: visible;
