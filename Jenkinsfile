@@ -24,15 +24,15 @@ node {
 
     stage("Test") {
         tryStep "test", {
-            sh "docker-compose -p mapitout_frondend -f docker-compose.yml build && " +
-                    "docker-compose -p mapitout_frondend -f docker-compose.yml run --rm test"
+            sh "docker-compose -p mapitout_frontend -f docker-compose.yml build && " +
+                    "docker-compose -p mapitout_frontend -f docker-compose.yml run --rm test"
         }
     }
 
     stage("Build image") {
         tryStep "build", {
             docker.withRegistry('https://repo.data.amsterdam.nl','docker-registry') {
-                def image = docker.build("datapunt/mapitout_frondend:${env.BUILD_NUMBER}")
+                def image = docker.build("datapunt/mapitout_frontend:${env.BUILD_NUMBER}")
                 image.push()
             }
         }
@@ -47,7 +47,7 @@ if (BRANCH == "master") {
         stage('Push acceptance image') {
             tryStep "image tagging", {
                 docker.withRegistry('https://repo.data.amsterdam.nl','docker-registry') {
-                    def image = docker.image("datapunt/mapitout_frondend:${env.BUILD_NUMBER}")
+                    def image = docker.image("datapunt/mapitout_frontend:${env.BUILD_NUMBER}")
                     image.pull()
                     image.push("acceptance")
                 }
@@ -61,7 +61,7 @@ if (BRANCH == "master") {
                 build job: 'Subtask_Openstack_Playbook',
                 parameters: [
                     [$class: 'StringParameterValue', name: 'INVENTORY', value: 'acceptance'],
-                    [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-mapitout-frondend.yml'],
+                    [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-mapitout-frontend.yml'],
                 ]
             }
         }
@@ -69,7 +69,7 @@ if (BRANCH == "master") {
 
 
     stage('Waiting for approval') {
-        slackSend channel: '#ci-channel', color: 'warning', message: 'mapitout_frondend is waiting for Production Release - please confirm'
+        slackSend channel: '#ci-channel', color: 'warning', message: 'mapitout_frontend is waiting for Production Release - please confirm'
         input "Deploy to Production?"
     }
 
@@ -77,7 +77,7 @@ if (BRANCH == "master") {
         stage('Push production image') {
         tryStep "image tagging", {
             docker.withRegistry('https://repo.data.amsterdam.nl','docker-registry') {
-                def image = docker.image("datapunt/mapitout_frondend:${env.BUILD_NUMBER}")
+                def image = docker.image("datapunt/mapitout_frontend:${env.BUILD_NUMBER}")
                 image.pull()
                     image.push("production")
                     image.push("latest")
@@ -92,7 +92,7 @@ if (BRANCH == "master") {
                 build job: 'Subtask_Openstack_Playbook',
                 parameters: [
                     [$class: 'StringParameterValue', name: 'INVENTORY', value: 'production'],
-                    [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-mapitout-frondend.yml'],
+                    [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-mapitout-frontend.yml'],
                 ]
             }
         }
