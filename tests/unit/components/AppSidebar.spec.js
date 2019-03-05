@@ -1,12 +1,12 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 
-import AppTabs from "@/components/AppTabs.vue";
+import AppSidebar from "@/components/AppSidebar.vue";
 
 const localVue = createLocalVue();
 
-describe("AppTabs", () => {
+describe("AppSidebar", () => {
   it("should create", () => {
-    const wrapper = shallowMount(AppTabs, {
+    const wrapper = shallowMount(AppSidebar, {
       localVue
     });
 

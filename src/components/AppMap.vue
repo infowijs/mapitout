@@ -1,5 +1,5 @@
 <template>
-  <div class="map"></div>
+  <section class="map"></section>
 </template>
 <style scoped lang="scss">
 .map {
