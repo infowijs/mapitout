@@ -8,6 +8,8 @@ RUN npm install && npm cache clean --force
 COPY . /build/
 RUN npm run build
 
+COPY /deploy /deploy
+
 # webserver image.
 FROM nginx:latest
 MAINTAINER datapunt.ois@amsterdam.nl
