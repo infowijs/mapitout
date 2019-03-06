@@ -1,7 +1,5 @@
 <template>
-  <aside>
-    sidebar
-  </aside>
+  <aside></aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";

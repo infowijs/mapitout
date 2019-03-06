@@ -8,5 +8,6 @@ header {
   position: relative;
   background: $greyscale-0;
   overflow: visible;
+  height: 50px;
 }
 </style>
