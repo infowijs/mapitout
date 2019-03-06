@@ -9,28 +9,37 @@
 aside {
   background: white;
   height: 100px;
+  transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {
     min-width: 340px;
     height: unset;
+  }
 
-    &.expanded {
+  &.expanded {
+    height: 100%;
+
+    @media (min-width: $breakpoint-tablet-portrait) {
       height: unset;
     }
   }
+}
 
-  .handle-drag {
-    background: $greyscale-0;
-    height: 10px;
-    border-radius: 3px 3px 0 0;
-    cursor: pointer;
+.handle-drag {
+  background: $greyscale-0;
+  height: 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  cursor: pointer;
+  transition: border-top-left-radius 0.2s ease-in-out, border-top-right-radius 0.2s ease-in-out;
 
-    @media (min-width: $breakpoint-tablet-portrait) {
-      display: none;
-    }
+  .expanded & {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
-  &.expanded {
-    height: 100%;
+
+  @media (min-width: $breakpoint-tablet-portrait) {
+    display: none;
   }
 }
 </style>
