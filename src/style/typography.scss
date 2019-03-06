@@ -5,7 +5,7 @@ body {
   font-size: 13px;
   line-height: 22px;
 
-  @media (min-width: $breakpoint-tablet) {
+  @media (min-width: $breakpoint-tablet-portrait) {
     font-size: 17px;
     line-height: 27px;
   }
@@ -16,7 +16,7 @@ h1 {
   font-size: 16px;
   line-height: 20px;
 
-  @media (min-width: $breakpoint-tablet) {
+  @media (min-width: $breakpoint-tablet-portrait) {
     font-size: 24px;
     line-height: 30px;
   }
@@ -27,7 +27,7 @@ h2 {
   font-size: 17px;
   line-height: 22px;
 
-  @media (min-width: $breakpoint-tablet) {
+  @media (min-width: $breakpoint-tablet-portrait) {
     font-size: 22px;
     line-height: 22px;
   }
@@ -38,7 +38,7 @@ h3 {
   font-size: 14px;
   line-height: 22px;
 
-  @media (min-width: $breakpoint-tablet) {
+  @media (min-width: $breakpoint-tablet-portrait) {
     font-size: 18px;
     line-height: 22px;
   }

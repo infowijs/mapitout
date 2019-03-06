@@ -1,17 +1,9 @@
 <template>
-  <div id="app">
-    <app-header />
-    <main>
-      <article>
-        <section>
-          <app-map />
-        </section>
-        <aside>
-          <app-tabs />
-        </aside>
-      </article>
-    </main>
-  </div>
+  <main id="app">
+    <app-header class="app-header" />
+    <app-map class="app-map" />
+    <app-sidebar class="app-sidebar" />
+  </main>
 </template>
 <style>
 @import "~normalize.css";
@@ -22,75 +14,54 @@
 <style scoped lang="scss">
 @import "style/variables";
 
-#app {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 main {
-  position: relative;
-  flex-grow: 1;
-}
-
-article {
-  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-section {
-  flex-grow: 1;
   position: relative;
+}
 
-  @media (min-width: $breakpoint-tablet) {
-    flex-grow: unset;
-    position: absolute;
+.app-header {
+  position: relative;
+  z-index: 2;
+  min-height: 50px;
+}
+
+.app-map {
+  @media (min-width: $breakpoint-tablet-portrait) {
+    position: relative;
     z-index: 1;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    flex-grow: 1;
   }
 }
 
-aside {
-  height: 126px;
-  width: 100%;
-  overflow: hidden;
+.app-sidebar {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-  &.expanded {
-    position: absolute;
-    bottom: 0;
-    height: 100%;
-  }
-
-  @media (min-width: $breakpoint-tablet) {
-    height: auto;
-    width: -moz-fit-content;
-    overflow: visible;
+  @media (min-width: $breakpoint-tablet-portrait) {
+    top: 50px;
+    left: unset;
+    right: unset;
+    bottom: unset;
     margin: 24px 0 24px 24px;
-
-    &.expanded {
-      position: relative;
-      bottom: unset;
-      height: auto;
-    }
   }
 }
 </style>
 <script>
 import AppHeader from "./components/AppHeader";
 import AppMap from "./components/AppMap";
-import AppTabs from "./components/AppTabs";
+import AppSidebar from "./components/AppSidebar";
 
 export default {
   components: {
     AppHeader,
     AppMap,
-    AppTabs
+    AppSidebar
   }
 };
 </script>

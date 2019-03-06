@@ -5,10 +5,9 @@
 @import "../style/variables";
 
 header {
+  position: relative;
   background: $greyscale-0;
-  padding: 5px 10px;
-  height: 40px;
-  display: flex;
-  align-items: center;
+  overflow: visible;
+  height: 50px;
 }
 </style>
