@@ -18,6 +18,5 @@ ENV BASE_URL=https://api.data.amsterdam.nl/
 COPY cmd.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/cmd.sh
 
-COPY public/ /usr/share/nginx/html/
 COPY --from=build-deps /build/dist/ /usr/share/nginx/html/
 CMD cmd.sh
