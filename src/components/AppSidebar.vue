@@ -1,19 +1,21 @@
 <template>
-  <aside v-expandable>
-
-  </aside>
+  <aside v-expandable></aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";
 
 aside {
   background: white;
-  height: 100px;
+  height: 50px;
   transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {
     min-width: 340px;
     height: unset;
+  }
+
+  &.expanding {
+    transition: unset;
   }
 
   &.expanded {
@@ -33,6 +35,7 @@ aside {
   cursor: pointer;
   transition: border-top-left-radius 0.2s ease-in-out, border-top-right-radius 0.2s ease-in-out;
 
+  .expanding &,
   .expanded & {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
