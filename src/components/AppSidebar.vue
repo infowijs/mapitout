@@ -6,7 +6,7 @@
 
 aside {
   background: white;
-  height: 50px;
+  height: 100px;
   transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {
@@ -28,12 +28,27 @@ aside {
 }
 
 .handle-drag {
+  position: relative;
   background: $greyscale-0;
   height: 10px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   cursor: pointer;
   transition: border-top-left-radius 0.2s ease-in-out, border-top-right-radius 0.2s ease-in-out;
+
+  &::before,
+  &::after {
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 10px;
+    bottom: 100%;
+  }
+
+  &::after {
+    bottom: unset;
+    top: 100%;
+  }
 
   .expanding &,
   .expanded & {
