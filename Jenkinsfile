@@ -31,10 +31,8 @@ node {
 
     stage("Build image") {
         tryStep "build", {
-            docker.withRegistry('https://repo.data.amsterdam.nl','docker-registry') {
-                def image = docker.build("datapunt/mapitout_frontend:${env.BUILD_NUMBER}")
+                def image = docker.build("build.app.amsterdam.nl:5000/ois/mapitout_frontend:${env.BUILD_NUMBER}")
                 image.push()
-            }
         }
     }
 }
@@ -46,11 +44,9 @@ if (BRANCH == "master") {
     node {
         stage('Push acceptance image') {
             tryStep "image tagging", {
-                docker.withRegistry('https://repo.data.amsterdam.nl','docker-registry') {
-                    def image = docker.image("datapunt/mapitout_frontend:${env.BUILD_NUMBER}")
+                    def image = docker.image("build.app.amsterdam.nl:5000/ois/mapitout_frontend:${env.BUILD_NUMBER}")
                     image.pull()
                     image.push("acceptance")
-                }
             }
         }
     }
@@ -76,12 +72,10 @@ if (BRANCH == "master") {
     node {
         stage('Push production image') {
         tryStep "image tagging", {
-            docker.withRegistry('https://repo.data.amsterdam.nl','docker-registry') {
-                def image = docker.image("datapunt/mapitout_frontend:${env.BUILD_NUMBER}")
+                def image = docker.image("build.app.amsterdam.nl:5000/ois/mapitout_frontend:${env.BUILD_NUMBER}")
                 image.pull()
                     image.push("production")
                     image.push("latest")
-                }
             }
         }
     }
