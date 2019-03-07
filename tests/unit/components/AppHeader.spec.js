@@ -7,6 +7,7 @@ const localVue = createLocalVue();
 describe("AppHeader", () => {
   it("should create", () => {
     const wrapper = shallowMount(AppHeader, {
+      stubs: ["router-link"],
       localVue
     });
 

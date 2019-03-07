@@ -25,7 +25,6 @@ main {
 .app-header {
   position: relative;
   z-index: 2;
-  min-height: 50px;
 }
 
 .app-map {
