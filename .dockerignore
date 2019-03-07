@@ -1,1 +1,7 @@
 node_modules/
+.editorconfig
+.gitignore
+.idea
+.git
+LICENSE
+README.md

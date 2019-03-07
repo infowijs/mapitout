@@ -1,14 +1,12 @@
-# Build
+# build image
 FROM node:latest as build-deps
 MAINTAINER datapunt.ois@amsterdam.nl
 
-COPY package*.json /build/
-WORKDIR /build
-RUN npm install && npm cache clean --force
+RUN npm i -g yarn
 COPY . /build/
-RUN npm run build
-
 COPY /deploy /deploy
+WORKDIR /build
+RUN yarn && yarn run build
 
 # webserver image.
 FROM nginx:latest

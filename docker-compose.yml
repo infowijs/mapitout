@@ -4,12 +4,6 @@ services:
     build: .
     ports:
       - "8080:80"
-    environment:
-      BASE_URL: ${BASE_URL:-"https://localhost"}
-      MAP_LOGIN_ID:
-      MAP_LOGIN_PWD:
-    #volumes:
-      #- "./src:/usr/share/nginx/html/"
 
   test:
     build:

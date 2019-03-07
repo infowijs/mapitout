@@ -6,5 +6,5 @@ set -u
 
 cd /build
 
-npm run lint
-npm test
+yarn run lint
+yarn test:unit
