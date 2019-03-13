@@ -85,7 +85,7 @@ ul {
     width: 162px;
     padding: 9px 12px;
     border-radius: 3px;
-    box-shadow: 0 2px 4px 0 #00000055;
+    box-shadow: 0 2px 4px 0 $greyscale-2;
 
     &.fade-enter-active,
     &.fade-leave-active {
