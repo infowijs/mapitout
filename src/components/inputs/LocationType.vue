@@ -1,12 +1,15 @@
 <template>
   <div ref="rootEl">
-    <button :class="selectedClass" @click="onTriggerClick"></button>
+    <button :class="selectedClass" @click="onTriggerClick" />
     <transition name="fade">
       <ul v-if="isListVisible">
         <li v-for="option in options" v-bind:key="option.value">
-          <a :class="option.key" alt="option.description" @click="onListItemClick(option.value)">{{
-            option.label
-          }}</a>
+          <a
+            :class="option.key"
+            title="option.description"
+            @click="onListItemClick(option.value)"
+            >{{ option.label }}</a
+          >
         </li>
       </ul>
     </transition>
