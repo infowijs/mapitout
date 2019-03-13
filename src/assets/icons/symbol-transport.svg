@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Button/Icon/place/station</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Button/Icon/place/station" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="circle" fill="#FD6500" cx="14" cy="14" r="13"></circle>
+        <g id="bus" transform="translate(6.000000, 6.000000)">
+            <path d="M2.39058824,1.58186433 L2.39058824,13.6094118 L13.6094118,13.6094118 L13.6094118,1.58186433 C12.1279762,0.933160295 10.2584597,0.605557701 8,0.605557701 C5.74154025,0.605557701 3.87202379,0.933160295 2.39058824,1.58186433 Z" id="body" stroke="#FFFFFF" stroke-width="0.941176471"></path>
+            <path d="M15.36,4.48 L15.36,7.7395267" id="mirror2" stroke="#FFFFFF" stroke-width="1.28"></path>
+            <path d="M0.64,4.48 L0.64,7.7395267" id="mirror1" stroke="#FFFFFF" stroke-width="1.28"></path>
+            <path d="M1.88235294,8.47058824 L14.1176471,8.47058824 L14.1176471,14.1176471 L1.88235294,14.1176471 L1.88235294,8.47058824 Z M4.8,12.16 C5.33019336,12.16 5.76,11.7301934 5.76,11.2 C5.76,10.6698066 5.33019336,10.24 4.8,10.24 C4.26980664,10.24 3.84,10.6698066 3.84,11.2 C3.84,11.7301934 4.26980664,12.16 4.8,12.16 Z M11.2,12.16 C11.7301934,12.16 12.16,11.7301934 12.16,11.2 C12.16,10.6698066 11.7301934,10.24 11.2,10.24 C10.6698066,10.24 10.24,10.6698066 10.24,11.2 C10.24,11.7301934 10.6698066,12.16 11.2,12.16 Z" id="lights" fill="#FFFFFF"></path>
+            <path d="M5.12,15.68 C5.12,14.7963444 5.12,14.08 4.16,14.08 C3.2,14.08 3.2,14.7963444 3.2,15.68" id="wheel2" fill="#FFFFFF" transform="translate(4.160000, 14.880000) rotate(180.000000) translate(-4.160000, -14.880000) "></path>
+            <path d="M12.8,15.68 C12.8,14.7963444 12.8,14.08 11.84,14.08 C10.88,14.08 10.88,14.7963444 10.88,15.68" id="wheel1" fill="#FFFFFF" transform="translate(11.840000, 14.880000) rotate(180.000000) translate(-11.840000, -14.880000) "></path>
+        </g>
+    </g>
+</svg>

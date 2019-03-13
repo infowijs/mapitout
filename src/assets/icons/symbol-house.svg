@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Button/Icon/place/house</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Button/Icon/place/house" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval-16" fill="#FF0000" cx="14" cy="14" r="13"></circle>
+        <g id="house" transform="translate(6.000000, 7.000000)">
+            <path d="M1.92,6.25586258 L8,0.366847826 L14.08,6.25586258 L14.08,14.3672756 L7.04,14.3672756 L7.04,9.14988432 L3.84,9.14988432 L3.84,14.3672756 L1.92,14.3672756 L1.92,6.25586258 Z M8.96,9.13043478 L8.96,11.7391304 L11.52,11.7391304 L11.52,9.13043478 L8.96,9.13043478 Z" id="Combined-Shape" fill="#F7F7F7"></path>
+            <polyline id="Path-12" stroke="#F7F7F7" stroke-width="2.19142857" points="0.367421477 7.4712417 1.92 5.88913043 8 0 14.08 5.88913043 15.6325785 7.4712417"></polyline>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="7px" height="4px" viewBox="0 0 7 4" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Icons/Dropdown</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M1.44334362,0.333333333 C0.833749052,0.333333333 0.701274914,0.678132309 1.14601591,1.10209217 L3.77793321,3.61102956 C3.88583017,3.71388489 4.0631208,3.71163984 4.16866266,3.61102956 L6.80057996,1.10209217 C7.24596497,0.67751839 7.10749987,0.333333333 6.50325225,0.333333333 L1.44334362,0.333333333 Z" id="path-1"></path>
+    </defs>
+    <g id="Responsive-Design---Mobile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="mobile---add-range" transform="translate(-97.000000, -109.000000)">
+            <g id="Funtion-Range-Copy" transform="translate(-1.000000, 23.000000)">
+                <g id="Funtion-Range">
+                    <g id="Range-tab" transform="translate(0.000000, 10.000000)">
+                        <g id="Starting-point" transform="translate(64.000000, 64.000000)">
+                            <g id="Icons/Dropdown" transform="translate(34.000000, 12.000000)">
+                                <mask id="mask-2" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                </mask>
+                                <use id="Mask" fill="#4D4D4D" xlink:href="#path-1"></use>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
