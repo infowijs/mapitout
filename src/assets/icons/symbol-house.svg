@@ -1,13 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
-    <title>Button/Icon/place/house</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Button/Icon/place/house" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="Oval-16" fill="#FF0000" cx="14" cy="14" r="13"></circle>
-        <g id="house" transform="translate(6.000000, 7.000000)">
-            <path d="M1.92,6.25586258 L8,0.366847826 L14.08,6.25586258 L14.08,14.3672756 L7.04,14.3672756 L7.04,9.14988432 L3.84,9.14988432 L3.84,14.3672756 L1.92,14.3672756 L1.92,6.25586258 Z M8.96,9.13043478 L8.96,11.7391304 L11.52,11.7391304 L11.52,9.13043478 L8.96,9.13043478 Z" id="Combined-Shape" fill="#F7F7F7"></path>
-            <polyline id="Path-12" stroke="#F7F7F7" stroke-width="2.19142857" points="0.367421477 7.4712417 1.92 5.88913043 8 0 14.08 5.88913043 15.6325785 7.4712417"></polyline>
-        </g>
+<svg width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fill-rule="evenodd">
+        <circle fill="red" cx="14" cy="14" r="13"/>
+        <path d="M7.92 13.256L14 7.366l6.08 5.89v8.111h-7.04V16.15h-3.2v5.217H7.92v-8.111zm7.04 2.874v2.61h2.56v-2.61h-2.56z" fill="#F7F7F7"/>
+        <path stroke="#F7F7F7" stroke-width="2.191" d="M6.367 14.471L7.92 12.89 14 7l6.08 5.89 1.553 1.581"/>
     </g>
 </svg>

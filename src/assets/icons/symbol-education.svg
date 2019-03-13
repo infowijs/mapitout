@@ -1,15 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
-    <title>Button/Icon/place/school</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Button/Icon/place/school" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle id="Oval-16" fill="#0C65D5" cx="14" cy="14" r="13"></circle>
-        <g id="school" transform="translate(6.000000, 8.000000)">
-            <path d="M14.1666667,4.15384615 L14.1666667,9.69230769" id="Line-3" stroke="#FFFFFF" stroke-width="0.5" fill="#000000" stroke-linecap="square"></path>
-            <ellipse id="Oval-2" fill="#FFFFFF" cx="14.1666667" cy="10.1538462" rx="1" ry="1"></ellipse>
-            <path d="M2.83333333,6 L2.83333333,7.84826687 C2.83333333,9.89961023 4.49627569,11.5625526 6.54761905,11.5625526 L9.28227186,11.5625526 C11.3336152,11.5625526 12.9965576,9.89961023 12.9965576,7.84826687 L12.9965576,6 L8.10070027,8.11039562 L2.83333333,6 Z" id="Path-40" fill="#FFFFFF"></path>
-            <polygon id="Path-39" fill="#FFFFFF" points="8.12558326 0 0.0699936996 4.25367765 8.12558326 7.38461538 16.1811728 3.7958167"></polygon>
+<svg width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" fill-rule="evenodd">
+        <circle fill="#0C65D5" cx="14" cy="14" r="13"/>
+        <g transform="translate(6 8)">
+            <path d="M14.167 4.154v5.538" stroke="#FFF" stroke-width=".5" fill="#000" stroke-linecap="square"/>
+            <ellipse fill="#FFF" cx="14.167" cy="10.154" rx="1" ry="1"/>
+            <path d="M2.833 6v1.848a3.714 3.714 0 0 0 3.715 3.715h2.734a3.714 3.714 0 0 0 3.715-3.715V6L8.1 8.11 2.833 6z" fill="#FFF"/>
+            <path fill="#FFF" d="M8.126 0L.07 4.254l8.056 3.13 8.055-3.588z"/>
         </g>
     </g>
 </svg>
