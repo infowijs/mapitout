@@ -1,15 +1,12 @@
 <template>
   <div ref="rootEl">
-    <button :class="selectedClass" @click="onTriggerClick" />
+    <button class="trigger" :class="selectedClass" @click="onTriggerClick" />
     <transition name="fade">
       <ul v-if="isListVisible">
         <li v-for="option in options" v-bind:key="option.value">
-          <a
-            :class="option.value"
-            title="option.description"
-            @click="onListItemClick(option.value)"
-            >{{ option.label }}</a
-          >
+          <button class="option" :class="option.value" @click="onListItemClick(option.value)">
+            {{ option.label }}
+          </button>
         </li>
       </ul>
     </transition>
@@ -39,7 +36,7 @@ div {
   height: 28px;
 }
 
-button {
+.trigger {
   display: none;
 
   @media (min-width: $breakpoint-tablet-portrait) {
@@ -102,13 +99,14 @@ ul {
   li {
     margin: 5px 11px;
 
-    a {
-      display: block;
+    .option {
       width: 30px;
-      padding-top: 30px;
+      padding: 30px 0 0 0;
       background-size: 26px 26px;
       background-position: center 2px;
       background-repeat: no-repeat;
+      background-color: transparent;
+      border: 0 none;
       cursor: pointer;
       font-size: 11px;
       text-align: center;
@@ -149,16 +147,12 @@ select {
 </style>
 <script>
 const LOCATION_TYPES = [
-  { value: "home", label: "Home", description: "Home" },
-  {
-    value: "transport",
-    label: "Station",
-    description: "Public Transport Station"
-  },
-  { value: "health", label: "Health", description: "Health Care Facilities" },
-  { value: "work", label: "Work", description: "Work" },
-  { value: "education", label: "School", description: "Education Facilities" },
-  { value: "wellness", label: "Gym", description: "Wellness Facilities" }
+  { value: "home", label: "Home" },
+  { value: "transport", label: "Station" },
+  { value: "health", label: "Health" },
+  { value: "work", label: "Work" },
+  { value: "education", label: "School" },
+  { value: "wellness", label: "Gym" }
 ];
 
 export default {

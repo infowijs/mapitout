@@ -54,7 +54,7 @@ describe("LocationType", () => {
 
     wrapper.find("button").trigger("click");
 
-    wrapper.find("ul li:first-child a").trigger("click");
+    wrapper.find("ul li:first-child button").trigger("click");
 
     expect(wrapper.vm.isListVisible).toBeFalsy();
     expect(selectItemSpy).toHaveBeenCalled();
