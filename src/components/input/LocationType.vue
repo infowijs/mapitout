@@ -5,7 +5,7 @@
       <ul v-if="isListVisible">
         <li v-for="option in options" v-bind:key="option.value">
           <a
-            :class="option.key"
+            :class="option.value"
             title="option.description"
             @click="onListItemClick(option.value)"
             >{{ option.label }}</a
@@ -130,10 +130,11 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  font-size: 0;
+  font-size: 16px;
   background-repeat: no-repeat, no-repeat;
   background-position: center right, left, center;
   cursor: pointer;
+  color: transparent;
 
   @media (min-width: $breakpoint-tablet-portrait) {
     display: none;
@@ -147,20 +148,30 @@ select {
 }
 </style>
 <script>
-const ADDRESS_TYPES = [
-  { value: "home", label: "Home", key: "home", description: "Home" },
-  { value: "station", label: "Station", key: "transport", description: "Public Transport Station" },
-  { value: "health", label: "Health", key: "health", description: "Health Care Facilities" },
-  { value: "work", label: "Work", key: "work", description: "Work" },
-  { value: "school", label: "School", key: "education", description: "Education Facilities" },
-  { value: "gym", label: "Gym", key: "wellness", description: "Wellness Facilities" }
+const LOCATION_TYPES = [
+  { value: "home", label: "Home", description: "Home" },
+  {
+    value: "transport",
+    label: "Station",
+    description: "Public Transport Station"
+  },
+  { value: "health", label: "Health", description: "Health Care Facilities" },
+  { value: "work", label: "Work", description: "Work" },
+  { value: "education", label: "School", description: "Education Facilities" },
+  { value: "wellness", label: "Gym", description: "Wellness Facilities" }
 ];
 
 export default {
-  props: ["value"],
+  props: {
+    value: {
+      type: String,
+      default: "home",
+      validator: value => LOCATION_TYPES.map(type => type.value).indexOf(value) !== -1
+    }
+  },
   data() {
     return {
-      options: ADDRESS_TYPES,
+      options: LOCATION_TYPES,
       selected: "home",
       selectedClass: "selected-home",
       isListVisible: false
@@ -194,7 +205,7 @@ export default {
     },
 
     selectItem(value) {
-      this.selectedClass = `selected-${this.options.find(option => option.value === value).key}`;
+      this.selectedClass = `selected-${this.options.find(option => option.value === value).value}`;
 
       this.$emit("input", value);
     }
