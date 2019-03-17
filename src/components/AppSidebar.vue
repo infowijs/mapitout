@@ -1,5 +1,9 @@
 <template>
-  <aside v-expandable></aside>
+  <aside v-expandable>
+    <div>
+      <location @input="onInput"></location>
+    </div>
+  </aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";
@@ -10,7 +14,8 @@ aside {
   transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {
-    min-width: 340px;
+    width: 244px;
+    padding: 24px 48px;
     height: unset;
   }
 
@@ -63,6 +68,24 @@ aside {
 </style>
 <script>
 import "../directives/expandable";
+import Location from "./input/Location";
 
-export default {};
+export default {
+  data() {
+    return {
+      locationAddress: {}
+    };
+  },
+  components: { Location },
+  methods: {
+    onInput(value) {
+      console.log(value);
+    }
+  },
+  watch: {
+    locationAddress: value => {
+      console.log(value.value, value.coordinates);
+    }
+  }
+};
 </script>

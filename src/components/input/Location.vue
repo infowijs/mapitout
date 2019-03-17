@@ -1,0 +1,71 @@
+<template>
+  <div>
+    <location-type class="type" v-model="value.type" @input="onInput"></location-type>
+    <location-address class="address" v-model="value.address" @input="onInput"></location-address>
+  </div>
+</template>
+<style scoped lang="scss">
+div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.address {
+  flex-grow: 1;
+  margin-left: 12px;
+}
+</style>
+<script>
+import LocationType from "./LocationType";
+import LocationAddress from "./LocationAddress";
+
+export default {
+  props: {
+    value: {
+      type: Object,
+      default: function() {
+        return {
+          type: "home",
+          address: {
+            value: "",
+            coordinates: {
+              lat: null,
+              lng: null
+            }
+          }
+        };
+      }
+    }
+  },
+  components: {
+    LocationType,
+    LocationAddress
+  },
+  methods: {
+    onInput() {
+      if (this.validate()) {
+        this.$emit("input", this.value);
+      }
+    },
+
+    validate() {
+      let valid = false;
+      const address = this.value.address.value;
+      const coords = this.value.address.coordinates;
+
+      if (address.length > 0) {
+        if (coords.lat !== 0 && coords.lng !== 0) {
+          valid = true;
+        }
+      } else {
+        if (coords.lat === 0 && coords.lng === 0) {
+          valid = true;
+        }
+      }
+
+      return valid;
+    }
+  }
+};
+</script>
