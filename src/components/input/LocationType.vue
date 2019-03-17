@@ -32,7 +32,6 @@ $locationTypeIconPaths: (
 div {
   position: relative;
   overflow: visible;
-  width: 28px;
   height: 28px;
 }
 
