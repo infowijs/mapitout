@@ -28,11 +28,7 @@ export default {
         return {
           type: "home",
           address: {
-            value: "",
-            coordinates: {
-              lat: null,
-              lng: null
-            }
+            address: "aasdas"
           }
         };
       }
@@ -51,17 +47,14 @@ export default {
 
     validate() {
       let valid = false;
-      const address = this.value.address.value;
+
+      const address = this.value.address.address;
       const coords = this.value.address.coordinates;
 
-      if (address.length > 0) {
-        if (coords.lat !== 0 && coords.lng !== 0) {
-          valid = true;
-        }
-      } else {
-        if (coords.lat === 0 && coords.lng === 0) {
-          valid = true;
-        }
+      if (address.length > 0 && coords) {
+        valid = true;
+      } else if (!coords) {
+        valid = true;
       }
 
       return valid;

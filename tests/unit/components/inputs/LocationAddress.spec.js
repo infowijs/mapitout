@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 
-import LocationAddress from "@/components/input/LocationAddress.vue";
+import LocationAddress, { defaultValue } from "@/components/input/LocationAddress.vue";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -35,7 +35,7 @@ describe("LocationAddress", () => {
 
   it("should initialize with the passed in value string", () => {
     const initialValue = {
-      value: "aaaa",
+      address: "initial address",
       coordinates: { lat: 1, lng: 2 }
     };
     const wrapper = shallowMount(LocationAddress, {
@@ -45,7 +45,7 @@ describe("LocationAddress", () => {
       }
     });
 
-    expect(wrapper.vm.query).toEqual(initialValue.value);
+    expect(wrapper.vm.query).toEqual(initialValue.address);
   });
 
   it("should mask the input by default and hide the mask on focus", () => {
@@ -53,11 +53,33 @@ describe("LocationAddress", () => {
       localVue
     });
 
-    expect(wrapper.contains(".mask")).toBeTruthy();
+    expect(wrapper.classes("focused")).toBeFalsy();
 
     wrapper.find("input").trigger("focus");
 
-    expect(wrapper.contains(".mask")).toBeFalsy();
+    expect(wrapper.classes("focused")).toBeTruthy();
+  });
+
+  it("should select the first item in the list whenever the list displayed", () => {
+    const wrapper = shallowMount(LocationAddress, {
+      localVue
+    });
+    wrapper.vm.focusedSuggestionIndex = -1;
+    wrapper.vm.displaySuggestions = true;
+
+    expect(wrapper.vm.focusedSuggestionIndex).toEqual(0);
+  });
+
+  it("should deselect the selected item in the list whenever the list hidden", () => {
+    const wrapper = shallowMount(LocationAddress, {
+      localVue
+    });
+
+    wrapper.vm.displaySuggestions = true;
+    wrapper.vm.focusedSuggestionIndex = 1;
+    wrapper.vm.displaySuggestions = false;
+
+    expect(wrapper.vm.focusedSuggestionIndex).toEqual(-1);
   });
 
   it("should fetch the suggestions on user input", () => {
@@ -65,11 +87,11 @@ describe("LocationAddress", () => {
       localVue
     });
 
-    const suggestSpy = jest.spyOn(wrapper.vm, "suggest");
+    const debouncedSuggestSpy = jest.spyOn(wrapper.vm, "debouncedSuggest").mockImplementation();
 
     wrapper.find("input").setValue("aaa");
 
-    expect(suggestSpy).toHaveBeenCalledWith("aaa");
+    expect(debouncedSuggestSpy).toHaveBeenCalledWith("aaa");
   });
 
   it("should debounce the suggestion calls on user input", done => {
@@ -78,52 +100,58 @@ describe("LocationAddress", () => {
       mocks: { $store }
     });
 
+    const suggestSpy = jest.spyOn(wrapper.vm, "suggest").mockImplementation();
+
     wrapper.find("input").setValue("aaa");
     wrapper.find("input").setValue("aaaa");
+    wrapper.find("input").setValue("aaaaaaa");
 
     setTimeout(() => {
-      expect(addressStoreModule.actions.search).toHaveBeenCalledTimes(1);
+      expect(suggestSpy).toHaveBeenCalledTimes(1);
 
       done();
     }, 550);
   });
 
-  it("should clear suggestions for queries shorter than 3 characters", done => {
+  it("should select the focused suggestion on Enter in the input control", () => {
     const wrapper = shallowMount(LocationAddress, {
-      localVue,
-      mocks: { $store }
+      localVue
+    });
+    const selectedSuggestion = 1;
+
+    const selectSpy = jest.spyOn(wrapper.vm, "select").mockImplementation();
+
+    wrapper.vm.focusedSuggestionIndex = selectedSuggestion;
+
+    wrapper.find("input").trigger("keydown", {
+      key: "Enter"
     });
 
-    wrapper.vm.suggest("aa");
-
-    setTimeout(() => {
-      expect(addressStoreModule.actions.search).not.toHaveBeenCalled();
-      expect(wrapper.vm.suggestions).toEqual([]);
-      expect(wrapper.vm.displaySuggestions).toBeFalsy();
-      done();
-    }, 550);
+    expect(selectSpy).toHaveBeenCalledWith(selectedSuggestion);
   });
 
-  it("should fetch suggestions for queries longer than 2 characters", done => {
+  it("should clear the value on Enter in the input control without a focused suggestion", () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue,
-      mocks: { $store }
+      propsData: {
+        value: {
+          address: "aaa",
+          coordinates: { lat: 1, lng: 2 }
+        }
+      }
     });
-    const query = "aaa";
 
-    addressStoreModule.actions.search.mockResolvedValue([{}]);
+    wrapper.vm.focusedSuggestionIndex = -1;
+    wrapper.vm.query = "bb";
 
-    wrapper.vm.suggest(query);
+    wrapper.find("input").trigger("keydown", {
+      key: "Enter"
+    });
 
-    setTimeout(() => {
-      expect(addressStoreModule.actions.search).toHaveBeenCalled();
-      expect(wrapper.vm.displaySuggestions).toBeTruthy();
-
-      done();
-    }, 550);
+    expect(wrapper.emitted("input")[0]).toEqual([defaultValue]);
   });
 
-  it("should select a list item whenever a user clicks / taps on it", () => {
+  it("should set its value whenever a user clicks on a suggestion", () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue
     });
@@ -151,61 +179,50 @@ describe("LocationAddress", () => {
     expect(selectSpy).toHaveBeenCalledWith(1);
   });
 
-  it("should select the focused index whenever the user punches the Enter key, if any", () => {
+  it("should clear suggestions for queries shorter than 3 characters", async () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue
     });
 
-    const selectSpy = jest.spyOn(wrapper.vm, "select").mockImplementation();
+    await wrapper.vm.suggest("aa");
 
-    wrapper.vm.focusedListIndex = 0;
-
-    wrapper.trigger("keydown", {
-      key: "Enter"
-    });
-
-    expect(selectSpy).toHaveBeenCalledWith(0);
+    expect(wrapper.vm.suggestions).toEqual([]);
+    expect(wrapper.vm.displaySuggestions).toBeFalsy();
   });
 
-  it("should clear the currently set value whenever the user punches the Enter key with no focused index", () => {
+  it("should fetch suggestions for queries longer than 2 characters", async () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue,
-      propsData: {
-        value: {
-          value: "aaa",
-          coordinates: {
-            lat: 1,
-            lng: 2
-          }
-        }
-      }
+      mocks: { $store }
     });
+    const suggestions = [{ id: "test-id", address: "test-address" }];
+    const query = "aaa";
 
-    wrapper.vm.focusedListIndex = -1;
-    wrapper.vm.query = "aaaa";
+    addressStoreModule.actions.search.mockResolvedValue(suggestions);
 
-    wrapper.trigger("keydown", {
-      key: "Enter"
-    });
+    await wrapper.vm.suggest(query);
 
-    expect(wrapper.emitted("input")[0]).toEqual([{ value: "", coordinates: { lat: 0, lng: 0 } }]);
+    expect(addressStoreModule.actions.search).toHaveBeenCalled();
+    expect(wrapper.vm.displaySuggestions).toBeTruthy();
+    expect(wrapper.vm.suggestions).toEqual(suggestions);
   });
 
-  it("should default select the first item in the list whenever the list id displayed and deselect it on hide", () => {
+  it("should skip on displaying the suggestions when none are returned", async () => {
     const wrapper = shallowMount(LocationAddress, {
-      localVue
+      localVue,
+      mocks: { $store }
     });
+    const suggestions = [];
+    const query = "aaa";
 
-    wrapper.vm.displaySuggestions = true;
+    addressStoreModule.actions.search.mockResolvedValue(suggestions);
 
-    expect(wrapper.vm.focusedListIndex).toEqual(0);
+    await wrapper.vm.suggest(query);
 
-    wrapper.vm.displaySuggestions = false;
-
-    expect(wrapper.vm.focusedListIndex).toEqual(-1);
+    expect(wrapper.vm.displaySuggestions).toBeFalsy();
   });
 
-  it("should attempt to resolve the selected item", () => {
+  it("should resolve the selected suggestion and hide the list", async () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue,
       mocks: { $store }
@@ -219,13 +236,13 @@ describe("LocationAddress", () => {
     wrapper.vm.suggestions = suggestions;
     wrapper.vm.displaySuggestions = true;
 
-    wrapper.vm.select(0);
+    await wrapper.vm.select(0);
 
     expect(addressStoreModule.actions.resolve).toHaveBeenCalled();
     expect(addressStoreModule.actions.resolve.mock.calls[0][1]).toEqual(suggestions[0].id);
   });
 
-  it("should update the value, query and hide the suggestions on a successful resolve after selection", async () => {
+  it("should set it value on a successful resolve", async () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue,
       mocks: { $store }
@@ -245,11 +262,10 @@ describe("LocationAddress", () => {
 
     expect(wrapper.emitted("input")[0]).toEqual([
       {
-        value: suggestions[0].address,
+        address: suggestions[0].address,
         coordinates: resolvedCooordinates
       }
     ]);
     expect(wrapper.vm.query).toEqual(suggestions[0].address);
-    expect(wrapper.vm.displaySuggestions).toEqual(false);
   });
 });

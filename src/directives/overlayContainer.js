@@ -2,7 +2,7 @@ import Vue from "vue";
 
 const documentClickHandlers = new WeakMap();
 
-Vue.directive("toggle-prop", {
+Vue.directive("overlay-container", {
   bind: function(el, binding, vNode) {
     const togglePropName = binding.value.togglePropName;
 
@@ -23,7 +23,8 @@ Vue.directive("toggle-prop", {
   },
 
   unbind: function(el) {
-    document.removeEventListener()("click", documentClickHandlers.get(el));
+    document.removeEventListener("click", documentClickHandlers.get(el));
+
     documentClickHandlers.delete(el);
   }
 });

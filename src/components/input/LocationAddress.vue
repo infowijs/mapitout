@@ -1,28 +1,27 @@
 <template>
   <label
-    ref="rootEl"
-    @keydown="onKeyDown"
-    v-toggle-prop="{ propName: 'displaySuggestions' }"
+    :class="{ focused: isInputFocused }"
+    v-overlay-container="{ togglePropName: 'displaySuggestions' }"
     v-navigable-list="{
-      focusedIndexPropName: 'focusedListIndex',
+      focusedIndexPropName: 'focusedSuggestionIndex',
       focusedItemClassName: 'focused'
     }"
   >
     <input
       type="text"
-      @input="onInput"
-      @focus="onFocus"
-      @blur="onBlur"
-      :value="query"
+      @input="onInputInput"
+      @focus="onInputFocus"
+      @blur="onInputBlur"
+      @keydown="onInputKeyDown"
+      v-model="query"
       :placeholder="placeholder"
     />
-    <div v-if="!isInputFocused" class="mask"></div>
     <ul v-if="displaySuggestions">
       <li
         v-for="(suggestion, index) in suggestions"
         :key="suggestion.id"
-        @click="select(index)"
-        :class="{ focused: index === focusedListIndex }"
+        @click="onSuggestionClick(index)"
+        :class="{ focused: index === focusedSuggestionIndex }"
       >
         <span>{{ suggestion.address }}</span>
       </li>
@@ -37,17 +36,21 @@ label {
   flex-direction: row;
   position: relative;
   color: $greyscale-1;
-}
 
-.mask {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 25%;
-  height: calc(100% - 2px);
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+  &::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25%;
+    height: calc(100% - 2px);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+  }
+
+  &.focused::after {
+    content: none;
+  }
 }
 
 input {
@@ -89,8 +92,13 @@ ul {
 import { debounce } from "lodash";
 import { mapActions } from "vuex";
 
-import "../../directives/toggleProp";
+import "../../directives/overlayContainer";
 import "../../directives/navigableList";
+
+export const defaultValue = {
+  address: "",
+  coordinates: null
+};
 
 export default {
   props: {
@@ -101,13 +109,7 @@ export default {
     value: {
       type: Object,
       default: function() {
-        return {
-          value: "",
-          coordinates: {
-            lat: 0,
-            lng: 0
-          }
-        };
+        return { ...defaultValue };
       }
     }
   },
@@ -118,76 +120,78 @@ export default {
       isLoading: false,
       displaySuggestions: false,
       suggestions: [],
-      focusedListIndex: -1
+      focusedSuggestionIndex: -1
     };
   },
 
   mounted() {
-    this.query = this.value.value;
+    this.query = this.value.address;
   },
 
   watch: {
     displaySuggestions: function(value) {
-      this.focusedListIndex = value ? 0 : -1;
+      this.focusedSuggestionIndex = value ? 0 : -1;
     }
   },
 
   methods: {
-    ...mapActions(["reportError"]),
-
     ...mapActions("address", ["search", "resolve"]),
 
-    onFocus() {
+    debouncedSuggest: debounce(function(query) {
+      this.suggest(query);
+    }, 500),
+
+    onInputFocus() {
       this.isInputFocused = true;
     },
 
-    onBlur() {
+    onInputBlur() {
       this.isInputFocused = false;
     },
 
-    onKeyDown(event) {
+    onInputInput(event) {
+      this.debouncedSuggest(event.target.value);
+    },
+
+    onInputKeyDown(event) {
       if (event.key === "Enter") {
         event.preventDefault();
 
-        if (this.focusedListIndex !== -1) {
-          this.select(this.focusedListIndex);
-        } else if (this.value.value.length > 0 && this.query !== this.value.value) {
-          this.$emit("input", { value: "", coordinates: { lat: 0, lng: 0 } });
+        if (this.focusedSuggestionIndex !== -1) {
+          this.select(this.focusedSuggestionIndex);
+        } else if (this.value.address.length > 0 && this.value.address !== this.query) {
+          this.$emit("input", { ...defaultValue });
         }
       }
     },
 
-    onInput(event) {
-      this.suggest(event.target.value);
+    onSuggestionClick(index) {
+      this.select(index);
     },
 
-    suggest: debounce(async function(query) {
-      if (query !== this.query) {
-        if (query.length > 2) {
-          this.suggestions = await this.search(query);
-        } else {
-          this.suggestions = [];
-        }
+    async suggest(query) {
+      let suggestions = [];
 
-        this.query = query;
-
-        this.displaySuggestions = this.suggestions.length > 0;
+      if (query.length > 2) {
+        suggestions = await this.search(query);
       }
-    }, 500),
+
+      this.suggestions = suggestions;
+
+      this.displaySuggestions = this.suggestions.length > 0;
+    },
 
     async select(index) {
       const suggestion = this.suggestions[index];
-      const coords = await this.resolve(suggestion.id);
+      const address = suggestion.address;
+      const coordinates = await this.resolve(suggestion.id);
 
-      if (coords) {
-        const value = {
-          value: suggestion.address,
-          coordinates: coords
-        };
+      if (coordinates) {
+        const value = { address, coordinates };
 
         this.$emit("input", value);
 
-        this.query = value.value;
+        this.query = value.address;
       }
 
       this.displaySuggestions = false;
