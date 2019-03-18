@@ -2,7 +2,11 @@
   <label
     ref="rootEl"
     @keydown="onKeyDown"
-    v-toggle-prop-on-document-click="{ propName: 'displaySuggestions' }"
+    v-toggle-prop="{ propName: 'displaySuggestions' }"
+    v-navigable-list="{
+      focusedIndexPropName: 'focusedListIndex',
+      focusedItemClassName: 'focused'
+    }"
   >
     <input
       type="text"
@@ -12,10 +16,15 @@
       :value="query"
       :placeholder="placeholder"
     />
-    <div v-if="!isFocused" class="mask"></div>
-    <ul v-if="displaySuggestions" @mouseover="onListMouseOver">
-      <li v-for="(suggestion, index) in suggestions" :key="suggestion.id" @click="select(index)">
-        <span>{{ suggestion.weergavenaam }}</span>
+    <div v-if="!isInputFocused" class="mask"></div>
+    <ul v-if="displaySuggestions">
+      <li
+        v-for="(suggestion, index) in suggestions"
+        :key="suggestion.id"
+        @click="select(index)"
+        :class="{ focused: index === focusedListIndex }"
+      >
+        <span>{{ suggestion.address }}</span>
       </li>
     </ul>
   </label>
@@ -42,7 +51,6 @@ label {
 }
 
 input {
-  position: relative;
   font-size: 12px;
   line-height: 1.83px;
   border-width: 0 0 2px 0;
@@ -81,7 +89,8 @@ ul {
 import { debounce } from "lodash";
 import { mapActions } from "vuex";
 
-import "../../directives/togglePropOnDocumentClick";
+import "../../directives/toggleProp";
+import "../../directives/navigableList";
 
 export default {
   props: {
@@ -105,16 +114,22 @@ export default {
   data() {
     return {
       query: "",
-      isFocused: false,
-      isDirty: false,
+      isInputFocused: false,
       isLoading: false,
       displaySuggestions: false,
-      suggestions: []
+      suggestions: [],
+      focusedListIndex: -1
     };
   },
 
   mounted() {
     this.query = this.value.value;
+  },
+
+  watch: {
+    displaySuggestions: function(value) {
+      this.focusedListIndex = value ? 0 : -1;
+    }
   },
 
   methods: {
@@ -123,124 +138,56 @@ export default {
     ...mapActions("address", ["search", "resolve"]),
 
     onFocus() {
-      this.isFocused = true;
+      this.isInputFocused = true;
     },
 
     onBlur() {
-      this.isFocused = false;
-    },
-
-    onListMouseOver(event) {
-      const listEl = event.target.closest("li");
-
-      if (listEl && !listEl.classList.contains("focused")) {
-        this.$refs.rootEl.querySelectorAll("ul li").forEach(listEl => {
-          listEl.classList.remove("focused");
-        });
-
-        listEl.classList.add("focused");
-      }
+      this.isInputFocused = false;
     },
 
     onKeyDown(event) {
-      if (!["ArrowUp", "ArrowDown", "Enter", "Esc"].includes(event.key)) {
-        return;
-      }
-
-      event.preventDefault();
-
-      const suggestionEls = this.$refs.rootEl.querySelectorAll("ul li");
-
-      const currentIndex = Array.prototype.indexOf.call(
-        suggestionEls,
-        this.$refs.rootEl.querySelector("li.focused")
-      );
-
-      if (["ArrowUp", "ArrowDown"].includes(event.key)) {
-        const minIndex = 0;
-        const maxIndex = suggestionEls.length - 1;
-        let nextIndex;
-
-        switch (event.key) {
-          case "ArrowUp":
-            nextIndex =
-              currentIndex === -1
-                ? minIndex
-                : currentIndex - 1 < minIndex
-                ? minIndex
-                : currentIndex - 1;
-            break;
-          case "ArrowDown":
-            nextIndex =
-              currentIndex === -1
-                ? minIndex
-                : currentIndex + 1 > maxIndex
-                ? maxIndex
-                : currentIndex + 1;
-            break;
-        }
-
-        if (currentIndex !== nextIndex) {
-          if (currentIndex !== -1) {
-            suggestionEls.item(currentIndex).classList.remove("focused");
-          }
-          suggestionEls.item(nextIndex).classList.add("focused");
-        }
-      }
-
       if (event.key === "Enter") {
-        if (currentIndex !== -1) {
-          this.select(currentIndex);
-        } else if (this.query !== this.value.value) {
-          this.$emit("input", { value: "", coordinates: null });
-        }
-      }
+        event.preventDefault();
 
-      if (event.key === "Esc") {
-        this.displaySuggestions = false;
+        if (this.focusedListIndex !== -1) {
+          this.select(this.focusedListIndex);
+        } else if (this.value.value.length > 0 && this.query !== this.value.value) {
+          this.$emit("input", { value: "", coordinates: { lat: 0, lng: 0 } });
+        }
       }
     },
 
     onInput(event) {
-      const value = event.target.value;
-
-      this.isDirty = value.length > 0;
-
-      this.query = value;
-
-      if (value.length > 2) {
-        this.suggest(value);
-      } else {
-        this.suggestions = [];
-        this.displaySuggestions = false;
-      }
+      this.suggest(event.target.value);
     },
 
     suggest: debounce(async function(query) {
-      this.isLoading = true;
+      if (query !== this.query) {
+        if (query.length > 2) {
+          this.suggestions = await this.search(query);
+        } else {
+          this.suggestions = [];
+        }
 
-      this.suggestions = await this.search(query);
+        this.query = query;
 
-      this.isLoading = false;
-
-      if (this.suggestions.length > 0) {
-        this.displaySuggestions = true;
+        this.displaySuggestions = this.suggestions.length > 0;
       }
     }, 500),
 
     async select(index) {
-      const address = this.suggestions[index];
-      const coords = await this.resolve(address.id);
+      const suggestion = this.suggestions[index];
+      const coords = await this.resolve(suggestion.id);
 
       if (coords) {
         const value = {
-          value: address.weergavenaam,
+          value: suggestion.address,
           coordinates: coords
         };
 
-        this.query = value.value;
-
         this.$emit("input", value);
+
+        this.query = value.value;
       }
 
       this.displaySuggestions = false;
