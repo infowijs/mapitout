@@ -34,7 +34,12 @@ export const actions = {
     try {
       const result = await response.json();
 
-      return result.response.docs;
+      return result.response.docs.map(suggestion => {
+        return {
+          id: suggestion.id,
+          address: suggestion.weergavenaam
+        };
+      });
     } catch (error) {
       dispatch("reportError", new Error("Invalid response format"), { root: true });
 
