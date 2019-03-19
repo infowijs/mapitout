@@ -55,7 +55,17 @@ describe("v-overlay-container", () => {
       attachToDocument: true
     });
 
-    wrapper.vm.cursor = 1;
+    wrapper.vm.cursor = -1;
+
+    wrapper.trigger("keydown", {
+      key: "ArrowDown"
+    });
+    expect(wrapper.vm.cursor).toBe(0);
+
+    wrapper.trigger("keydown", {
+      key: "ArrowDown"
+    });
+    expect(wrapper.vm.cursor).toBe(1);
 
     wrapper.trigger("keydown", {
       key: "ArrowDown"

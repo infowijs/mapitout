@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-const documentClickHandlers = new WeakMap();
+export const documentClickHandlers = new WeakMap();
 
 Vue.directive("overlay-container", {
   bind: function(el, binding, vNode) {

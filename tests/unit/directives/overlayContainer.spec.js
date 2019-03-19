@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { mount, createLocalVue, shallowMount } from "@vue/test-utils";
 import "../../../src/directives/overlayContainer";
+import { documentClickHandlers } from "../../../src/directives/overlayContainer";
 
 const localVue = createLocalVue();
 
@@ -64,5 +65,21 @@ describe("v-overlay-container", () => {
     });
 
     expect(wrapper.vm.testProp).toBeFalsy();
+  });
+
+  it("should remove the document event handlers on unbind", () => {
+    const wrapper = shallowMount(TestComponent, {
+      localVue,
+      attachToDocument: true
+    });
+
+    const removeEventListenerSpy = jest.spyOn(document, "removeEventListener");
+
+    const handler = documentClickHandlers.get(wrapper.vm.$el);
+
+    wrapper.destroy();
+
+    expect(documentClickHandlers.has(wrapper.vm.$el)).toBeFalsy();
+    expect(removeEventListenerSpy).toHaveBeenCalledWith("click", handler);
   });
 });

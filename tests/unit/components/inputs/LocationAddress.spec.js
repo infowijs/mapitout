@@ -59,6 +59,10 @@ describe("LocationAddress", () => {
 
     expect(wrapper.classes("focused")).toBeTruthy();
     expect(wrapper.emitted("focus")).toBeTruthy();
+
+    wrapper.find("input").trigger("blur");
+
+    expect(wrapper.classes("focused")).toBeFalsy();
   });
 
   it("should select the first item in the list whenever the list displayed", () => {
