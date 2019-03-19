@@ -1,9 +1,5 @@
 <template>
-  <aside v-expandable>
-    <div>
-      <location @input="onInput"></location>
-    </div>
-  </aside>
+  <aside v-expandable></aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";
@@ -68,24 +64,6 @@ aside {
 </style>
 <script>
 import "../directives/expandable";
-import Location from "./input/Location";
 
-export default {
-  data() {
-    return {
-      locationAddress: {}
-    };
-  },
-  components: { Location },
-  methods: {
-    onInput(value) {
-      console.log(value);
-    }
-  },
-  watch: {
-    locationAddress: value => {
-      console.log(value.value, value.coordinates);
-    }
-  }
-};
+export default {};
 </script>
