@@ -1,23 +1,24 @@
-const DATASOURCE_SUGGESTIONS = "https://geodata.nationaalgeoregister.nl/locatieserver/v3/suggest";
+const DATASOURCE_SUGGESTIONS =
+  "https://geodata.nationaalgeoregister.nl/locatieserver/v3/suggest?fq=type:adres&rows=5";
 const DATASOURCE_LOOKUP = "https://geodata.nationaalgeoregister.nl/locatieserver/v3/lookup";
 
 export const mutations = {
-  saveResolved(state, { id, coordinates }) {
-    state.resolved.push({ id, coordinates });
+  saveResolved(state, address) {
+    if (state.resolved.filter(resolved => resolved.id === address.id).length === 0) {
+      state.resolved.push(address);
+    }
   }
 };
 
 export const getters = {
-  getResolvedById: state => id => state.resolved.find(address => address.id === id)
+  getResolvedById: (state, id) => state.resolved.find(address => address.id === id)
 };
 
 export const actions = {
   async search({ dispatch }, query) {
     const url = new URL(DATASOURCE_SUGGESTIONS);
 
-    url.searchParams.append("fq", "type:adres");
     url.searchParams.append("q", query);
-    url.searchParams.append("rows", 5);
 
     const request = {
       method: "GET"
@@ -49,7 +50,7 @@ export const actions = {
 
   async resolve({ dispatch, getters, commit }, id) {
     const resolved = getters.getResolvedById(id);
-    const defaultValue = { lat: 0, lng: 0 };
+    const defaultValue = null;
 
     if (resolved) {
       return resolved.coordinates;
