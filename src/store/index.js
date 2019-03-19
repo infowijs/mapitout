@@ -13,13 +13,13 @@ export const mutations = {
 
 export const actions = {
   reportError({ commit }, error) {
-    commit("error", error.statusMessage);
+    commit("error", error.message);
   }
 };
 
 export default new Vuex.Store({
   state: {
-    error: []
+    error: ""
   },
   modules: {
     address
