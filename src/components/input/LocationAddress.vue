@@ -63,9 +63,7 @@ ul {
   position: absolute;
   top: 100%;
   width: 100%;
-  border-width: 0;
-  border-style: solid;
-  border-color: $greyscale-1;
+  border: 0 none;
   border-radius: 0 0 3px 3px;
   background-color: white;
   margin: 0;
