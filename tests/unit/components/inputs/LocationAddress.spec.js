@@ -58,16 +58,17 @@ describe("LocationAddress", () => {
     wrapper.find("input").trigger("focus");
 
     expect(wrapper.classes("focused")).toBeTruthy();
+    expect(wrapper.emitted("focus")).toBeTruthy();
   });
 
   it("should select the first item in the list whenever the list displayed", () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue
     });
-    wrapper.vm.focusedSuggestionIndex = -1;
+    wrapper.vm.cursorIndex = -1;
     wrapper.vm.displaySuggestions = true;
 
-    expect(wrapper.vm.focusedSuggestionIndex).toEqual(0);
+    expect(wrapper.vm.cursorIndex).toEqual(0);
   });
 
   it("should deselect the selected item in the list whenever the list hidden", () => {
@@ -76,10 +77,10 @@ describe("LocationAddress", () => {
     });
 
     wrapper.vm.displaySuggestions = true;
-    wrapper.vm.focusedSuggestionIndex = 1;
+    wrapper.vm.cursorIndex = 1;
     wrapper.vm.displaySuggestions = false;
 
-    expect(wrapper.vm.focusedSuggestionIndex).toEqual(-1);
+    expect(wrapper.vm.cursorIndex).toEqual(-1);
   });
 
   it("should fetch the suggestions on user input", () => {
@@ -121,7 +122,7 @@ describe("LocationAddress", () => {
 
     const selectSpy = jest.spyOn(wrapper.vm, "select").mockImplementation();
 
-    wrapper.vm.focusedSuggestionIndex = selectedSuggestion;
+    wrapper.vm.cursorIndex = selectedSuggestion;
 
     wrapper.find("input").trigger("keydown", {
       key: "Enter"
@@ -141,7 +142,7 @@ describe("LocationAddress", () => {
       }
     });
 
-    wrapper.vm.focusedSuggestionIndex = -1;
+    wrapper.vm.cursorIndex = -1;
     wrapper.vm.query = "bb";
 
     wrapper.find("input").trigger("keydown", {

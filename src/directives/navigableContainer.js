@@ -1,9 +1,8 @@
 import Vue from "vue";
 
-Vue.directive("navigable-list", {
+Vue.directive("navigable-container", {
   bind(el, binding, vNode) {
-    const focusedIndexPropName = binding.value.focusedIndexPropName;
-    const focusedItemClassName = binding.value.focusedItemClassName;
+    const cursorPropName = binding.value.cursorPropName;
 
     el.addEventListener("mouseover", event => {
       const hoveredListItemEl = event.target.closest("li");
@@ -11,15 +10,11 @@ Vue.directive("navigable-list", {
       if (hoveredListItemEl && el.contains(hoveredListItemEl)) {
         el.querySelectorAll("li").forEach((listItemEl, index) => {
           if (listItemEl === hoveredListItemEl) {
-            listItemEl.classList.add(focusedItemClassName);
-
-            vNode.context[focusedIndexPropName] = index;
-          } else {
-            listItemEl.classList.remove(focusedItemClassName);
+            vNode.context[cursorPropName] = index;
           }
         });
       } else {
-        vNode.context[focusedIndexPropName] = -1;
+        vNode.context[cursorPropName] = -1;
       }
     });
 
@@ -28,23 +23,25 @@ Vue.directive("navigable-list", {
         event.preventDefault();
         const minIndex = 0;
         const maxIndex = el.querySelectorAll("li").length - 1;
-        const currentIndex = vNode.context[focusedIndexPropName];
+        const currentIndex = vNode.context[cursorPropName];
 
         let nextIndex;
 
         if (currentIndex === -1) {
           nextIndex = minIndex;
         } else {
+          const currentItem = el.querySelectorAll("li").item(currentIndex);
+
           switch (event.key) {
             case "ArrowUp":
-              if (el.querySelectorAll("li").item(currentIndex).previousSibling) {
+              if (currentItem.previousSibling) {
                 nextIndex = currentIndex - 1;
               } else {
                 nextIndex = minIndex;
               }
               break;
             case "ArrowDown":
-              if (el.querySelectorAll("li").item(currentIndex).nextSibling) {
+              if (currentItem.nextSibling) {
                 nextIndex = currentIndex + 1;
               } else {
                 nextIndex = maxIndex;
@@ -53,7 +50,7 @@ Vue.directive("navigable-list", {
           }
         }
 
-        vNode.context[focusedIndexPropName] = nextIndex;
+        vNode.context[cursorPropName] = nextIndex;
       }
     });
   }

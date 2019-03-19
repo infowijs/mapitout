@@ -28,7 +28,7 @@ export default {
         return {
           type: "home",
           address: {
-            address: "aasdas"
+            address: ""
           }
         };
       }

@@ -2,10 +2,7 @@
   <label
     :class="{ focused: isInputFocused }"
     v-overlay-container="{ togglePropName: 'displaySuggestions' }"
-    v-navigable-list="{
-      focusedIndexPropName: 'focusedSuggestionIndex',
-      focusedItemClassName: 'focused'
-    }"
+    v-navigable-container="{ cursorPropName: 'cursorIndex' }"
   >
     <input
       type="text"
@@ -21,7 +18,7 @@
         v-for="(suggestion, index) in suggestions"
         :key="suggestion.id"
         @click="onSuggestionClick(index)"
-        :class="{ focused: index === focusedSuggestionIndex }"
+        :class="{ cursor: index === cursorIndex }"
       >
         <span>{{ suggestion.address }}</span>
       </li>
@@ -82,7 +79,7 @@ ul {
     line-height: 1.83;
     cursor: pointer;
 
-    &.focused {
+    &.cursor {
       background-color: $greyscale-2;
     }
   }
@@ -93,7 +90,7 @@ import { debounce } from "lodash";
 import { mapActions } from "vuex";
 
 import "../../directives/overlayContainer";
-import "../../directives/navigableList";
+import "../../directives/navigableContainer";
 
 export const defaultValue = {
   address: "",
@@ -120,7 +117,7 @@ export default {
       isLoading: false,
       displaySuggestions: false,
       suggestions: [],
-      focusedSuggestionIndex: -1
+      cursorIndex: -1
     };
   },
 
@@ -130,7 +127,7 @@ export default {
 
   watch: {
     displaySuggestions: function(value) {
-      this.focusedSuggestionIndex = value ? 0 : -1;
+      this.cursorIndex = value ? 0 : -1;
     }
   },
 
@@ -143,6 +140,8 @@ export default {
 
     onInputFocus() {
       this.isInputFocused = true;
+
+      this.$emit("focus");
     },
 
     onInputBlur() {
@@ -157,8 +156,8 @@ export default {
       if (event.key === "Enter") {
         event.preventDefault();
 
-        if (this.focusedSuggestionIndex !== -1) {
-          this.select(this.focusedSuggestionIndex);
+        if (this.cursorIndex !== -1) {
+          this.select(this.cursorIndex);
         } else if (this.value.address.length > 0 && this.value.address !== this.query) {
           this.$emit("input", { ...defaultValue });
         }
