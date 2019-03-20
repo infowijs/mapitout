@@ -8,33 +8,15 @@
           :class="[option.value, { selected: option.value === value }]"
           :title="options.label"
           @click="onListItemClick(index)"
-        ></button>
+        >
+          <component :is="option.component" />
+        </button>
       </li>
     </ul>
   </label>
 </template>
 <style scoped lang="scss">
 @import "../../style/variables";
-
-$transportTypeIconPaths: (
-  (
-    public,
-    "../../assets/icons/symbol-public-transport.svg",
-    "../../assets/icons/symbol-public-transport-active.svg"
-  ),
-  (car, "../../assets/icons/symbol-driving.svg", "../../assets/icons/symbol-driving-active.svg"),
-  (
-    bicycle,
-    "../../assets/icons/symbol-cycling.svg",
-    "../../assets/icons/symbol-cycling-active.svg"
-  ),
-  (foot, "../../assets/icons/symbol-walking.svg", "../../assets/icons/symbol-walking-active.svg"),
-  (
-    "mixed",
-    "../../assets/icons/symbol-mixed-transportation.svg",
-    "../../assets/icons/symbol-mixed-transportation-active.svg"
-  )
-);
 
 ul {
   list-style: none;
@@ -49,35 +31,36 @@ ul {
 .option {
   border: 0 none;
   cursor: pointer;
-  width: 26px;
-  height: 26px;
   padding: 0;
+  border-radius: 13px;
   background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
+  height: 28px;
 
-@each $key, $pathNormal, $pathActive in $transportTypeIconPaths {
-  .#{$key} {
-    background-image: url($pathNormal);
-
-    &.selected {
-      background-image: url($pathActive);
-    }
+  svg {
+    color: $greyscale-1;
   }
-}
 
-.mixed {
-  width: 56px;
+  &.selected {
+    svg {
+      color: white;
+    }
+    background-color: $greyscale-1;
+  }
 }
 </style>
 <script>
+import IconBus from "../icons/IconBus";
+import IconCar from "../icons/IconCar";
+import IconPedestrian from "../icons/IconPedestrian";
+import IconBicycle from "../icons/IconBicycle";
+import IconBicycleBus from "../icons/IconBicycleBus";
+
 const TRANSPORT_TYPES = [
-  { value: "public", label: "Public Transport" },
-  { value: "car", label: "Vehicle" },
-  { value: "bicycle", label: "Bicycle" },
-  { value: "foot", label: "Walking" },
-  { value: "mixed", label: "Public Transport and Bicycle" }
+  { value: "public", label: "Public Transport", component: IconBus },
+  { value: "car", label: "Vehicle", component: IconCar },
+  { value: "bicycle", label: "Bicycle", component: IconBicycle },
+  { value: "foot", label: "Walking", component: IconPedestrian },
+  { value: "mixed", label: "Public Transport and Bicycle", component: IconBicycleBus }
 ];
 export default {
   props: {
@@ -87,8 +70,16 @@ export default {
       validator: value => TRANSPORT_TYPES.map(type => type.value).indexOf(value) !== -1
     }
   },
+  components: {
+    IconBus,
+    IconCar,
+    IconPedestrian,
+    IconBicycle,
+    IconBicycleBus
+  },
   data() {
     return {
+      publicPath: process.env.BASE_URL,
       options: TRANSPORT_TYPES
     };
   },
