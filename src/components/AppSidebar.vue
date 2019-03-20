@@ -10,7 +10,8 @@ aside {
   transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {
-    min-width: 340px;
+    width: 244px;
+    padding: 24px 48px;
     height: unset;
   }
 

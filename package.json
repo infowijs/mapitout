@@ -17,6 +17,7 @@
   "dependencies": {
     "google-maps-api-loader": "^1.1.1",
     "hammerjs": "^2.0.8",
+    "lodash": "^4.17.11",
     "normalize.css": "^8.0.1",
     "register-service-worker": "^1.5.2",
     "vue": "^2.6.6",
