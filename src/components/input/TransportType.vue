@@ -9,7 +9,7 @@
           :title="options.label"
           @click="onListItemClick(index)"
         >
-          <component :is="option.component" />
+          <icon :name="option.icon" />
         </button>
       </li>
     </ul>
@@ -49,18 +49,14 @@ ul {
 }
 </style>
 <script>
-import IconBus from "../icons/IconBus";
-import IconCar from "../icons/IconCar";
-import IconPedestrian from "../icons/IconPedestrian";
-import IconBicycle from "../icons/IconBicycle";
-import IconBicycleBus from "../icons/IconBicycleBus";
+import Icon from "../Icon";
 
 const TRANSPORT_TYPES = [
-  { value: "public", label: "Public Transport", component: IconBus },
-  { value: "car", label: "Vehicle", component: IconCar },
-  { value: "bicycle", label: "Bicycle", component: IconBicycle },
-  { value: "foot", label: "Walking", component: IconPedestrian },
-  { value: "mixed", label: "Public Transport and Bicycle", component: IconBicycleBus }
+  { value: "public", label: "Public Transport", icon: "bus" },
+  { value: "car", label: "Vehicle", icon: "car" },
+  { value: "bicycle", label: "Bicycle", icon: "bicycle" },
+  { value: "foot", label: "Walking", icon: "pedestrian" },
+  { value: "mixed", label: "Public Transport and Bicycle", icon: "bicycle-bus" }
 ];
 export default {
   props: {
@@ -70,13 +66,7 @@ export default {
       validator: value => TRANSPORT_TYPES.map(type => type.value).indexOf(value) !== -1
     }
   },
-  components: {
-    IconBus,
-    IconCar,
-    IconPedestrian,
-    IconBicycle,
-    IconBicycleBus
-  },
+  components: { Icon },
   data() {
     return {
       publicPath: process.env.BASE_URL,
