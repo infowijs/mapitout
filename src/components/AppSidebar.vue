@@ -1,11 +1,5 @@
 <template>
-  <aside v-expandable>
-    <div>
-      <location v-model="location"></location>
-      <transport-type v-model="transportType"></transport-type>
-      <travel-time v-model="travelTime"></travel-time>
-    </div>
-  </aside>
+  <aside v-expandable></aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";
@@ -70,35 +64,6 @@ aside {
 </style>
 <script>
 import "../directives/expandable";
-import Location from "./input/Location";
-import TransportType from "./input/TransportType";
-import TravelTime from "./input/TravelTime";
 
-export default {
-  data() {
-    return {
-      location: {
-        type: "home",
-        address: {}
-      },
-      transportType: "public",
-      travelTime: 45
-    };
-  },
-  components: {
-    Location,
-    TransportType,
-    TravelTime
-  },
-  methods: {
-    onInput(value) {
-      console.log(value);
-    }
-  },
-  watch: {
-    locationAddress: value => {
-      console.log(value.value, value.coordinates);
-    }
-  }
-};
+export default {};
 </script>
