@@ -53,7 +53,7 @@ describe("TravelTime", () => {
     expect(wrapper.find(".handle").element.style.left).toBe(`${deltaX + initialOffset}px`);
   });
 
-  it("should refrain from updating the handle style if the newOffset is not within bounds", () => {
+  it("should should not allow a slide beyond the maxValue", () => {
     const wrapper = shallowMount(TravelTime, {
       localVue,
       attachToDocument: true
@@ -66,7 +66,23 @@ describe("TravelTime", () => {
 
     wrapper.vm.onHandlePan({ deltaX });
 
-    expect(wrapper.find(".handle").element.style.left).toBe("");
+    expect(wrapper.find(".handle").element.style.left).toBe("150px");
+  });
+
+  it("should should not allow a slide beyond the minValue", () => {
+    const wrapper = shallowMount(TravelTime, {
+      localVue,
+      attachToDocument: true
+    });
+
+    const initialOffset = 50;
+    const deltaX = -180;
+
+    wrapper.setData({ minOffset: -6, maxOffset: 150, initialOffset });
+
+    wrapper.vm.onHandlePan({ deltaX });
+
+    expect(wrapper.find(".handle").element.style.left).toBe("-6px");
   });
 
   it("should update its value on pan end", () => {
