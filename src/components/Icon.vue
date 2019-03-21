@@ -15,7 +15,7 @@ export default {
       type: String,
       required: true,
       validator: value =>
-        ["bicycle", "bicycle-bus", "bus", "car", "pedestrian", "time"].includes(value)
+        ["bicycle", "bicycle-bus", "bus", "car", "pedestrian", "icon-time"].includes(value)
     }
   },
   components: {
@@ -24,7 +24,7 @@ export default {
     bus: IconBus,
     car: IconCar,
     pedestrian: IconPedestrian,
-    time: IconTime
+    "icon-time": IconTime
   }
 };
 </script>

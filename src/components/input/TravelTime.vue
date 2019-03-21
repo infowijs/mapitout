@@ -1,5 +1,6 @@
 <template>
-  <label ref="root">
+  <label>
+    <icon class="icon" name="icon-time" />
     <div ref="rail" class="rail" @click="onRailClick">
       <div
         ref="handle"
@@ -20,23 +21,42 @@
 $slider-thinkness: 4px;
 $handle-height: 24px;
 
+label {
+  position: relative;
+  padding: 0 0 12px 32px;
+  display: flex;
+  flex-direction: row;
+}
+
+.icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .rail {
   position: relative;
   z-index: 2;
   height: $slider-thinkness;
-  margin: (($handle-height - $slider-thinkness) / 2) 0;
+  margin: (($handle-height - $slider-thinkness) / 2) 0 (($handle-height - $slider-thinkness) / 2)
+    24px;
   width: 100%;
   background-color: $greyscale-2;
   border-radius: 2px;
 }
 
 .labels {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 52px;
   z-index: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 100%;
+  font-size: 12px;
+  color: $greyscale-2;
+  line-height: 1;
 }
 
 .handle {
@@ -50,6 +70,7 @@ $handle-height: 24px;
 </style>
 <script>
 import Hammer from "hammerjs";
+import Icon from "../Icon";
 
 export default {
   props: {
@@ -71,7 +92,7 @@ export default {
       return this.maxValue - this.minValue;
     },
     handleOffsetX: function() {
-      return (this.value * 100) / this.range;
+      return ((this.value - this.minValue) * 100) / this.range;
     }
   },
   data() {
@@ -80,6 +101,9 @@ export default {
       minOffset: undefined,
       maxOffset: undefined
     };
+  },
+  components: {
+    Icon
   },
   mounted() {
     const handleHammerInstance = Hammer(this.$refs.handle);
@@ -98,26 +122,34 @@ export default {
       const railEl = this.$refs.rail;
 
       this.initialOffset = handleEl.offsetLeft;
-      this.minOffset = handleEl.offsetWidth / 2;
+      this.minOffset = -handleEl.offsetWidth / 2;
       this.maxOffset = railEl.offsetWidth - handleEl.offsetWidth / 2;
     },
 
     onHandlePan(event) {
       const handleEl = this.$refs.handle;
-      const newOffset = this.initialOffset + event.deltaX;
+      let newOffset = this.initialOffset + event.deltaX;
 
-      if (this.minOffset <= newOffset && newOffset <= this.maxOffset) {
-        handleEl.style.left = `${newOffset}px`;
+      if (newOffset < this.minOffset) {
+        newOffset = this.minOffset;
       }
+
+      if (this.maxOffset < newOffset) {
+        newOffset = this.maxOffset;
+      }
+
+      handleEl.style.left = `${newOffset}px`;
     },
 
     onHandlePanEnd() {
       const handleEl = this.$refs.handle;
       const railEl = this.$refs.rail;
 
-      const newValue = Math.floor(
-        (this.range * (handleEl.offsetLeft + handleEl.offsetWidth / 2)) / railEl.offsetWidth
-      );
+      const newValue =
+        this.minValue +
+        Math.floor(
+          (this.range * (handleEl.offsetLeft + handleEl.offsetWidth / 2)) / railEl.offsetWidth
+        );
 
       this.$emit("input", newValue);
     },
@@ -127,7 +159,7 @@ export default {
       const width = railEl.offsetWidth;
       const offset = event.offsetX;
 
-      const value = Math.round(this.range * (offset / width));
+      const value = this.minValue + Math.round(this.range * (offset / width));
 
       this.$emit("input", value);
     }
