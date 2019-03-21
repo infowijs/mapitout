@@ -1,5 +1,5 @@
 <template>
-  <label>
+  <label ref="root">
     <div ref="rail" class="rail" @click="onRailClick">
       <div
         ref="handle"
@@ -71,9 +71,15 @@ export default {
       return this.maxValue - this.minValue;
     },
     handleOffsetX: function() {
-      console.log(this.value);
       return (this.value * 100) / this.range;
     }
+  },
+  data() {
+    return {
+      initialOffset: undefined,
+      minOffset: undefined,
+      maxOffset: undefined
+    };
   },
   mounted() {
     const handleHammerInstance = Hammer(this.$refs.handle);
