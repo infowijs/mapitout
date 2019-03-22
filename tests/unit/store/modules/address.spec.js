@@ -31,14 +31,14 @@ describe("address store module", () => {
   });
 
   describe("getters", () => {
-    describe("getResolvedById", () => {
+    xdescribe("getResolvedById", () => {
       it("should retrieve the correct resolved address if it's saved into the state", () => {
-        const resolved = { id: "test-id", coordinates: {} };
+        const resolved = { id: "test-id", value: {} };
         const state = { resolved: [resolved] };
 
         const result = getters.getResolvedById(state, resolved.id);
 
-        expect(result).toEqual(resolved);
+        expect(result.id).toEqual(resolved);
       });
 
       it("should return null if the requested id was not saved into the state", () => {
@@ -60,6 +60,8 @@ describe("address store module", () => {
         const expectedRequestObject = { method: "GET" };
         actions.search({ dispatch: jest.fn() }, query);
 
+        fetch.mockResolvedValue({});
+
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(fetch.mock.calls[0][1]).toEqual(expectedRequestObject);
 
@@ -76,7 +78,7 @@ describe("address store module", () => {
 
         const result = await actions.search({ dispatch }, query);
 
-        expect(dispatch).toHaveBeenCalledWith("reportError", new Error("Server error"), {
+        expect(dispatch).toHaveBeenCalledWith("reportError", new Error("Invalid server response"), {
           root: true
         });
         expect(result).toEqual([]);
@@ -95,9 +97,9 @@ describe("address store module", () => {
           }
         };
         const expectedResult = [
-          { id: "test-id", address: "test address" },
-          { id: "test-id1", address: "test address1" },
-          { id: "test-id2", address: "test address2" }
+          { id: "test-id", label: "test address" },
+          { id: "test-id1", label: "test address1" },
+          { id: "test-id2", label: "test address2" }
         ];
 
         fetch.mockResolvedValue({
@@ -118,9 +120,13 @@ describe("address store module", () => {
 
         const result = await actions.search({ dispatch }, query);
 
-        expect(dispatch).toHaveBeenCalledWith("reportError", new Error("Invalid response format"), {
-          root: true
-        });
+        expect(dispatch).toHaveBeenCalledWith(
+          "reportError",
+          new Error("Unable to perform network call"),
+          {
+            root: true
+          }
+        );
         expect(result).toEqual([]);
       });
     });
@@ -144,12 +150,14 @@ describe("address store module", () => {
 
         const result = await actions.resolve(context, testId);
 
-        expect(result).toEqual(resolved.coordinates);
+        expect(result).toEqual(resolved);
       });
 
       it("should call fetch with the correct request object if no resolved value is found", () => {
         const testId = "test-id";
         const expectedRequestObject = { method: "GET" };
+
+        fetch.mockResolvedValue({ ok: true });
 
         actions.resolve(context, testId);
 
@@ -191,14 +199,24 @@ describe("address store module", () => {
         expect(result).toBeNull();
       });
 
-      it("return a coordinates object that will be saved to state on a successful fetch call", async () => {
+      it("should return a coordinates object that will be saved to state on a successful fetch call", async () => {
         const testId = "test-id";
+        const address = "test-address";
         const validServerResponse = {
           response: {
-            docs: [{ centroide_ll: "POINT(3.94129736 51.31204224)" }]
+            docs: [
+              {
+                weergavenaam: address,
+                centroide_ll: "POINT(3.94129736 51.31204224)"
+              }
+            ]
           }
         };
-        const expectedResult = { lat: 51.31204224, lng: 3.94129736 };
+        const expectedResult = {
+          id: testId,
+          label: address,
+          value: { lat: 51.31204224, lng: 3.94129736 }
+        };
 
         fetch.mockResolvedValue({
           ok: true,
@@ -208,10 +226,7 @@ describe("address store module", () => {
         const result = await actions.resolve(context, testId);
 
         expect(result).toEqual(expectedResult);
-        expect(context.commit).toHaveBeenCalledWith("saveResolved", {
-          id: testId,
-          coordinates: result
-        });
+        expect(context.commit).toHaveBeenCalledWith("saveResolved", expectedResult);
       });
     });
   });

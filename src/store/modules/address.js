@@ -3,15 +3,15 @@ const DATASOURCE_SUGGESTIONS =
 const DATASOURCE_LOOKUP = "https://geodata.nationaalgeoregister.nl/locatieserver/v3/lookup";
 
 export const mutations = {
-  saveResolved(state, address) {
-    if (state.resolved.filter(resolved => resolved.id === address.id).length === 0) {
-      state.resolved.push(address);
+  saveResolved(state, resolved) {
+    if (state.resolved.filter(resolved => resolved.id === resolved.id).length === 0) {
+      state.resolved.push(resolved);
     }
   }
 };
 
 export const getters = {
-  getResolvedById: (state, id) => state.resolved.find(address => address.id === id)
+  getResolvedById: state => id => state.resolved.find(resolved => resolved.id === id)
 };
 
 export const actions = {
@@ -24,36 +24,34 @@ export const actions = {
       method: "GET"
     };
 
-    const response = await fetch(url, request);
-
-    if (!response.ok) {
-      dispatch("reportError", new Error("Server error"), { root: true });
-
-      return [];
-    }
-
     try {
-      const result = await response.json();
+      const response = await fetch(url, request);
 
-      return result.response.docs.map(suggestion => {
-        return {
+      if (response.ok) {
+        const result = await response.json();
+
+        return result.response.docs.map(suggestion => ({
           id: suggestion.id,
-          address: suggestion.weergavenaam
-        };
-      });
+          label: suggestion.weergavenaam
+        }));
+      } else {
+        dispatch("reportError", new Error("Invalid server response"), { root: true });
+
+        return [];
+      }
     } catch (error) {
-      dispatch("reportError", new Error("Invalid response format"), { root: true });
+      dispatch("reportError", new Error("Unable to perform network call"), { root: true });
 
       return [];
     }
   },
 
-  async resolve({ dispatch, getters, commit }, id) {
-    const resolved = getters.getResolvedById(id);
+  async resolve({ state, getters, commit, dispatch }, id) {
+    const resolved = getters.getResolvedById(state, id);
     const defaultValue = null;
 
     if (resolved) {
-      return resolved.coordinates;
+      return resolved;
     }
 
     const url = new URL(DATASOURCE_LOOKUP);
@@ -74,15 +72,26 @@ export const actions = {
 
     try {
       const result = await response.json();
-      let coordString = result.response.docs[0].centroide_ll;
-      const coordArray = coordString
-        .replace("POINT(", "")
-        .replace(")", "")
-        .split(" ");
-      const coordinates = { lat: parseFloat(coordArray[1]), lng: parseFloat(coordArray[0]) };
-      commit("saveResolved", { id, coordinates });
 
-      return coordinates;
+      if (result.response.docs[0]) {
+        const resolved = {
+          id,
+          value: result.response.docs[0].centroide_ll
+            .replace("POINT(", "")
+            .replace(")", "")
+            .split(" ")
+            .map(coord => parseFloat(coord))
+            .reduce((acc, value, index) => {
+              acc[index === 0 ? "lng" : "lat"] = value;
+              return acc;
+            }, {}),
+          label: result.response.docs[0].weergavenaam
+        };
+
+        commit("saveResolved", resolved);
+
+        return resolved;
+      }
     } catch (error) {
       dispatch("reportError", new Error("Invalid response format"), { root: true });
 
@@ -94,6 +103,14 @@ export const actions = {
 export default {
   namespaced: true,
   state: {
+    types: [
+      { value: "home", label: "Home" },
+      { value: "transport", label: "Station" },
+      { value: "health", label: "Health" },
+      { value: "work", label: "Work" },
+      { value: "education", label: "School" },
+      { value: "wellness", label: "Gym" }
+    ],
     resolved: []
   },
   getters,
