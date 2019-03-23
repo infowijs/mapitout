@@ -1,8 +1,9 @@
 <template>
   <div
-    :class="{ focused: isInputFocused }"
+    :class="{ focused: isInputFocused, disabled: isDisabled }"
     v-overlay-container="{ togglePropName: 'areSuggestionsVisible' }"
     v-navigable-container="{ cursorPropName: 'cursorIndex' }"
+    @click="onRootClick"
   >
     <input
       type="text"
@@ -12,6 +13,7 @@
       @blur="onInputBlur"
       @keydown="onInputKeyDown"
       v-model="query"
+      :disabled="isDisabled"
       :placeholder="placeholder"
     />
     <transition name="fade">
@@ -35,6 +37,18 @@ div {
   position: relative;
   align-items: stretch;
   color: $greyscale-1;
+
+  .disabled & {
+    &::before {
+      content: " ";
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      position: absolute;
+      z-index: 1;
+    }
+  }
 }
 
 .input {
@@ -47,6 +61,10 @@ div {
   line-height: 1;
   font-size: unset;
   background: transparent;
+
+  .disabled & {
+    z-index: -1;
+  }
 }
 
 .dropdown {
@@ -94,6 +112,10 @@ export default {
       default: ""
     },
     value: Object,
+    isDisabled: {
+      type: Boolean,
+      default: false
+    },
     search: {
       type: Function,
       required: true
@@ -123,6 +145,10 @@ export default {
     debouncedSuggest: debounce(function(query) {
       this.suggest(query);
     }, 500),
+
+    onRootClick(event) {
+      console.log(event);
+    },
 
     onInputFocus() {
       this.isInputFocused = true;

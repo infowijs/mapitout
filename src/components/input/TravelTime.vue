@@ -1,9 +1,9 @@
 <template>
   <div :class="['trave-time', { disabled: isDisabled }]">
-    <icon class="icon" name="icon-time" />
+    <icon class="icon" name="icon-time" v-if="!isDisabled" />
     <div class="rail-labels-value">
       <div class="current-value">
-        <span class="label">Travel time: </span>
+        <span class="label" v-if="!isDisabled">Travel time: </span>
         <span class="value">{{ value }}m</span>
       </div>
       <div v-if="!isDisabled" ref="rail" class="rail" @click="onRailClick">
@@ -36,16 +36,11 @@ $rail-margin-vertical: ($handle-height - $slider-thinkness) / 2;
 
   &.disabled {
     align-items: center;
-    height: 16px;
   }
 }
 
 svg {
   color: $greyscale-1;
-
-  .disabled & {
-    color: rgba($greyscale-1, 0.4);
-  }
 }
 
 .rail-labels-value {
@@ -54,7 +49,7 @@ svg {
   margin-left: calc(14px + 1rem);
 
   .disabled & {
-    margin-left: 4px;
+    margin-left: 0;
   }
 }
 
@@ -73,8 +68,10 @@ svg {
 
   .disabled & {
     position: relative;
-    .label {
-      display: none;
+
+    .value {
+      font-size: 11px;
+      color: rgba($greyscale-1, 0.48);
     }
   }
 }
@@ -86,10 +83,6 @@ svg {
   margin: $rail-margin-vertical 0;
   background-color: rgba($greyscale-1, 0.48);
   border-radius: 2px;
-
-  .disabled & {
-    display: none;
-  }
 }
 
 .labels {
@@ -101,10 +94,6 @@ svg {
   color: rgba($greyscale-1, 0.48);
   line-height: 1;
   font-size: 10px;
-
-  .disabled & {
-    display: none;
-  }
 }
 
 .handle {

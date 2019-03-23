@@ -64,6 +64,7 @@
       button {
         background-color: transparent;
         display: block;
+        cursor: default;
 
         svg {
           color: rgba($greyscale-1, 0.4);

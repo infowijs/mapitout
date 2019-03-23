@@ -14,7 +14,6 @@ aside {
 
   @media (min-width: $breakpoint-tablet-portrait) {
     width: 340px;
-    padding: 36px 0;
     height: unset;
   }
 

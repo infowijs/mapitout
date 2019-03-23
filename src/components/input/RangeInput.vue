@@ -43,21 +43,23 @@
 
 .transport-type::v-deep {
   background-color: transparent;
+  margin-left: auto;
 
   .active & {
+    margin-left: unset;
     z-index: 1;
     background-color: $greyscale-2;
   }
 }
 
 .travel-time::v-deep {
-  .active & {
-    z-index: 1;
-    background-color: transparent;
+  z-index: 1;
+  background-color: transparent;
+  margin-left: 4px;
 
-    .active & {
-      background-color: rgba($greyscale-1, 0.11);
-    }
+  .active & {
+    margin-left: unset;
+    background-color: rgba($greyscale-1, 0.11);
   }
 }
 </style>

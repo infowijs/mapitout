@@ -1,13 +1,19 @@
 <template>
   <div :class="['location', { disabled: isDisabled }]">
-    <enhanced-select class="type" v-model="type" :options="locationTypes"></enhanced-select>
+    <enhanced-select
+      class="type"
+      v-model="type"
+      :isDisabled="isDisabled"
+      :options="locationTypes"
+    />
     <suggest-input
       class="address"
       v-model="address"
+      :isDisabled="isDisabled"
       :search="search"
       :resolve="resolve"
       placeholder="Choose an address"
-    ></suggest-input>
+    />
   </div>
 </template>
 <style scoped lang="scss">
@@ -38,7 +44,6 @@ $locationTypeIconPaths: (
     background-repeat: no-repeat;
     background-position: left center;
     padding: 0 0 0 36px;
-    cursor: pointer;
     font-size: 0;
 
     &::after {
@@ -52,16 +57,6 @@ $locationTypeIconPaths: (
     @each $key, $path in $locationTypeIconPaths {
       &.selected-#{$key} {
         background-image: url($path);
-      }
-    }
-  }
-
-  .disabled & {
-    .trigger {
-      padding: 0 0 0 28px;
-
-      &::after {
-        display: none;
       }
     }
   }
@@ -104,7 +99,7 @@ $locationTypeIconPaths: (
     font-size: 16px;
     background-color: transparent;
     background-repeat: no-repeat, no-repeat;
-    background-position: center right, left, center;
+    background-position: center right, left center;
     cursor: pointer;
     color: transparent;
 
@@ -118,9 +113,31 @@ $locationTypeIconPaths: (
       }
     }
   }
+
+  .disabled & {
+    &::after {
+      content: " ";
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+    }
+    .trigger {
+      padding: 0 0 0 44px;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .native {
+      z-index: -1;
+      background-position: -100% -100%, left center;
+    }
+  }
 }
 
-.address {
+.address::v-deep {
   flex-grow: 1;
   margin-left: 1rem;
 
@@ -135,19 +152,23 @@ $locationTypeIconPaths: (
     background: linear-gradient(to right, rgba(255, 255, 255, 0), $greyscale-2);
   }
 
-  .disabled & {
-    &::after {
-      background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
-    }
-  }
-
   &.focused::after {
     content: none;
   }
 
-  &::v-deep {
+  .input {
+    border-width: 0 0 2px 0;
+  }
+
+  .disabled & {
+    &::after {
+      width: 40%;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+    }
+
     .input {
-      border-width: 0 0 2px 0;
+      border-width: 0;
+      padding: 0;
     }
   }
 }
@@ -160,7 +181,10 @@ import { mapActions, mapState } from "vuex";
 export default {
   props: {
     value: Object,
-    isDisabled: Boolean
+    isDisabled: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     EnhancedSelect,
