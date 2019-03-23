@@ -1,5 +1,5 @@
 <template>
-  <div class="location">
+  <div :class="['location', { disabled: isDisabled }]">
     <enhanced-select class="type" v-model="type" :options="locationTypes"></enhanced-select>
     <suggest-input
       class="address"
@@ -32,13 +32,12 @@ $locationTypeIconPaths: (
   display: flex;
 
   .trigger {
-    width: 28px;
     height: 28px;
     border: 0 none;
     background-color: transparent;
     background-repeat: no-repeat;
     background-position: left center;
-    padding-left: 32px;
+    padding: 0 0 0 36px;
     cursor: pointer;
     font-size: 0;
 
@@ -53,6 +52,16 @@ $locationTypeIconPaths: (
     @each $key, $path in $locationTypeIconPaths {
       &.selected-#{$key} {
         background-image: url($path);
+      }
+    }
+  }
+
+  .disabled & {
+    .trigger {
+      padding: 0 0 0 28px;
+
+      &::after {
+        display: none;
       }
     }
   }
@@ -113,7 +122,7 @@ $locationTypeIconPaths: (
 
 .address {
   flex-grow: 1;
-  margin-left: 12px;
+  margin-left: 1rem;
 
   &::after {
     content: " ";
@@ -123,7 +132,13 @@ $locationTypeIconPaths: (
     right: 0;
     width: 25%;
     height: calc(100% - 2px);
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), $greyscale-2);
+  }
+
+  .disabled & {
+    &::after {
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+    }
   }
 
   &.focused::after {
@@ -144,7 +159,8 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   props: {
-    value: Object
+    value: Object,
+    isDisabled: Boolean
   },
   components: {
     EnhancedSelect,

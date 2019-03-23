@@ -1,62 +1,110 @@
 <template>
-  <label>
+  <div :class="['trave-time', { disabled: isDisabled }]">
     <icon class="icon" name="icon-time" />
-    <div ref="rail" class="rail" @click="onRailClick">
-      <div
-        ref="handle"
-        @click.stop
-        class="handle"
-        :style="{ left: `calc(${handleOffsetX}% - 6px)` }"
-      ></div>
+    <div class="rail-labels-value">
+      <div class="current-value">
+        <span class="label">Travel time: </span>
+        <span class="value">{{ value }}m</span>
+      </div>
+      <div v-if="!isDisabled" ref="rail" class="rail" @click="onRailClick">
+        <div
+          ref="handle"
+          @click.stop
+          class="handle"
+          :style="{ left: `calc(${handleOffsetX}% - 6px)` }"
+        ></div>
+      </div>
+      <div v-if="!isDisabled" class="labels">
+        <span class="min">{{ minValue }}</span>
+        <span class="max">{{ maxValue }}</span>
+      </div>
     </div>
-    <div class="labels">
-      <span class="min">{{ minValue }}</span>
-      <span class="max">{{ maxValue }}</span>
-    </div>
-  </label>
+  </div>
 </template>
 <style scoped lang="scss">
 @import "../../style/variables";
 
 $slider-thinkness: 4px;
 $handle-height: 24px;
+$rail-margin-vertical: ($handle-height - $slider-thinkness) / 2;
 
-label {
+.travel-time {
   position: relative;
-  padding: 0 0 12px 32px;
   display: flex;
   flex-direction: row;
+  align-items: flex-end;
+
+  &.disabled {
+    align-items: center;
+    height: 16px;
+  }
 }
 
-.icon {
+svg {
+  color: $greyscale-1;
+
+  .disabled & {
+    color: rgba($greyscale-1, 0.4);
+  }
+}
+
+.rail-labels-value {
+  position: relative;
+  flex-grow: 1;
+  margin-left: calc(14px + 1rem);
+
+  .disabled & {
+    margin-left: 4px;
+  }
+}
+
+.current-value {
+  font-size: 12px;
   position: absolute;
-  left: 0;
-  top: 0;
+  bottom: calc(100% - 4px);
+
+  .label {
+    color: rgba($greyscale-1, 0.48);
+  }
+
+  .value {
+    color: $greyscale-1;
+  }
+
+  .disabled & {
+    position: relative;
+    .label {
+      display: none;
+    }
+  }
 }
 
 .rail {
   position: relative;
   z-index: 2;
   height: $slider-thinkness;
-  margin: (($handle-height - $slider-thinkness) / 2) 0 (($handle-height - $slider-thinkness) / 2)
-    24px;
-  width: 100%;
-  background-color: $greyscale-2;
+  margin: $rail-margin-vertical 0;
+  background-color: rgba($greyscale-1, 0.48);
   border-radius: 2px;
+
+  .disabled & {
+    display: none;
+  }
 }
 
 .labels {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 52px;
   z-index: 1;
+  margin-top: -$rail-margin-vertical + 2;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 12px;
-  color: $greyscale-2;
+  color: rgba($greyscale-1, 0.48);
   line-height: 1;
+  font-size: 10px;
+
+  .disabled & {
+    display: none;
+  }
 }
 
 .handle {
@@ -83,6 +131,7 @@ export default {
       default: 90
     },
     value: Number,
+    isDisabled: Boolean,
     default: function() {
       return 45;
     }
@@ -106,15 +155,18 @@ export default {
     Icon
   },
   mounted() {
-    const handleHammerInstance = Hammer(this.$refs.handle);
+    //todo this needs to be turned into a directive
+    if (this.$refs.handle) {
+      const handleHammerInstance = Hammer(this.$refs.handle);
 
-    handleHammerInstance.get("pan").set({ direction: Hammer.DIRECTION_HORIZONTAL });
+      handleHammerInstance.get("pan").set({ direction: Hammer.DIRECTION_HORIZONTAL });
 
-    handleHammerInstance.on("panstart", this.onHandlePanStart);
+      handleHammerInstance.on("panstart", this.onHandlePanStart);
 
-    handleHammerInstance.on("pan", this.onHandlePan);
+      handleHammerInstance.on("pan", this.onHandlePan);
 
-    handleHammerInstance.on("panend", this.onHandlePanEnd);
+      handleHammerInstance.on("panend", this.onHandlePanEnd);
+    }
   },
   methods: {
     onHandlePanStart() {

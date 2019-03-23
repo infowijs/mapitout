@@ -46,6 +46,7 @@ div {
   width: 100%;
   line-height: 1;
   font-size: unset;
+  background: transparent;
 }
 
 .dropdown {

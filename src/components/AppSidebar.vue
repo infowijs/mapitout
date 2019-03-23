@@ -1,17 +1,20 @@
 <template>
-  <aside v-expandable></aside>
+  <aside v-expandable>
+    <range-input :isActive="activeRange === 0" v-model="range1" @focus="focusRangeInput(0)" />
+    <range-input :isActive="activeRange === 1" v-model="range2" @focus="focusRangeInput(1)" />
+  </aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";
 
 aside {
   background: white;
-  height: 100px;
+  height: 86px;
   transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {
-    width: 244px;
-    padding: 24px 48px;
+    width: 340px;
+    padding: 36px 0;
     height: unset;
   }
 
@@ -64,6 +67,28 @@ aside {
 </style>
 <script>
 import "../directives/expandable";
+import RangeInput from "./input/RangeInput";
 
-export default {};
+export default {
+  data() {
+    return {
+      range1: null,
+      activeRange: 0,
+      range2: null
+    };
+  },
+  components: {
+    RangeInput
+  },
+  watch: {
+    range: value => {
+      console.log(value);
+    }
+  },
+  methods: {
+    focusRangeInput(index) {
+      this.activeRange = index;
+    }
+  }
+};
 </script>

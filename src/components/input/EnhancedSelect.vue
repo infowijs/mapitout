@@ -29,6 +29,7 @@ div {
 }
 .trigger {
   display: none;
+  outline: none;
 
   @media (min-width: $breakpoint-tablet-portrait) {
     display: initial;
@@ -74,6 +75,7 @@ div {
       cursor: pointer;
       text-align: center;
       color: $greyscale-1;
+      outline: none;
     }
   }
 }
