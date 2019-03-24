@@ -1,8 +1,5 @@
 <template>
-  <aside v-expandable>
-    <range-input :isActive="activeRange === 0" v-model="range1" @focus="focusRangeInput(0)" />
-    <range-input :isActive="activeRange === 1" v-model="range2" @focus="focusRangeInput(1)" />
-  </aside>
+  <aside v-expandable></aside>
 </template>
 <style scoped lang="scss">
 @import "../style/variables";
@@ -66,28 +63,6 @@ aside {
 </style>
 <script>
 import "../directives/expandable";
-import RangeInput from "./input/RangeInput";
 
-export default {
-  data() {
-    return {
-      range1: null,
-      activeRange: 0,
-      range2: null
-    };
-  },
-  components: {
-    RangeInput
-  },
-  watch: {
-    range: value => {
-      console.log(value);
-    }
-  },
-  methods: {
-    focusRangeInput(index) {
-      this.activeRange = index;
-    }
-  }
-};
+export default {};
 </script>

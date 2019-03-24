@@ -119,10 +119,13 @@ export default {
       type: Number,
       default: 90
     },
-    value: Number,
-    isDisabled: Boolean,
-    default: function() {
-      return 45;
+    value: {
+      type: Number,
+      default: 45
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -144,20 +147,29 @@ export default {
     Icon
   },
   mounted() {
-    //todo this needs to be turned into a directive
-    if (this.$refs.handle) {
-      const handleHammerInstance = Hammer(this.$refs.handle);
-
-      handleHammerInstance.get("pan").set({ direction: Hammer.DIRECTION_HORIZONTAL });
-
-      handleHammerInstance.on("panstart", this.onHandlePanStart);
-
-      handleHammerInstance.on("pan", this.onHandlePan);
-
-      handleHammerInstance.on("panend", this.onHandlePanEnd);
-    }
+    this.initHammer();
+  },
+  updated() {
+    this.initHammer();
   },
   methods: {
+    initHammer() {
+      if (this.$refs.handle) {
+        if (!this.handleHammerInstance) {
+          const handleHammerInstance = Hammer(this.$refs.handle);
+
+          handleHammerInstance.get("pan").set({ direction: Hammer.DIRECTION_HORIZONTAL });
+
+          handleHammerInstance.on("panstart", this.onHandlePanStart);
+
+          handleHammerInstance.on("pan", this.onHandlePan);
+
+          handleHammerInstance.on("panend", this.onHandlePanEnd);
+        }
+      } else {
+        this.handleHammerInstance = null;
+      }
+    },
     onHandlePanStart() {
       const handleEl = this.$refs.handle;
       const railEl = this.$refs.rail;

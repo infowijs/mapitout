@@ -1,6 +1,6 @@
 <template>
-  <div ref="root" class="range" :class="{ active: isActive }">
-    <location class="location" :isDisabled="!isActive" v-model="location" />
+  <div ref="root" class="range" :class="{ active: isActive }" @click="onRootClick">
+    <location-input class="location" :isDisabled="!isActive" v-model="location" />
     <transport-type class="transport-type" :isDisabled="!isActive" v-model="transportType" />
     <travel-time class="travel-time" :isDisabled="!isActive" v-model="travelTime" />
   </div>
@@ -13,7 +13,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 48px;
+  padding: 0 48px;
+  background-color: white;
+  height: 76px;
+  cursor: pointer;
+  transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+  overflow: hidden;
 
   > * {
     padding: 0;
@@ -24,6 +29,8 @@
     align-items: stretch;
     justify-content: unset;
     padding: 0;
+    cursor: default;
+    height: 230px;
 
     > * {
       padding: 24px 48px;
@@ -54,60 +61,67 @@
 
 .travel-time::v-deep {
   z-index: 1;
-  background-color: transparent;
+  background-color: white;
   margin-left: 4px;
 
   .active & {
     margin-left: unset;
-    background-color: rgba($greyscale-1, 0.11);
+    background-color: lighten($greyscale-1, 55);
   }
 }
 </style>
 <script>
-import Location from "./Location";
+import LocationInput from "./LocationInput";
 import TransportType from "./TransportType";
 import TravelTime from "./TravelTime";
 
 export default {
   props: {
-    value: Object,
-    isActive: Boolean
+    value: {
+      type: Object,
+      default: function() {
+        return {
+          location: {
+            type: "home",
+            address: null
+          },
+          transportType: "public",
+          travelTime: 45
+        };
+      }
+    },
+    isActive: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {
-      location: this.value ? this.value.location : null,
-      transportType: this.value ? this.value.transportType : "public",
-      travelTime: this.value ? this.value.travelTime : 30
+      location: this.value.location,
+      transportType: this.value.transportType,
+      travelTime: this.value.travelTime
     };
   },
   components: {
-    Location,
+    LocationInput,
     TransportType,
     TravelTime
   },
   watch: {
     location: function(location) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, location });
+      console.log("aaa");
+      this.$emit("input", { ...this.value, location });
     },
     transportType: function(transportType) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, transportType });
+      this.$emit("input", { ...this.value, transportType });
     },
     travelTime: function(travelTime) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, travelTime });
+      this.$emit("input", { ...this.value, travelTime });
     }
-  },
-  mounted() {
-    this.$refs.root.addEventListener("click", this.onRootClick);
   },
   methods: {
     onRootClick() {
       this.$emit("focus");
-    },
-    setValue(newValue) {
-      this.$emit("input", newValue);
     }
   }
 };

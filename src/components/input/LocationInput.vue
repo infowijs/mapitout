@@ -180,7 +180,15 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   props: {
-    value: Object,
+    value: {
+      type: Object,
+      default: function() {
+        return {
+          type: "home",
+          address: null
+        };
+      }
+    },
     isDisabled: {
       type: Boolean,
       default: false
@@ -192,8 +200,8 @@ export default {
   },
   data() {
     return {
-      type: this.value ? this.value.type : "home",
-      address: this.value ? this.value.address : null
+      type: this.value.type,
+      address: this.value.address
     };
   },
   computed: {
@@ -203,20 +211,14 @@ export default {
   },
   watch: {
     type: function(type) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, type });
+      this.$emit("input", { ...this.value, type });
     },
     address: function(address) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, address });
+      this.$emit("input", { ...this.value, address });
     }
   },
   methods: {
-    ...mapActions("address", ["search", "resolve"]),
-
-    setValue(newValue) {
-      this.$emit("input", newValue);
-    }
+    ...mapActions("address", ["search", "resolve"])
   }
 };
 </script>

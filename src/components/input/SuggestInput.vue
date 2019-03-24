@@ -3,7 +3,6 @@
     :class="{ focused: isInputFocused, disabled: isDisabled }"
     v-overlay-container="{ togglePropName: 'areSuggestionsVisible' }"
     v-navigable-container="{ cursorPropName: 'cursorIndex' }"
-    @click="onRootClick"
   >
     <input
       type="text"
@@ -145,10 +144,6 @@ export default {
     debouncedSuggest: debounce(function(query) {
       this.suggest(query);
     }, 500),
-
-    onRootClick(event) {
-      console.log(event);
-    },
 
     onInputFocus() {
       this.isInputFocused = true;

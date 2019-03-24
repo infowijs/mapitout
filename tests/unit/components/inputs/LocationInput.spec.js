@@ -1,12 +1,12 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 
-import Location from "@/components/input/Location.vue";
+import LocationInput from "@/components/input/LocationInput.vue";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("Location", () => {
+describe("LocationInput", () => {
   let $store;
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe("Location", () => {
   });
 
   it("should create", () => {
-    const wrapper = shallowMount(Location, {
+    const wrapper = shallowMount(LocationInput, {
       localVue,
       mocks: {
         $store
@@ -40,49 +40,33 @@ describe("Location", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  it("should trigger a setValue call whenever the type or address change ", () => {
-    const wrapper = shallowMount(Location, {
+  it("should trigger a setValue call whenever the type property changes ", () => {
+    const wrapper = shallowMount(LocationInput, {
       localVue,
       mocks: {
         $store
-      },
-      propsData: {
-        value: {
-          type: "home",
-          address: null
-        }
       }
     });
 
-    const setValueSpy = jest.spyOn(wrapper.vm, "setValue").mockImplementation();
-
     wrapper.setData({
-      type: "test-value"
+      type: "work"
     });
 
-    wrapper.setData({
-      address: {}
-    });
-
-    expect(setValueSpy).toHaveBeenCalledTimes(2);
+    expect(wrapper.emitted("input")).toBeTruthy();
   });
 
-  it("should emit a value change whenever the resolved address value changes", () => {
-    const wrapper = shallowMount(Location, {
+  it("should trigger a setValue call whenever the address property changes ", () => {
+    const wrapper = shallowMount(LocationInput, {
       localVue,
       mocks: {
         $store
       }
     });
 
-    wrapper.vm.setValue({
-      type: "test-value"
-    });
-
-    wrapper.vm.setValue({
+    wrapper.setData({
       address: {}
     });
 
-    expect(wrapper.emitted().input.length).toBeTruthy();
+    expect(wrapper.emitted("input")).toBeTruthy();
   });
 });
