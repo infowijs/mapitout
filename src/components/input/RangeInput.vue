@@ -17,7 +17,7 @@
   background-color: white;
   height: 76px;
   cursor: pointer;
-  transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+  /*transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;*/
   overflow: hidden;
 
   > * {
@@ -81,10 +81,8 @@ export default {
       type: Object,
       default: function() {
         return {
-          location: {
-            type: "home",
-            address: null
-          },
+          type: "home",
+          origin: null,
           transportType: "public",
           travelTime: 45
         };
@@ -97,7 +95,10 @@ export default {
   },
   data() {
     return {
-      location: this.value.location,
+      location: {
+        type: this.value.type,
+        address: this.value.origin
+      },
       transportType: this.value.transportType,
       travelTime: this.value.travelTime
     };
@@ -109,8 +110,7 @@ export default {
   },
   watch: {
     location: function(location) {
-      console.log("aaa");
-      this.$emit("input", { ...this.value, location });
+      this.$emit("input", { ...this.value, type: location.type, origin: location.address });
     },
     transportType: function(transportType) {
       this.$emit("input", { ...this.value, transportType });
