@@ -6,7 +6,6 @@
 
 aside {
   background: white;
-  height: 86px;
   transition: height 0.2s ease-in-out;
 
   @media (min-width: $breakpoint-tablet-portrait) {

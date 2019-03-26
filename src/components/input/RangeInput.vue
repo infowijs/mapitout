@@ -15,7 +15,6 @@
   justify-content: space-between;
   padding: 0 48px;
   background-color: white;
-  height: 76px;
   cursor: pointer;
   /*transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;*/
   overflow: hidden;
@@ -30,7 +29,6 @@
     justify-content: unset;
     padding: 0;
     cursor: default;
-    height: 230px;
 
     > * {
       padding: 24px 48px;
