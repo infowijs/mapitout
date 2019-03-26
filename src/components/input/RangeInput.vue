@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="range" :class="{ active: isActive }" @click="onRootClick">
+  <div class="range" :class="{ active: isActive }" @click="onRootClick">
     <location-input class="location" :isDisabled="!isActive" v-model="location" />
     <transport-type class="transport-type" :isDisabled="!isActive" v-model="transportType" />
     <travel-time class="travel-time" :isDisabled="!isActive" v-model="travelTime" />
@@ -27,7 +27,7 @@
   &.active {
     flex-direction: column;
     align-items: stretch;
-    justify-content: unset;
+    justify-content: normal;
     padding: 0;
     cursor: default;
     height: 230px;
@@ -53,7 +53,7 @@
   margin-left: auto;
 
   .active & {
-    margin-left: unset;
+    margin-left: 0;
     z-index: 1;
     background-color: $greyscale-2;
   }
@@ -65,7 +65,7 @@
   margin-left: 4px;
 
   .active & {
-    margin-left: unset;
+    margin-left: 0;
     background-color: lighten($greyscale-1, 55);
   }
 }
@@ -121,7 +121,9 @@ export default {
   },
   methods: {
     onRootClick() {
-      this.$emit("focus");
+      if (!this.isActive) {
+        this.$emit("focus");
+      }
     }
   }
 };
