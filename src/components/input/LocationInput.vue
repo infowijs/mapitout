@@ -1,13 +1,19 @@
 <template>
-  <div class="location">
-    <enhanced-select class="type" v-model="type" :options="locationTypes"></enhanced-select>
+  <div :class="['location', { disabled: isDisabled }]">
+    <enhanced-select
+      class="type"
+      v-model="type"
+      :isDisabled="isDisabled"
+      :options="locationTypes"
+    />
     <suggest-input
       class="address"
       v-model="address"
+      :isDisabled="isDisabled"
       :search="search"
       :resolve="resolve"
       placeholder="Choose an address"
-    ></suggest-input>
+    />
   </div>
 </template>
 <style scoped lang="scss">
@@ -32,14 +38,12 @@ $locationTypeIconPaths: (
   display: flex;
 
   .trigger {
-    width: 28px;
     height: 28px;
     border: 0 none;
     background-color: transparent;
     background-repeat: no-repeat;
     background-position: left center;
-    padding-left: 32px;
-    cursor: pointer;
+    padding: 0 0 0 36px;
     font-size: 0;
 
     &::after {
@@ -95,7 +99,7 @@ $locationTypeIconPaths: (
     font-size: 16px;
     background-color: transparent;
     background-repeat: no-repeat, no-repeat;
-    background-position: center right, left, center;
+    background-position: center right, left center;
     cursor: pointer;
     color: transparent;
 
@@ -109,11 +113,33 @@ $locationTypeIconPaths: (
       }
     }
   }
+
+  .disabled & {
+    &::after {
+      content: " ";
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+    }
+    .trigger {
+      padding: 0 0 0 44px;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .native {
+      z-index: -1;
+      background-position: -100% -100%, left center;
+    }
+  }
 }
 
-.address {
+.address::v-deep {
   flex-grow: 1;
-  margin-left: 12px;
+  margin-left: 1rem;
 
   &::after {
     content: " ";
@@ -123,16 +149,26 @@ $locationTypeIconPaths: (
     right: 0;
     width: 25%;
     height: calc(100% - 2px);
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), $greyscale-2);
   }
 
   &.focused::after {
     content: none;
   }
 
-  &::v-deep {
+  .input {
+    border-width: 0 0 2px 0;
+  }
+
+  .disabled & {
+    &::after {
+      width: 40%;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+    }
+
     .input {
-      border-width: 0 0 2px 0;
+      border-width: 0;
+      padding: 0;
     }
   }
 }
@@ -144,7 +180,19 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   props: {
-    value: Object
+    value: {
+      type: Object,
+      default: function() {
+        return {
+          type: "home",
+          address: null
+        };
+      }
+    },
+    isDisabled: {
+      type: Boolean,
+      default: false
+    }
   },
   components: {
     EnhancedSelect,
@@ -152,8 +200,8 @@ export default {
   },
   data() {
     return {
-      type: this.value ? this.value.type : "home",
-      address: this.value ? this.value.address : null
+      type: this.value.type,
+      address: this.value.address
     };
   },
   computed: {
@@ -163,20 +211,14 @@ export default {
   },
   watch: {
     type: function(type) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, type });
+      this.$emit("input", { ...this.value, type });
     },
     address: function(address) {
-      const currentValue = this.value ? this.value : {};
-      this.setValue({ ...currentValue, address });
+      this.$emit("input", { ...this.value, address });
     }
   },
   methods: {
-    ...mapActions("address", ["search", "resolve"]),
-
-    setValue(newValue) {
-      this.$emit("input", newValue);
-    }
+    ...mapActions("address", ["search", "resolve"])
   }
 };
 </script>

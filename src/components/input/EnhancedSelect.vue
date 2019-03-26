@@ -1,5 +1,9 @@
 <template>
-  <div ref="rootEl" v-overlay-container="{ togglePropName: 'isListVisible' }">
+  <div
+    ref="rootEl"
+    :class="{ disabled: isDisabled }"
+    v-overlay-container="{ togglePropName: 'isListVisible' }"
+  >
     <button class="trigger" :class="selectedClass" @click="onTriggerClick">
       {{ value }}
     </button>
@@ -12,7 +16,13 @@
         </li>
       </ul>
     </transition>
-    <select class="native" v-model="selected" @change="onSelectChange" :class="selectedClass">
+    <select
+      :disabled="isDisabled"
+      class="native"
+      v-model="selected"
+      @change="onSelectChange"
+      :class="selectedClass"
+    >
       <option v-for="option in options" :key="option.value" :value="option.value">
         {{ option.label }}
       </option>
@@ -29,9 +39,15 @@ div {
 }
 .trigger {
   display: none;
+  outline: none;
+  cursor: pointer;
 
   @media (min-width: $breakpoint-tablet-portrait) {
     display: initial;
+  }
+
+  .disabled & {
+    cursor: default;
   }
 }
 .native {
@@ -74,6 +90,7 @@ div {
       cursor: pointer;
       text-align: center;
       color: $greyscale-1;
+      outline: none;
     }
   }
 }
@@ -84,6 +101,10 @@ import "../../directives/overlayContainer";
 export default {
   props: {
     value: String,
+    isDisabled: {
+      type: Boolean,
+      default: false
+    },
     options: Array
   },
   data() {
@@ -99,7 +120,9 @@ export default {
   },
   methods: {
     onTriggerClick() {
-      this.isListVisible = !this.isListVisible;
+      if (!this.isDisabled) {
+        this.isListVisible = !this.isListVisible;
+      }
     },
 
     onListItemClick(value) {

@@ -31,22 +31,21 @@ describe("address store module", () => {
   });
 
   describe("getters", () => {
-    xdescribe("getResolvedById", () => {
+    describe("getResolvedById", () => {
       it("should retrieve the correct resolved address if it's saved into the state", () => {
         const resolved = { id: "test-id", value: {} };
         const state = { resolved: [resolved] };
 
-        const result = getters.getResolvedById(state, resolved.id);
+        const result = getters.getResolvedById(state)(resolved.id);
 
-        expect(result.id).toEqual(resolved);
+        expect(result).toEqual(resolved);
       });
 
       it("should return null if the requested id was not saved into the state", () => {
         const resolved = { id: "test-id", coordinates: {} };
-        const resolved2 = { id: "test-id2", coordinates: {} };
         const state = { resolved: [resolved] };
 
-        const result = getters.getResolvedById(state, resolved2.id);
+        const result = getters.getResolvedById(state)("other-id");
 
         expect(result).toBeUndefined();
       });
