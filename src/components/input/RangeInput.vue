@@ -16,7 +16,6 @@
   padding: 0 48px;
   background-color: white;
   cursor: pointer;
-  /*transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;*/
   overflow: hidden;
 
   > * {
