@@ -1,3 +1,4 @@
+/* global jest */
 const GoogleMapsApiLoader = jest.fn();
 const Map = jest.fn();
 

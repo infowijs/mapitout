@@ -4,8 +4,7 @@
       <li
         v-for="(option, index) in options"
         :key="option.value"
-        class="option"
-        :class="[option.value, { selected: option.value === value }]"
+        :class="['option', { selected: option.value === value }]"
       >
         <button tabindex="0" :title="options.label" @click="onListItemClick(index)">
           <component :is="option.icon" />
@@ -92,17 +91,17 @@ import IconCar from "../../assets/icons/IconCar.svg";
 import IconPedestrian from "../../assets/icons/IconPedestrian.svg";
 
 const TRANSPORT_TYPES = [
-  { value: "public", label: "Public Transport", icon: "icon-bus" },
-  { value: "car", label: "Vehicle", icon: "icon-car" },
-  { value: "bicycle", label: "Bicycle", icon: "icon-bicycle" },
-  { value: "foot", label: "Walking", icon: "icon-pedestrian" },
-  { value: "mixed", label: "Public Transport and Bicycle", icon: "icon-bicycle-bus" }
+  { value: "public_transport", label: "Public Transport", icon: "icon-bus" },
+  { value: "driving", label: "Vehicle", icon: "icon-car" },
+  { value: "cycling", label: "Bicycle", icon: "icon-bicycle" },
+  { value: "walking", label: "Walking", icon: "icon-pedestrian" },
+  { value: "cycling+ferry", label: "Public Transport and Bicycle", icon: "icon-bicycle-bus" }
 ];
 export default {
   props: {
     value: {
       type: String,
-      default: "public",
+      default: "public_transport",
       validator: value => TRANSPORT_TYPES.map(type => type.value).indexOf(value) !== -1
     },
     isDisabled: Boolean

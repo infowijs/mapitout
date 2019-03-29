@@ -99,7 +99,7 @@ div {
 }
 </style>
 <script>
-import { debounce } from "lodash";
+import { debounce, isEqual } from "lodash";
 
 import "../../directives/overlayContainer";
 import "../../directives/navigableContainer";
@@ -110,7 +110,16 @@ export default {
       type: String,
       default: ""
     },
-    value: Object,
+    value: {
+      type: Object,
+      default() {
+        return {
+          id: undefined,
+          label: "",
+          value: null
+        };
+      }
+    },
     isDisabled: {
       type: Boolean,
       default: false
@@ -126,7 +135,7 @@ export default {
   },
   data() {
     return {
-      query: this.value ? this.value.label : "",
+      query: this.value.label,
       isInputFocused: false,
       areSuggestionsVisible: false,
       suggestions: [],
@@ -187,22 +196,26 @@ export default {
 
     async select(index) {
       const suggestion = this.suggestions[index];
-      let value = null;
+      let value = { ...this.value };
 
-      if (suggestion && (!this.value || (this.value && this.value.id !== suggestion.id))) {
+      if (suggestion) {
         value = await this.resolve(suggestion.id);
+      } else if (this.value.label !== this.query || !this.query) {
+        value = {
+          id: undefined,
+          label: "",
+          value: null
+        };
+      }
+
+      if (this.value.label !== this.query) {
+        this.query = value.label;
       }
 
       this.areSuggestionsVisible = false;
 
-      if (value) {
-        this.query = value.label;
-      }
-
-      if (value !== this.value) {
-        if ((!this.value && value) || (this.value && this.value.label !== this.query)) {
-          this.$emit("input", value);
-        }
+      if (!isEqual(value, { ...this.value })) {
+        this.$emit("input", value);
       }
     }
   }

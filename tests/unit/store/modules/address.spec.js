@@ -178,7 +178,7 @@ describe("address store module", () => {
         expect(context.dispatch).toHaveBeenCalledWith("reportError", new Error("Server error"), {
           root: true
         });
-        expect(result).toBeNull();
+        expect(result).toEqual({ id: undefined, label: "", value: null });
       });
 
       it("should return a null value and dispatch an error action given invalid json", async () => {
@@ -195,7 +195,7 @@ describe("address store module", () => {
             root: true
           }
         );
-        expect(result).toBeNull();
+        expect(result).toEqual({ id: undefined, label: "", value: null });
       });
 
       it("should return a coordinates object that will be saved to state on a successful fetch call", async () => {

@@ -185,7 +185,9 @@ export default {
       default: function() {
         return {
           type: "home",
-          address: null
+          addressId: undefined,
+          address: undefined,
+          coordinates: null
         };
       }
     },
@@ -201,7 +203,11 @@ export default {
   data() {
     return {
       type: this.value.type,
-      address: this.value.address
+      address: {
+        id: this.value.addressId,
+        value: this.value.coordinates,
+        label: this.value.address
+      }
     };
   },
   computed: {
@@ -213,8 +219,14 @@ export default {
     type: function(type) {
       this.$emit("input", { ...this.value, type });
     },
+
     address: function(address) {
-      this.$emit("input", { ...this.value, address });
+      this.$emit("input", {
+        ...this.value,
+        addressId: address.id,
+        address: address.label,
+        coordinates: address.value
+      });
     }
   },
   methods: {

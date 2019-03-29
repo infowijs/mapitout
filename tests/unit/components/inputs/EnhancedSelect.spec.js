@@ -23,6 +23,19 @@ describe("EnhancedSelect", () => {
     expect(wrapper.vm.isListVisible).toBeTruthy();
   });
 
+  it("should skip displaying the list upon clicking the trigger when the component is disabled", () => {
+    const wrapper = shallowMount(EnhancedSelect, {
+      localVue,
+      propsData: {
+        isDisabled: true
+      }
+    });
+
+    wrapper.find("button").trigger("click");
+
+    expect(wrapper.vm.isListVisible).toBeFalsy();
+  });
+
   it("should hide the list upon clicking the trigger a second time", () => {
     const wrapper = shallowMount(EnhancedSelect, {
       localVue

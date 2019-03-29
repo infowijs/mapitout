@@ -98,12 +98,17 @@ describe("SuggestInput", () => {
     expect(wrapper.vm.cursorIndex).toEqual(0);
   });
 
-  xit("should reset the cursor whenever this list is hidden", () => {
+  it("should reset the cursor whenever this list is hidden", () => {
     const wrapper = shallowMount(SuggestInput, {
       localVue,
       propsData: {
         search,
         resolve
+      },
+      data() {
+        return {
+          areSuggestionsVisible: true
+        };
       }
     });
     wrapper.setData({
@@ -225,6 +230,26 @@ describe("SuggestInput", () => {
     expect(selectSpy).toHaveBeenCalledWith(0);
   });
 
+  it("should not trigger a selection of the cursor index when pressing any other key", () => {
+    const wrapper = shallowMount(SuggestInput, {
+      localVue,
+      propsData: {
+        search,
+        resolve
+      }
+    });
+
+    const selectSpy = jest.spyOn(wrapper.vm, "select").mockImplementation();
+
+    wrapper.setData({ cursorIndex: 0 });
+
+    wrapper.find("input").trigger("keydown", {
+      key: "Y"
+    });
+
+    expect(selectSpy).not.toHaveBeenCalled();
+  });
+
   it("should only search for queries longer than two characters", async () => {
     const wrapper = shallowMount(SuggestInput, {
       localVue,
@@ -279,7 +304,7 @@ describe("SuggestInput", () => {
     expect(wrapper.vm.areSuggestionsVisible).toBeFalsy();
   });
 
-  it("should emit an input event with a null value whenever an invalid selection is triggered on a set value", async () => {
+  it("should emit an input event with an empty value whenever an invalid selection is triggered on a set value", async () => {
     const wrapper = shallowMount(SuggestInput, {
       localVue,
       propsData: {
@@ -297,7 +322,7 @@ describe("SuggestInput", () => {
     });
     await wrapper.vm.select(-1);
 
-    expect(wrapper.emitted().input[0][0]).toBeNull();
+    expect(wrapper.emitted().input[0][0]).toEqual({ id: undefined, label: "", value: null });
   });
 
   it("should emit an input event whenever a selection is resolved", async () => {
@@ -305,20 +330,18 @@ describe("SuggestInput", () => {
       localVue,
       propsData: {
         search,
-        resolve,
-        value: null
+        resolve
       }
     });
+    const resolved = {
+      id: "test-id",
+      label: "test-label",
+      value: {}
+    };
 
     wrapper.setData({
-      suggestions: [
-        {
-          id: "test-id"
-        }
-      ]
+      suggestions: [{ id: resolved.id }]
     });
-
-    const resolved = { id: "test-resolved-id" };
 
     resolve.mockResolvedValue(resolved);
 
