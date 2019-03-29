@@ -13,6 +13,7 @@
 </style>
 <style scoped lang="scss">
 @import "style/variables";
+@import "style/fonts";
 
 main {
   width: 100%;
