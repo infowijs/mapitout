@@ -1,6 +1,6 @@
 <template>
   <div :class="['trave-time', { disabled: isDisabled }]">
-    <icon class="icon" name="icon-time" v-if="!isDisabled" />
+    <icon-time class="icon" v-if="!isDisabled" />
     <div class="rail-labels-value">
       <div class="current-value">
         <span class="label" v-if="!isDisabled">Travel time: </span>
@@ -107,7 +107,7 @@ svg {
 </style>
 <script>
 import Hammer from "hammerjs";
-import Icon from "../Icon";
+import IconTime from "../../assets/icons/IconTime.svg";
 
 export default {
   props: {
@@ -144,7 +144,7 @@ export default {
     };
   },
   components: {
-    Icon
+    IconTime
   },
   mounted() {
     this.initHammer();

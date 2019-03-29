@@ -20,12 +20,12 @@
 @import "../../style/variables";
 
 $locationTypeIconPaths: (
-  (home, "../../assets/icons/symbol-house.svg"),
-  (work, "../../assets/icons/symbol-work.svg"),
-  (health, "../../assets/icons/symbol-health.svg"),
-  (wellness, "../../assets/icons/symbol-wellness.svg"),
-  (transport, "../../assets/icons/symbol-transport.svg"),
-  (education, "../../assets/icons/symbol-education.svg")
+  (home, "../../assets/icons/IconHome.svg?external"),
+  (work, "../../assets/icons/IconWork.svg?external"),
+  (health, "../../assets/icons/IconHealth.svg?external"),
+  (wellness, "../../assets/icons/IconWellness.svg?external"),
+  (transport, "../../assets/icons/IconTransport.svg?external"),
+  (education, "../../assets/icons/IconEducation.svg?external")
 );
 
 .location {
@@ -51,7 +51,7 @@ $locationTypeIconPaths: (
       display: block;
       height: 100%;
       width: 8px;
-      background: transparent url("../../assets/carret-down.svg") no-repeat center center;
+      background: transparent url("../../assets/carret-down.svg?external") no-repeat center center;
     }
 
     @each $key, $path in $locationTypeIconPaths {
@@ -109,7 +109,7 @@ $locationTypeIconPaths: (
 
     @each $key, $path in $locationTypeIconPaths {
       &.selected-#{$key} {
-        background-image: url("../../assets/carret-down.svg"), url($path);
+        background-image: url("../../assets/carret-down.svg?external"), url($path);
       }
     }
   }
