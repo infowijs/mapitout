@@ -1,3 +1,10 @@
+import IconHome from "@/assets/icons/IconHome.svg";
+import IconTransport from "@/assets/icons/IconTransport.svg";
+import IconHealth from "@/assets/icons/IconHealth.svg";
+import IconWork from "@/assets/icons/IconWork.svg";
+import IconEducation from "@/assets/icons/IconEducation.svg";
+import IconWellness from "@/assets/icons/IconWellness.svg";
+
 export const mutations = {
   saveResolved(state, resolved) {
     if (state.resolved.filter(resolved => resolved.id === resolved.id).length === 0) {
@@ -103,12 +110,12 @@ export default {
   namespaced: true,
   state: {
     types: [
-      { value: "home", label: "Home" },
-      { value: "transport", label: "Station" },
-      { value: "health", label: "Health" },
-      { value: "work", label: "Work" },
-      { value: "education", label: "School" },
-      { value: "wellness", label: "Gym" }
+      { value: "home", label: "Home", icon: IconHome, highlightColor: "#ff0000" },
+      { value: "transport", label: "Station", icon: IconTransport, highlightColor: "#fd6500" },
+      { value: "health", label: "Health", icon: IconHealth, highlightColor: "#87c010" },
+      { value: "work", label: "Work", icon: IconWork, highlightColor: "#ff0000" },
+      { value: "education", label: "School", icon: IconEducation, highlightColor: "#0c65d5" },
+      { value: "wellness", label: "Gym", icon: IconWellness, highlightColor: "#942190" }
     ],
     resolved: []
   },

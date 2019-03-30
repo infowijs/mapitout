@@ -5,7 +5,7 @@
       class="address"
       v-model="address"
       :isDisabled="isDisabled"
-      :search="search"
+      :search="searchByAddress"
       :resolve="resolve"
       placeholder="Choose an address"
     />
@@ -15,12 +15,12 @@
 @import "../../style/variables";
 
 $locationTypeIconPaths: (
-  (home, "../../assets/icons/IconHome.svg?external"),
-  (work, "../../assets/icons/IconWork.svg?external"),
-  (health, "../../assets/icons/IconHealth.svg?external"),
-  (wellness, "../../assets/icons/IconWellness.svg?external"),
-  (transport, "../../assets/icons/IconTransport.svg?external"),
-  (education, "../../assets/icons/IconEducation.svg?external")
+  (home, "../../assets/icons/IconHome.svg"),
+  (work, "../../assets/icons/IconWork.svg"),
+  (health, "../../assets/icons/IconHealth.svg"),
+  (wellness, "../../assets/icons/IconWellness.svg"),
+  (transport, "../../assets/icons/IconTransport.svg"),
+  (education, "../../assets/icons/IconEducation.svg")
 );
 
 .location {
@@ -46,7 +46,7 @@ $locationTypeIconPaths: (
       display: block;
       height: 100%;
       width: 8px;
-      background: transparent url("../../assets/carret-down.svg?external") no-repeat center center;
+      background: transparent url("../../assets/carret-down.svg") no-repeat center center;
     }
 
     @each $key, $path in $locationTypeIconPaths {
@@ -104,7 +104,7 @@ $locationTypeIconPaths: (
 
     @each $key, $path in $locationTypeIconPaths {
       &.selected-#{$key} {
-        background-image: url("../../assets/carret-down.svg?external"), url($path);
+        background-image: url("../../assets/carret-down.svg"), url($path);
       }
     }
   }

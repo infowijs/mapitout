@@ -30,7 +30,6 @@ header {
   position: relative;
   background: $greyscale-0;
   overflow: visible;
-  height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -46,12 +45,6 @@ header {
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  height: 40px;
-  padding-left: 60px;
-  background: url("../assets/logo.svg") no-repeat;
-  background-size: 40px 40px;
-  text-transform: uppercase;
-  color: #f7f7f7;
   text-decoration: none;
 
   .icon {
@@ -95,7 +88,7 @@ header {
 }
 </style>
 <script>
-import Logo from "../assets/logo.svg";
+import Logo from "@/assets/logo.svg?inline";
 
 export default {
   components: {

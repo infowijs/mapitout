@@ -84,11 +84,11 @@
 }
 </style>
 <script>
-import IconBicycle from "../../assets/icons/IconBicycle.svg";
-import IconBicycleBus from "../../assets/icons/IconBicycleBus.svg";
-import IconBus from "../../assets/icons/IconBus.svg";
-import IconCar from "../../assets/icons/IconCar.svg";
-import IconPedestrian from "../../assets/icons/IconPedestrian.svg";
+import IconBicycle from "@/assets/icons/IconBicycle.svg?inline";
+import IconBicycleBus from "@/assets/icons/IconBicycleBus.svg?inline";
+import IconBus from "@/assets/icons/IconBus.svg?inline";
+import IconCar from "@/assets/icons/IconCar.svg?inline";
+import IconPedestrian from "@/assets/icons/IconPedestrian.svg?inline";
 
 const TRANSPORT_TYPES = [
   { value: "public_transport", label: "Public Transport", icon: "icon-bus" },

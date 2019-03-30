@@ -107,7 +107,7 @@ svg {
 </style>
 <script>
 import Hammer from "hammerjs";
-import IconTime from "../../assets/icons/IconTime.svg";
+import IconTime from "@/assets/icons/IconTime.svg?inline";
 
 export default {
   props: {
