@@ -44,7 +44,7 @@
 
 .travel-time::v-deep {
   z-index: 1;
-  background-color: lighten($greyscale-1, 55);
+  background-color: $greyscale-2;
   padding: 24px 48px;
   order: 4;
 

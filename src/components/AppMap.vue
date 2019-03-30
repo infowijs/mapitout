@@ -1,12 +1,6 @@
 <template>
-  <section ref="map" class="map"></section>
+  <section ref="map"></section>
 </template>
-<style scoped lang="scss">
-.map {
-  width: 100%;
-  height: 100%;
-}
-</style>
 <script>
 import GoogleMapsApiLoader from "google-maps-api-loader";
 

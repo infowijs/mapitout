@@ -1,14 +1,19 @@
 <template>
   <header>
-    <router-link to="/" class="logo">map<span>it</span>out</router-link>
+    <router-link to="/" class="logo">
+      <logo class="icon"></logo>
+      <span class="text-map">map</span>
+      <span class="text-it">it</span>
+      <span class="text-out">out</span>
+    </router-link>
     <a
       class="iamsterdam"
       href="https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area"
-      alt="Living in the Amsterdam Area | I amsterdam"
+      title="Living in the Amsterdam Area | I amsterdam"
     >
       <img
         src="../assets/iamsterdam-tablet-landscape.png"
-        alt="IAmsterdam"
+        alt="Living in the Amsterdam Area | I amsterdam"
         srcset="
           ../assets/iamsterdam-mobile.png           105w,
           ../assets/iamsterdam-tablet-landscape.png 179w
@@ -48,12 +53,31 @@ header {
   text-transform: uppercase;
   color: #f7f7f7;
   text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 2px;
-  line-height: 18px;
+
+  .icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 16px;
+  }
 
   span {
-    color: $primary;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    @media (min-width: $breakpoint-tablet-portrait) {
+      font-size: 14px;
+    }
+
+    &.text-it {
+      color: $primary;
+    }
+
+    &.text-map,
+    &.text-out {
+      color: $greyscale-2;
+    }
   }
 }
 .iamsterdam {
@@ -70,3 +94,12 @@ header {
   }
 }
 </style>
+<script>
+import Logo from "../assets/logo.svg";
+
+export default {
+  components: {
+    Logo
+  }
+};
+</script>
