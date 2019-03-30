@@ -12,7 +12,7 @@ describe("LocationInput", () => {
   beforeEach(() => {
     $store = new Vuex.Store({
       modules: {
-        address: {
+        locations: {
           namespaced: true,
           state: {
             types: [
@@ -21,7 +21,7 @@ describe("LocationInput", () => {
             ]
           },
           actions: {
-            search: jest.fn(),
+            searchByAddress: jest.fn(),
             resolve: jest.fn()
           }
         }

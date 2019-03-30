@@ -1,11 +1,6 @@
 <template>
   <div :class="['location', { disabled: isDisabled }]">
-    <enhanced-select
-      class="type"
-      v-model="type"
-      :isDisabled="isDisabled"
-      :options="locationTypes"
-    />
+    <enhanced-select class="type" v-model="type" :isDisabled="isDisabled" :options="types" />
     <suggest-input
       class="address"
       v-model="address"
@@ -211,8 +206,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("address", {
-      locationTypes: state => state.types
+    ...mapState("locations", {
+      types: state => state.types
     })
   },
   watch: {
@@ -230,7 +225,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("address", ["search", "resolve"])
+    ...mapActions("locations", ["searchByAddress", "resolve"])
   }
 };
 </script>

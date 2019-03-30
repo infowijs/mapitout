@@ -1,6 +1,6 @@
 import { mutations, actions } from "../../../src/store";
 
-jest.mock("../../../src/store/modules/address", () => {
+jest.mock("../../../src/store/modules/locations", () => {
   return {};
 });
 

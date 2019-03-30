@@ -1,6 +1,6 @@
-import { mutations, getters, actions } from "../../../../src/store/modules/address";
+import { mutations, getters, actions } from "../../../../src/store/modules/locations";
 
-describe("address store module", () => {
+describe("locations store module", () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
@@ -53,11 +53,11 @@ describe("address store module", () => {
   });
 
   describe("actions", () => {
-    describe("search", () => {
+    describe("searchByAddress", () => {
       it("should call fetch with the correct url and request object", () => {
         const query = "testQuery";
         const expectedRequestObject = { method: "GET" };
-        actions.search({ dispatch: jest.fn() }, query);
+        actions.searchByAddress({ dispatch: jest.fn() }, query);
 
         fetch.mockResolvedValue({});
 
@@ -75,7 +75,7 @@ describe("address store module", () => {
 
         fetch.mockResolvedValue({ ok: false });
 
-        const result = await actions.search({ dispatch }, query);
+        const result = await actions.searchByAddress({ dispatch }, query);
 
         expect(dispatch).toHaveBeenCalledWith("reportError", new Error("Invalid server response"), {
           root: true
@@ -106,7 +106,7 @@ describe("address store module", () => {
           json: jest.fn().mockResolvedValue(validServerResponse)
         });
 
-        const result = await actions.search({ dispatch }, query);
+        const result = await actions.searchByAddress({ dispatch }, query);
 
         expect(result).toEqual(expectedResult);
       });
@@ -117,7 +117,7 @@ describe("address store module", () => {
 
         fetch.mockResolvedValue({ ok: true, json: jest.fn().mockRejectedValue("invalid json") });
 
-        const result = await actions.search({ dispatch }, query);
+        const result = await actions.searchByAddress({ dispatch }, query);
 
         expect(dispatch).toHaveBeenCalledWith(
           "reportError",
