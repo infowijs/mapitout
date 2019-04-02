@@ -135,12 +135,34 @@ import "./directives/expandable";
 import AppHeader from "./components/AppHeader";
 import AppMap from "./components/AppMap";
 import AppSidebar from "./components/AppSidebar";
+import { mapActions, mapGetters } from "vuex";
+import { isEqual, omit } from "lodash";
 
 export default {
   components: {
     AppHeader,
     AppMap,
     AppSidebar
+  },
+  watch: {
+    rangesWithOrigin: function(newValue, oldValue) {
+      if (
+        !isEqual(
+          newValue.map(range => ({ ...omit(range, ["originType", "highlightColor"]) })),
+          oldValue.map(range => ({ ...omit(range, ["originType", "highlightColor"]) }))
+        )
+      ) {
+        this.fetchAreas(newValue);
+      }
+    }
+  },
+  computed: {
+    ...mapGetters("ranges", ["rangesWithOrigin"])
+  },
+  methods: {
+    ...mapActions({
+      fetchAreas: "areas/fetch"
+    })
   }
 };
 </script>

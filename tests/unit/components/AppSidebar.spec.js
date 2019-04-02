@@ -7,7 +7,8 @@ const localVue = createLocalVue();
 describe("AppSidebar", () => {
   it("should create", () => {
     const wrapper = shallowMount(AppSidebar, {
-      localVue
+      localVue,
+      stubs: ["router-link", "router-view"]
     });
 
     expect(wrapper.isVueInstance()).toBeTruthy();

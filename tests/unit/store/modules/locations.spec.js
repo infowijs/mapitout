@@ -50,6 +50,25 @@ describe("locations store module", () => {
         expect(result).toBeUndefined();
       });
     });
+    describe("getLocationTypeByValue", () => {
+      it("should retrieve the type stored in the state by value passed", () => {
+        const type = { value: "test-value", icon: "" };
+        const state = { types: [type] };
+
+        const result = getters.getLocationTypeByValue(state)(type.value);
+
+        expect(result).toEqual(type);
+      });
+
+      it("should return null if the requested id was not saved into the state", () => {
+        const type = { value: "test-value", icon: "" };
+        const state = { types: [type] };
+
+        const result = getters.getLocationTypeByValue(state)("other-id");
+
+        expect(result).toBeUndefined();
+      });
+    });
   });
 
   describe("actions", () => {

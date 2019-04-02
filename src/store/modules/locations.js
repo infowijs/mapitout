@@ -14,6 +14,7 @@ export const mutations = {
 };
 
 export const getters = {
+  getLocationTypeByValue: state => value => state.types.find(type => type.value === value),
   getResolvedById: state => id => state.resolved.find(resolved => resolved.id === id)
 };
 
