@@ -1,10 +1,4 @@
-function getNextMonday9Am() {
-  const date = new Date();
-  date.setUTCDate(date.getUTCDate() + ((1 + 7 - date.getUTCDay()) % 7));
-  date.setUTCHours(9, 0, 0, 0);
-
-  return date;
-}
+import { getNextMonday9Am } from "../../utils";
 
 export const mutations = {
   update(state, areas) {

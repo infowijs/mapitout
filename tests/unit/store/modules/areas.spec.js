@@ -1,4 +1,5 @@
 import { mutations, actions } from "@/store/modules/areas";
+import { getNextMonday9Am } from "../../../../src/utils";
 
 describe("areas store module", () => {
   describe("mutations", () => {
@@ -56,10 +57,9 @@ describe("areas store module", () => {
         };
       });
 
-      xit("should call fetch with the correct parameters and always call commit", async () => {
+      it("should call fetch with the correct parameters and always call commit", async () => {
         const expectedRequest = {
-          body:
-            '{"departure_searches":[{"id":"range-0","coords":{"lat":1,"lng":1},"departure_time":"2019-04-01T09:00:00.000Z","travel_time":2700,"transportation":{"type":"public_transport"}},{"id":"range-1","coords":{"lat":1,"lng":2},"departure_time":"2019-04-01T09:00:00.000Z","travel_time":1200,"transportation":{"type":"car"}}],"unions":[{"id":"union","search_ids":["range-0","range-1"]}],"intersections":[{"id":"intersection","search_ids":["range-0","range-1"]}]}',
+          body: `{"departure_searches":[{"id":"range-0","coords":{"lat":1,"lng":1},"departure_time":"${getNextMonday9Am().toISOString()}","travel_time":2700,"transportation":{"type":"public_transport"}},{"id":"range-1","coords":{"lat":1,"lng":2},"departure_time":"${getNextMonday9Am().toISOString()}","travel_time":1200,"transportation":{"type":"car"}}],"unions":[{"id":"union","search_ids":["range-0","range-1"]}],"intersections":[{"id":"intersection","search_ids":["range-0","range-1"]}]}`,
           headers: {
             Accept: "application/json",
             "Content-type": "application/json; charset=utf-8"
