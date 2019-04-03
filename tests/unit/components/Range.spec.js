@@ -25,9 +25,6 @@ describe("Range", () => {
             coordinates: { lat: 0, lng: 0 }
           }
         };
-      },
-      computed: {
-        originTypes: []
       }
     });
 
