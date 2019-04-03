@@ -136,7 +136,7 @@ import AppHeader from "./components/AppHeader";
 import AppMap from "./components/AppMap";
 import AppSidebar from "./components/AppSidebar";
 import { mapActions, mapGetters } from "vuex";
-import { isEqual, omit } from "lodash";
+import { isEqual, omit } from "lodash-es";
 
 export default {
   components: {

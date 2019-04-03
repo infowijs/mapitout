@@ -99,7 +99,7 @@ div {
 }
 </style>
 <script>
-import { debounce, isEqual } from "lodash";
+import { debounce, isEqual } from "lodash-es";
 
 import "../../directives/overlayContainer";
 import "../../directives/navigableContainer";
