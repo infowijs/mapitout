@@ -14,7 +14,7 @@ export default {
       google: null,
       map: null,
       fullCoverage: null,
-      areaCoverages: {},
+      areaCoverages: [],
       originMarkers: [],
       intersectionPaths: []
     };
@@ -43,19 +43,17 @@ export default {
     },
 
     activeRangeId: function(activeRangeId) {
-      for (const rangeId in this.areaCoverages) {
-        if (this.areaCoverages.hasOwnProperty(rangeId)) {
-          if (rangeId === activeRangeId) {
-            this.areaCoverages[rangeId].setOptions({
-              fillOpacity: 0.2
-            });
-          } else {
-            this.areaCoverages[rangeId].setOptions({
-              fillOpacity: 0
-            });
-          }
+      this.areaCoverages.forEach(({ rangeId, areaCoverage }) => {
+        if (rangeId === activeRangeId) {
+          areaCoverage.setOptions({
+            fillOpacity: 0.2
+          });
+        } else {
+          areaCoverage.setOptions({
+            fillOpacity: 0
+          });
         }
-      }
+      });
     },
 
     rangesWithOrigin: function() {
@@ -65,9 +63,14 @@ export default {
   },
 
   async mounted() {
-    await this.initMap();
+    const googleApi = await this.initGoogleApi();
 
-    if (this.areas.length > 0) {
+    if (googleApi) {
+      this.google = googleApi;
+      this.map = await this.initGoogleMaps();
+    }
+
+    if (this.map && this.areas.length > 0) {
       this.drawOrigins();
       this.drawCoverage();
     }
@@ -78,17 +81,19 @@ export default {
       activateRange: "activate"
     }),
 
-    async initMap() {
+    async initGoogleApi() {
       try {
-        this.google = await GoogleMapsApiLoader({ apiKey: process.env.VUE_APP_GOOGLE_API_KEY });
+        return await GoogleMapsApiLoader({ apiKey: process.env.VUE_APP_GOOGLE_API_KEY });
       } catch (error) {
-        this.$router.push({ name: "error", params: { error } });
-        return;
+        this.$router.push({ name: "reportError", params: { error } });
+        return null;
       }
+    },
 
+    async initGoogleMaps() {
       const center = await getDeviceGeoLocation();
 
-      this.map = new this.google.maps.Map(this.$refs.map, {
+      return new this.google.maps.Map(this.$refs.map, {
         disableDefaultUI: true,
         zoom: 9,
         minZoom: 9,
@@ -101,9 +106,7 @@ export default {
     },
 
     drawOrigins() {
-      this.originMarkers.forEach(marker => {
-        marker.setMap(null);
-      });
+      this.cleanOrigins();
 
       this.originMarkers = this.rangesWithOrigin.map(range => {
         return new this.google.maps.Marker({
@@ -121,20 +124,22 @@ export default {
       this.areas.forEach(area => {
         switch (area.rangeId) {
           case "union":
-            this.drawUnion(area);
+            this.fullCoverage = this.drawUnion(area);
             break;
           case "intersection":
-            this.drawIntersections(area);
+            this.intersectionPaths = this.drawIntersections(area);
             break;
           default:
-            this.drawArea(area);
+            this.areaCoverages.push({ rangeId: area.rangeId, areaCoverage: this.drawArea(area) });
         }
       });
     },
 
     drawUnion(area) {
+      let union = null;
+
       if (area.paths.length >= 1) {
-        this.fullCoverage = new this.google.maps.Polygon({
+        union = new this.google.maps.Polygon({
           paths: [this.maskPath, ...area.paths],
           strokeColor: "#000000",
           strokeOpacity: 1,
@@ -144,11 +149,15 @@ export default {
           map: this.map
         });
       }
+
+      return union;
     },
 
     drawIntersections(area) {
-      if (this.areas.length > 3) {
-        this.intersectionPaths = area.paths.map(
+      let intersectionPaths = [];
+
+      if (this.areas.filter(area => !["union", "intersection"].includes(area.rangeId)).length > 1) {
+        intersectionPaths = area.paths.map(
           intersectionPath =>
             new this.google.maps.Polyline({
               path: intersectionPath,
@@ -171,6 +180,8 @@ export default {
             })
         );
       }
+
+      return intersectionPaths;
     },
 
     drawArea(area) {
@@ -199,7 +210,15 @@ export default {
         this.activateRange(area.rangeId);
       });
 
-      this.areaCoverages[area.rangeId] = areaCoverage;
+      return areaCoverage;
+    },
+
+    cleanOrigins() {
+      this.originMarkers.forEach(marker => {
+        marker.setMap(null);
+      });
+
+      this.originMarkers = [];
     },
 
     cleanCoverage() {
@@ -213,13 +232,10 @@ export default {
         return acc;
       }, []);
 
-      for (let areaId in this.areaCoverages) {
-        if (this.areaCoverages.hasOwnProperty(areaId)) {
-          this.areaCoverages[areaId].setMap(null);
-        }
-      }
-
-      this.areaCoverages = {};
+      this.areaCoverages = this.areaCoverages.reduce((acc, { areaCoverage }) => {
+        areaCoverage.setMap(null);
+        return acc;
+      }, []);
     }
   }
 };
