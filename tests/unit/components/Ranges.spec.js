@@ -100,7 +100,6 @@ describe("Ranges", () => {
       }
     });
     const updatedRange = { id: "range-0", testKey: "test" };
-
     wrapper.find(Range).trigger("input", updatedRange);
 
     expect(updateRangeSpy).toHaveBeenCalledWith(updatedRange);

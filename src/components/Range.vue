@@ -67,6 +67,7 @@ export default {
       type: Object,
       default: function() {
         return {
+          departureTime: new Date(),
           travelTime: 45,
           transportType: "public_transport",
           originType: "home",
@@ -87,6 +88,7 @@ export default {
       travelTime: this.value.travelTime,
       transportType: this.value.transportType,
       highlightColor: this.value.highlightColor,
+      departureTime: this.value.departureTime,
       origin: {
         type: this.value.originType,
         addressId: this.value.originId,
@@ -113,14 +115,32 @@ export default {
         originId: origin.addressId,
         originAddress: origin.address,
         originCoordinates: origin.coordinates,
-        highlightColor: this.originTypes.find(type => type.value === origin.type).highlightColor
+        highlightColor: this.originTypes.find(type => type.value === origin.type).highlightColor,
+        departureTime: this.getDepartureTime(new Date())
       });
     },
+
     transportType: function(transportType) {
       this.$emit("input", { ...this.value, transportType });
     },
+
     travelTime: function(travelTime) {
       this.$emit("input", { ...this.value, travelTime });
+    }
+  },
+  methods: {
+    getDepartureTime(date) {
+      const dayOfWeek = date.getUTCDay();
+
+      if (dayOfWeek !== 1) {
+        const dayOfMonth = date.getUTCDate();
+
+        date.setUTCDate(dayOfMonth - dayOfWeek + 8);
+      }
+
+      date.setUTCHours(9, 0, 0, 0);
+
+      return date;
     }
   }
 };

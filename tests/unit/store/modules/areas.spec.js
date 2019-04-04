@@ -1,5 +1,4 @@
 import { mutations, actions } from "@/store/modules/areas";
-import { getNextMonday9Am } from "../../../../src/utils";
 
 describe("areas store module", () => {
   describe("mutations", () => {
@@ -25,13 +24,15 @@ describe("areas store module", () => {
         id: "range-0",
         originCoordinates: { lat: 1, lng: 1 },
         travelTime: 45,
-        transportType: "public_transport"
+        transportType: "public_transport",
+        departureTime: new Date()
       },
       {
         id: "range-1",
         originCoordinates: { lat: 1, lng: 2 },
         travelTime: 20,
-        transportType: "car"
+        transportType: "car",
+        departureTime: new Date()
       }
     ];
     let areasResponseJson = {
@@ -59,7 +60,7 @@ describe("areas store module", () => {
 
       it("should call fetch with the correct parameters and always call commit", async () => {
         const expectedRequest = {
-          body: `{"departure_searches":[{"id":"range-0","coords":{"lat":1,"lng":1},"departure_time":"${getNextMonday9Am().toISOString()}","travel_time":2700,"transportation":{"type":"public_transport"}},{"id":"range-1","coords":{"lat":1,"lng":2},"departure_time":"${getNextMonday9Am().toISOString()}","travel_time":1200,"transportation":{"type":"car"}}],"unions":[{"id":"union","search_ids":["range-0","range-1"]}],"intersections":[{"id":"intersection","search_ids":["range-0","range-1"]}]}`,
+          body: `{"departure_searches":[{"id":"range-0","coords":{"lat":1,"lng":1},"departure_time":"${ranges[0].departureTime.toISOString()}","travel_time":2700,"transportation":{"type":"public_transport"}},{"id":"range-1","coords":{"lat":1,"lng":2},"departure_time":"${ranges[1].departureTime.toISOString()}","travel_time":1200,"transportation":{"type":"car"}}],"unions":[{"id":"union","search_ids":["range-0","range-1"]}],"intersections":[{"id":"intersection","search_ids":["range-0","range-1"]}]}`,
           headers: {
             Accept: "application/json",
             "Content-type": "application/json; charset=utf-8"

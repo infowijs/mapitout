@@ -1,5 +1,3 @@
-import { getNextMonday9Am } from "../../utils";
-
 export const mutations = {
   update(state, areas) {
     state.areas = areas;
@@ -25,7 +23,7 @@ export const actions = {
               lat: range.originCoordinates.lat,
               lng: range.originCoordinates.lng
             },
-            departure_time: getNextMonday9Am().toISOString(),
+            departure_time: range.departureTime.toISOString(),
             travel_time: range.travelTime * 60,
             transportation: {
               type: range.transportType
