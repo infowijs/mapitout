@@ -1,6 +1,20 @@
-import { mutations, actions, DEFAULT_RANGE } from "@/store/modules/ranges";
+import { mutations, actions, getters, DEFAULT_RANGE } from "@/store/modules/ranges";
 
 describe("ranges store module", () => {
+  describe("getters", () => {
+    describe("rangesWithOrigin", () => {
+      it("should add a new default value range to the store", () => {
+        const rangesWithOrigin = [{ originId: "test" }, { originId: "test2" }];
+        const state = {
+          ranges: [...rangesWithOrigin, { rangeId: "range-0" }, { rangeId: "range-1" }]
+        };
+
+        const result = getters.rangesWithOrigin(state);
+        expect(result).toEqual(rangesWithOrigin);
+      });
+    });
+  });
+
   describe("mutations", () => {
     describe("add", () => {
       it("should add a new default value range to the store", () => {

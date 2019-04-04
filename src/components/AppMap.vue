@@ -67,12 +67,12 @@ export default {
 
     if (googleApi) {
       this.google = googleApi;
-      this.map = await this.initGoogleMaps();
-    }
+      this.map = await this.initGoogleMaps(googleApi);
 
-    if (this.map && this.areas.length > 0) {
-      this.drawOrigins();
-      this.drawCoverage();
+      if (this.areas.length > 0) {
+        this.drawOrigins();
+        this.drawCoverage();
+      }
     }
   },
 
@@ -81,19 +81,21 @@ export default {
       activateRange: "activate"
     }),
 
+    ...mapActions(["reportError"]),
+
     async initGoogleApi() {
       try {
         return await GoogleMapsApiLoader({ apiKey: process.env.VUE_APP_GOOGLE_API_KEY });
       } catch (error) {
-        this.$router.push({ name: "reportError", params: { error } });
+        this.reportError(error);
         return null;
       }
     },
 
-    async initGoogleMaps() {
+    async initGoogleMaps(googleApi) {
       const center = await getDeviceGeoLocation();
 
-      return new this.google.maps.Map(this.$refs.map, {
+      return new googleApi.maps.Map(this.$refs.map, {
         disableDefaultUI: true,
         zoom: 9,
         minZoom: 9,
