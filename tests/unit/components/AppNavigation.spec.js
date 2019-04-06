@@ -1,14 +1,14 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 
-import AppSidebar from "@/components/AppSidebar.vue";
+import AppNavigation from "@/components/AppNavigation.vue";
 
 const localVue = createLocalVue();
 
-describe("AppSidebar", () => {
+describe("AppNavigation", () => {
   it("should create", () => {
-    const wrapper = shallowMount(AppSidebar, {
+    const wrapper = shallowMount(AppNavigation, {
       localVue,
-      stubs: ["router-view"]
+      stubs: ["router-link"]
     });
 
     expect(wrapper.isVueInstance()).toBeTruthy();
