@@ -2,7 +2,7 @@
   <nav class="nav">
     <ul class="tabs">
       <li class="tab">
-        <router-link :to="{ path: '/ranges' }" class="link">
+        <router-link :to="{ path: '/ranges' }" class="link" exact>
           <icon-area class="icon"></icon-area>
           <span>Range</span>
         </router-link>
@@ -14,17 +14,19 @@
 @import "../style/variables";
 
 .nav {
-  background-color: $greyscale-0;
+  padding-bottom: 2px;
+  background-color: $greyscale-2;
 
   .tabs {
     list-style: none;
     margin: 0;
     padding: 0 32px;
-    height: 50px;
+    height: 48px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
+    background-color: $greyscale-0;
 
     .tab {
       flex-basis: 50%;
@@ -41,7 +43,8 @@
 
       .link {
         width: 100%;
-        height: 100%;
+        height: calc(100% + 1px);
+        margin-bottom: -1px;
         display: flex;
         flex-direction: row;
         align-items: center;

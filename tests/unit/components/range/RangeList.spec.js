@@ -1,16 +1,15 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 
-import Ranges from "@/components/Ranges.vue";
-import Range from "@/components/Range.vue";
+import Ranges from "@/components/range/RangeList.vue";
+import Range from "@/components/range/Range.vue";
 import ranges from "@/store/modules/ranges";
 import Vuex from "vuex";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("Ranges", () => {
+describe("RangeList", () => {
   const addRangeSpy = jest.spyOn(ranges.actions, "add");
-  const updateRangeSpy = jest.spyOn(ranges.actions, "update");
   const removeRangeSpy = jest.spyOn(ranges.actions, "remove");
   let $store;
 
@@ -53,7 +52,7 @@ describe("Ranges", () => {
     expect(wrapper.findAll(Range).length).toBe(1);
   });
 
-  it("should update the activeRangeId the active range is removed", () => {
+  it("should update the activeRangeId if the active range is removed", () => {
     const wrapper = shallowMount(Ranges, {
       localVue,
       mocks: {
@@ -89,20 +88,6 @@ describe("Ranges", () => {
       .trigger("click");
 
     expect(wrapper.vm.activeRangeId).toBe(wrapper.vm.ranges[2].id);
-  });
-
-  // todo not sure why this does not work
-  xit("should update the range whenever a range component emits an input event", () => {
-    const wrapper = shallowMount(Ranges, {
-      localVue,
-      mocks: {
-        $store
-      }
-    });
-    const updatedRange = { id: "range-0", testKey: "test" };
-    wrapper.find(Range).trigger("input", updatedRange);
-
-    expect(updateRangeSpy).toHaveBeenCalledWith(updatedRange);
   });
 
   it("should add a range whenever clicking the addRange button", () => {

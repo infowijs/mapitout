@@ -6,6 +6,10 @@
       <span class="text-it">it</span>
       <span class="text-out">out</span>
     </router-link>
+    <button class="filters-toggle" @click="onClickFiltersToggle">
+      <span>Living Essentials</span>
+      <icon-buildings class="icon"></icon-buildings>
+    </button>
     <a
       class="iamsterdam"
       href="https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area"
@@ -33,6 +37,7 @@ header {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 0 10px;
 
   @media (min-width: $breakpoint-desktop) {
@@ -46,6 +51,7 @@ header {
   align-items: center;
   cursor: pointer;
   text-decoration: none;
+  line-height: 1;
 
   .icon {
     width: 32px;
@@ -56,7 +62,6 @@ header {
   span {
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: 2px;
     text-transform: uppercase;
 
     @media (min-width: $breakpoint-tablet-portrait) {
@@ -73,6 +78,32 @@ header {
     }
   }
 }
+
+.filters-toggle {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  outline: none;
+  border: 0 none;
+  color: $greyscale-2;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+
+  .icon {
+    height: 16px;
+    width: 16px;
+    color: $greyscale-2;
+    margin-left: 16px;
+  }
+
+  @media (min-width: $breakpoint-tablet-portrait) {
+    display: none;
+  }
+}
+
 .iamsterdam {
   position: absolute;
   top: 100%;
@@ -89,10 +120,20 @@ header {
 </style>
 <script>
 import Logo from "@/assets/logo.svg?inline";
+import IconBuildings from "@/assets/icons/IconBuildings.svg?inline";
 
 export default {
   components: {
-    Logo
+    Logo,
+    IconBuildings
+  },
+  props: {
+    value: Boolean
+  },
+  methods: {
+    onClickFiltersToggle() {
+      this.$emit("input", !this.value);
+    }
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <section ref="map"></section>
+  <section class="map" ref="map"></section>
 </template>
 <script>
 import GoogleMapsApiLoader from "google-maps-api-loader";
@@ -7,6 +7,7 @@ import GoogleMapsApiLoader from "google-maps-api-loader";
 import { getDeviceGeoLocation } from "../utils";
 import styles from "../style/google-maps";
 import { mapGetters, mapState, mapActions } from "vuex";
+import { isEqual } from "lodash-es";
 
 export default {
   data() {
@@ -16,13 +17,15 @@ export default {
       fullCoverage: null,
       areaCoverages: [],
       originMarkers: [],
-      intersectionPaths: []
+      intersectionPaths: [],
+      poiMarkers: []
     };
   },
   computed: {
-    ...mapGetters("locations", ["getLocationTypeByValue"]),
+    ...mapGetters("locations", ["getLocationTypeByValue", "getLocationTypeById"]),
     ...mapGetters("ranges", ["rangesWithOrigin"]),
     ...mapState("areas", ["mapBoundaries", "areas"]),
+    ...mapState("locations", ["pois"]),
     ...mapState("ranges", {
       activeRangeId: state => state.activeId
     }),
@@ -59,6 +62,12 @@ export default {
     rangesWithOrigin: function() {
       this.drawOrigins();
       this.drawCoverage();
+    },
+
+    pois: function(newValue, oldValue) {
+      if (!isEqual(newValue, oldValue)) {
+        this.drawPois();
+      }
     }
   },
 
@@ -215,6 +224,29 @@ export default {
       return areaCoverage;
     },
 
+    drawPois() {
+      this.cleanPois();
+
+      this.poiMarkers = this.pois.map(poi => {
+        const position = poi.geo_location.coordinates.reduce((acc, coordinate, index) => {
+          if (index === 1) {
+            acc.lat = coordinate;
+          } else {
+            acc.lng = coordinate;
+          }
+
+          return acc;
+        }, {});
+
+        return new this.google.maps.Marker({
+          position,
+          title: poi.name,
+          icon: this.getLocationTypeById(poi.poi_type_id).icon,
+          map: this.map
+        });
+      });
+    },
+
     cleanOrigins() {
       this.originMarkers.forEach(marker => {
         marker.setMap(null);
@@ -236,6 +268,14 @@ export default {
 
       this.areaCoverages = this.areaCoverages.reduce((acc, { areaCoverage }) => {
         areaCoverage.setMap(null);
+        return acc;
+      }, []);
+    },
+
+    cleanPois() {
+      this.poiMarkers = this.poiMarkers.reduce((acc, marker) => {
+        marker.setMap(null);
+
         return acc;
       }, []);
     }

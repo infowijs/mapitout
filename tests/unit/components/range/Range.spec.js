@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 
-import Range from "@/components/Range.vue";
+import Range from "@/components/range/Range.vue";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

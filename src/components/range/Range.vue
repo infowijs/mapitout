@@ -6,7 +6,7 @@
   </div>
 </template>
 <style scoped lang="scss">
-@import "../style/variables";
+@import "../../style/variables";
 
 .range {
   display: flex;
@@ -56,9 +56,9 @@
 }
 </style>
 <script>
-import LocationInput from "./input/LocationInput";
-import TransportType from "./input/TransportType";
-import TravelTime from "./input/TravelTime";
+import LocationInput from "../input/LocationInput";
+import TransportType from "../input/TransportType";
+import TravelTime from "../input/TravelTime";
 import { mapState } from "vuex";
 
 export default {

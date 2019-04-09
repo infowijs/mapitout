@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Ranges from "./components/Ranges";
+import RangesPanel from "./components/RangesPanel";
 
 Vue.use(Router);
 
@@ -10,9 +10,11 @@ export default new Router({
   routes: [
     {
       path: "/",
-      alias: "/ranges",
-      name: "ranges",
-      component: Ranges
+      redirect: { path: "/ranges" }
+    },
+    {
+      path: "/ranges",
+      component: RangesPanel
     }
   ]
 });

@@ -14,6 +14,7 @@ describe("App", () => {
     { rangeId: "range-1", originType: "work" }
   ];
   let fetchAreasSpy = jest.fn();
+  let fetchPoisSpy = jest.fn();
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -35,8 +36,33 @@ describe("App", () => {
         },
         areas: {
           namespaced: true,
+          mutations: {
+            updateAreas: (state, areas) => {
+              state.areas = areas;
+            }
+          },
           actions: {
             fetch: fetchAreasSpy
+          },
+          state: {
+            areas: [{ rangeId: "test" }]
+          }
+        },
+        filters: {
+          namespaced: true,
+          mutations: {
+            updateFilters: (state, filters) => {
+              state.filters = filters;
+            }
+          },
+          state: {
+            filters: [{ value: "test" }]
+          }
+        },
+        locations: {
+          namespaced: true,
+          actions: {
+            fetch: fetchPoisSpy
           }
         }
       }
@@ -45,7 +71,7 @@ describe("App", () => {
     wrapper = shallowMount(App, {
       localVue,
       store,
-      stubs: ["app-header", "app-tabs", "app-map"]
+      stubs: ["app-header", "app-tabs", "app-map", "router-view"]
     });
   });
 
@@ -64,6 +90,21 @@ describe("App", () => {
     rangesWithOriginNewValue[0].originType = "gym";
 
     store.commit("ranges/updateRanges", rangesWithOriginNewValue);
+
+    expect(fetchAreasSpy).not.toHaveBeenCalled();
+  });
+
+  it("should trigger a poi refresh whenever the filters prop changes", () => {
+    store.commit("filters/updateFilters", []);
+
+    expect(fetchPoisSpy).toHaveBeenCalled();
+  });
+
+  it("should trigger a poi refresh whenever the areas prop changes", () => {
+    const rangesWithOriginNewValue = [...rangesWithOriginStub];
+    rangesWithOriginNewValue[0].originType = "gym";
+
+    store.commit("areas/updateAreas", []);
 
     expect(fetchAreasSpy).not.toHaveBeenCalled();
   });

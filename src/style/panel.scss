@@ -1,0 +1,36 @@
+@import "./variables";
+
+.panel {
+  background: white;
+
+  @media (min-width: $breakpoint-tablet-portrait) {
+    box-shadow: 0 2px 8px 0 lighten($greyscale-1, 50);
+    overflow: scroll;
+  }
+
+  .header {
+    height: 50px;
+    background: $greyscale-0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+
+    .title {
+      text-transform: uppercase;
+      color: $greyscale-2;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+
+      .icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 12px;
+        color: $greyscale-2;
+      }
+    }
+  }
+}

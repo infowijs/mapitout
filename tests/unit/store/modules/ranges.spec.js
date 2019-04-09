@@ -68,23 +68,6 @@ describe("ranges store module", () => {
         expect(state.ranges.length).toBe(2);
       });
     });
-
-    describe("update", () => {
-      it("should update the passed in range in the ranges array", () => {
-        const updated = {
-          id: "range-1",
-          value: 1
-        };
-        const state = {
-          ranges: [{ id: "range-0" }, { id: "range-1" }]
-        };
-
-        mutations.update(state, updated);
-
-        expect(state.ranges[0]).toEqual({ id: "range-0" });
-        expect(state.ranges[1]).toEqual(updated);
-      });
-    });
   });
 
   describe("actions", () => {
@@ -113,15 +96,6 @@ describe("ranges store module", () => {
         actions.remove(context, id);
 
         expect(context.commit).toHaveBeenCalledWith("remove", id);
-      });
-    });
-
-    describe("update", () => {
-      it("should call the appropriate mutation", () => {
-        const range = { id: "range-0", value: 1 };
-        actions.update(context, range);
-
-        expect(context.commit).toHaveBeenCalledWith("update", range);
       });
     });
   });

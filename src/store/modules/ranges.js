@@ -32,15 +32,6 @@ export const mutations = {
     }
   },
 
-  update(state, updatedRange) {
-    state.ranges = state.ranges.map(range => {
-      if (range.id === updatedRange.id) {
-        return { ...updatedRange };
-      }
-      return range;
-    });
-  },
-
   activate(state, id) {
     state.activeId = id;
   }
@@ -55,10 +46,6 @@ export const actions = {
 
   remove({ commit }, id) {
     commit("remove", id);
-  },
-
-  update({ commit }, range) {
-    commit("update", range);
   },
 
   activate({ commit }, id) {

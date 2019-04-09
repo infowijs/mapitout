@@ -84,18 +84,22 @@
 }
 </style>
 <script>
-import IconBicycle from "@/assets/icons/IconBicycle.svg?inline";
-import IconBicycleBus from "@/assets/icons/IconBicycleBus.svg?inline";
-import IconBus from "@/assets/icons/IconBus.svg?inline";
-import IconCar from "@/assets/icons/IconCar.svg?inline";
-import IconPedestrian from "@/assets/icons/IconPedestrian.svg?inline";
+import IconTransportBicycle from "@/assets/icons/IconTransportBicycle.svg?inline";
+import IconTransportBicycleBus from "@/assets/icons/IconTransportBicycleBus.svg?inline";
+import IconTransportBus from "@/assets/icons/IconTransportBus.svg?inline";
+import IconTransportCar from "@/assets/icons/IconTransportCar.svg?inline";
+import IconTransportPedestrian from "@/assets/icons/IconTransportPedestrian.svg?inline";
 
 const TRANSPORT_TYPES = [
-  { value: "public_transport", label: "Public Transport", icon: "icon-bus" },
-  { value: "driving", label: "Vehicle", icon: "icon-car" },
-  { value: "cycling", label: "Bicycle", icon: "icon-bicycle" },
-  { value: "walking", label: "Walking", icon: "icon-pedestrian" },
-  { value: "cycling+ferry", label: "Public Transport and Bicycle", icon: "icon-bicycle-bus" }
+  { value: "public_transport", label: "Public Transport", icon: "icon-transport-bus" },
+  { value: "driving", label: "Vehicle", icon: "icon-transport-car" },
+  { value: "cycling", label: "Bicycle", icon: "icon-transport-bicycle" },
+  { value: "walking", label: "Walking", icon: "icon-transport-pedestrian" },
+  {
+    value: "cycling+ferry",
+    label: "Public Transport and Bicycle",
+    icon: "icon-transport-bicycle-bus"
+  }
 ];
 export default {
   props: {
@@ -107,11 +111,11 @@ export default {
     isDisabled: Boolean
   },
   components: {
-    IconBicycle,
-    IconBicycleBus,
-    IconBus,
-    IconCar,
-    IconPedestrian
+    IconTransportBicycle,
+    IconTransportBicycleBus,
+    IconTransportBus,
+    IconTransportCar,
+    IconTransportPedestrian
   },
   data() {
     return {

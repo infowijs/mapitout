@@ -19,7 +19,7 @@ $locationTypeIconPaths: (
   (work, "../../assets/icons/IconWork.svg"),
   (health, "../../assets/icons/IconHealth.svg"),
   (wellness, "../../assets/icons/IconWellness.svg"),
-  (transport, "../../assets/icons/IconTransport.svg"),
+  (transport, "../../assets/icons/IconBus.svg"),
   (education, "../../assets/icons/IconEducation.svg")
 );
 

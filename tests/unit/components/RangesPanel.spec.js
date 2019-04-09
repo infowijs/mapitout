@@ -1,12 +1,12 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 
-import AppSidebar from "@/components/AppSidebar.vue";
+import RangesPanel from "@/components/RangesPanel.vue";
 
 const localVue = createLocalVue();
 
-describe("AppSidebar", () => {
+describe("RangesPanel", () => {
   it("should create", () => {
-    const wrapper = shallowMount(AppSidebar, {
+    const wrapper = shallowMount(RangesPanel, {
       localVue,
       stubs: ["router-view"]
     });

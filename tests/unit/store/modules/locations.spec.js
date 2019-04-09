@@ -1,8 +1,11 @@
 import { mutations, getters, actions } from "../../../../src/store/modules/locations";
+import flushPromises from "flush-promises";
 
 describe("locations store module", () => {
+  global.fetch = jest.fn();
+
   beforeEach(() => {
-    global.fetch = jest.fn();
+    jest.resetAllMocks();
   });
 
   describe("mutations", () => {
@@ -28,6 +31,17 @@ describe("locations store module", () => {
         expect(state.resolved.includes(resolved)).toBeTruthy();
       });
     });
+
+    describe("updatePois", () => {
+      it("should update the state pois with the passed value", () => {
+        const state = { pois: [] };
+        const pois = { name: "test-name", coordinates: {} };
+
+        mutations.updatePois(state, pois);
+
+        expect(state.pois).toEqual(pois);
+      });
+    });
   });
 
   describe("getters", () => {
@@ -50,6 +64,7 @@ describe("locations store module", () => {
         expect(result).toBeUndefined();
       });
     });
+
     describe("getLocationTypeByValue", () => {
       it("should retrieve the type stored in the state by value passed", () => {
         const type = { value: "test-value", icon: "" };
@@ -60,11 +75,31 @@ describe("locations store module", () => {
         expect(result).toEqual(type);
       });
 
-      it("should return null if the requested id was not saved into the state", () => {
+      it("should return undefined if the requested id was not saved into the state", () => {
         const type = { value: "test-value", icon: "" };
         const state = { types: [type] };
 
         const result = getters.getLocationTypeByValue(state)("other-id");
+
+        expect(result).toBeUndefined();
+      });
+    });
+
+    describe("getLocationTypeById", () => {
+      it("should retrieve the type stored in the state by id passed", () => {
+        const type = { id: "test-id", icon: "" };
+        const state = { types: [type] };
+
+        const result = getters.getLocationTypeById(state)(type.id);
+
+        expect(result).toEqual(type);
+      });
+
+      it("should return undefined if the requested id was not saved into the state", () => {
+        const type = { id: "test-id", icon: "" };
+        const state = { types: [type] };
+
+        const result = getters.getLocationTypeById(state)("other-id");
 
         expect(result).toBeUndefined();
       });
@@ -245,6 +280,145 @@ describe("locations store module", () => {
 
         expect(result).toEqual(expectedResult);
         expect(context.commit).toHaveBeenCalledWith("saveResolved", expectedResult);
+      });
+    });
+
+    describe("fetch", () => {
+      const context = {
+        dispatch: jest.fn(),
+        commit: jest.fn()
+      };
+
+      beforeEach(() => {
+        jest.resetAllMocks();
+      });
+
+      it("should call fetch with the correct url", () => {
+        const filters = [{ value: "test" }];
+        const areas = [
+          {
+            rangeId: "union",
+            paths: []
+          }
+        ];
+        actions.fetch(context, { filters, areas });
+
+        fetch.mockResolvedValue({});
+
+        expect(fetch).toHaveBeenCalledTimes(1);
+
+        expect(fetch.mock.calls[0][0].toString()).toEqual(process.env.VUE_APP_ENDPOINT_POI_SEARCH);
+      });
+
+      it("should not call fetch if passed an empty filters array", () => {
+        const filters = [];
+        const areas = [
+          {
+            rangeId: "union",
+            paths: []
+          }
+        ];
+        actions.fetch(context, { filters, areas });
+
+        expect(fetch).not.toHaveBeenCalled();
+        expect(context.commit).toHaveBeenCalledWith("updatePois", []);
+      });
+
+      it("should not call fetch if passed an empty areas array", () => {
+        const filters = [{ value: "test" }];
+        const areas = [];
+        actions.fetch(context, { filters, areas });
+
+        expect(fetch).not.toHaveBeenCalled();
+        expect(context.commit).toHaveBeenCalledWith("updatePois", []);
+      });
+
+      it("should call fetch with the correct request object", () => {
+        const filters = [{ value: "test" }];
+        const areas = [
+          {
+            rangeId: "union",
+            paths: [[{ lat: 1, lng: 2 }, { lat: 1, lng: 2 }, { lat: 1, lng: 2 }]]
+          }
+        ];
+        actions.fetch(context, { filters, areas });
+
+        expect(fetch).toHaveBeenCalled();
+        expect(fetch.mock.calls[0][1]).toEqual({
+          body: JSON.stringify({
+            poi_by_type: ["test"],
+            poi_in_polygon: {
+              type: "Feature",
+              geometry: {
+                type: "Polygon",
+                coordinates: [[[2, 1], [2, 1], [2, 1]]],
+                crs: { type: "name", properties: { name: "EPSG:4326" } }
+              }
+            }
+          }),
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json; charset=utf-8"
+          },
+          method: "POST"
+        });
+      });
+
+      it("should call dispatch an error whenever the fetch call fails", async () => {
+        const filters = [{ value: "test" }];
+        const areas = [
+          {
+            rangeId: "union",
+            paths: [[{ lat: 1, lng: 2 }, { lat: 1, lng: 2 }, { lat: 1, lng: 2 }]]
+          }
+        ];
+        const expectedError = new Error("Unable to perform network call");
+        fetch.mockRejectedValue(new Error());
+
+        await actions.fetch(context, { filters, areas });
+
+        expect(context.dispatch).toHaveBeenCalledWith("reportError", expectedError, { root: true });
+      });
+
+      it("should call dispatch an error whenever the fetch call returns invalid json", async () => {
+        const filters = [{ value: "test" }];
+        const areas = [
+          {
+            rangeId: "union",
+            paths: [[{ lat: 1, lng: 2 }, { lat: 1, lng: 2 }, { lat: 1, lng: 2 }]]
+          }
+        ];
+        const expectedError = new Error("Invalid server response");
+
+        fetch.mockResolvedValue({
+          json: jest.fn().mockRejectedValue(new Error())
+        });
+
+        await actions.fetch(context, { filters, areas });
+
+        expect(context.dispatch).toHaveBeenCalledWith("reportError", expectedError, { root: true });
+      });
+
+      it("should call commit whenever the fetch call returns a valid json", async () => {
+        const filters = [{ value: "test" }];
+        const areas = [
+          {
+            rangeId: "union",
+            paths: [[{ lat: 1, lng: 2 }, { lat: 1, lng: 2 }, { lat: 1, lng: 2 }]]
+          }
+        ];
+        const expectedResult = [{ name: "test" }];
+
+        fetch.mockResolvedValue({
+          ok: true,
+          json: jest.fn().mockResolvedValue(expectedResult)
+        });
+
+        actions.fetch(context, { filters, areas });
+
+        await flushPromises();
+
+        expect(context.commit).toHaveBeenCalledWith("updatePois", expectedResult);
       });
     });
   });
