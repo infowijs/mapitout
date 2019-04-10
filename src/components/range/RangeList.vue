@@ -3,12 +3,12 @@
     <ul class="list">
       <li
         class="item"
-        v-for="(range, index) in ranges"
+        v-for="range in ranges"
         :key="range.id"
         :class="{ active: range.id === activeRangeId }"
         @click="onRangeClick(range.id)"
       >
-        <range :isDisabled="range.id !== activeRangeId" v-model="ranges[index]" />
+        <range :isDisabled="range.id !== activeRangeId" :range="range" @change="onChangeRange" />
         <button
           class="delete"
           v-if="range.id !== activeRangeId"
@@ -143,6 +143,7 @@ export default {
   methods: {
     ...mapActions("ranges", {
       addRange: "add",
+      updateRange: "update",
       removeRange: "remove",
       activateRange: "activate"
     }),
@@ -161,6 +162,10 @@ export default {
 
     onClickAddRange() {
       this.addRange();
+    },
+
+    onChangeRange(range) {
+      this.updateRange(range);
     }
   }
 };

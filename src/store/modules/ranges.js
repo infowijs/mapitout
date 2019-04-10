@@ -1,15 +1,13 @@
 export const DEFAULT_RANGE = {
+  id: "range-0",
   originType: "home",
-  originId: undefined,
+  originId: "",
   originAddress: "",
-  originCoordinates: undefined,
+  originLat: null,
+  originLng: null,
   transportType: "public_transport",
   travelTime: 45,
   highlightColor: "#ff0000"
-};
-
-export const getters = {
-  rangesWithOrigin: state => state.ranges.filter(range => range.originId)
 };
 
 export const mutations = {
@@ -21,8 +19,18 @@ export const mutations = {
       id = `range-${index++}`;
     }
     state.ranges.push({
-      id,
-      ...DEFAULT_RANGE
+      ...DEFAULT_RANGE,
+      id
+    });
+  },
+
+  update(state, updatedRange) {
+    state.ranges = state.ranges.map(range => {
+      if (range.id === updatedRange.id) {
+        return updatedRange;
+      }
+
+      return range;
     });
   },
 
@@ -44,6 +52,10 @@ export const actions = {
     commit("activate", state.ranges[state.ranges.length - 1].id);
   },
 
+  update({ commit }, range) {
+    commit("update", range);
+  },
+
   remove({ commit }, id) {
     commit("remove", id);
   },
@@ -60,6 +72,5 @@ export default {
     ranges: []
   },
   mutations,
-  actions,
-  getters
+  actions
 };

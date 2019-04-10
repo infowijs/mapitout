@@ -1,20 +1,6 @@
-import { mutations, actions, getters, DEFAULT_RANGE } from "@/store/modules/ranges";
+import { mutations, actions, DEFAULT_RANGE } from "@/store/modules/ranges";
 
 describe("ranges store module", () => {
-  describe("getters", () => {
-    describe("rangesWithOrigin", () => {
-      it("should add a new default value range to the store", () => {
-        const rangesWithOrigin = [{ originId: "test" }, { originId: "test2" }];
-        const state = {
-          ranges: [...rangesWithOrigin, { rangeId: "range-0" }, { rangeId: "range-1" }]
-        };
-
-        const result = getters.rangesWithOrigin(state);
-        expect(result).toEqual(rangesWithOrigin);
-      });
-    });
-  });
-
   describe("mutations", () => {
     describe("add", () => {
       it("should add a new default value range to the store", () => {
@@ -23,17 +9,34 @@ describe("ranges store module", () => {
         mutations.add(state);
 
         expect(state.ranges.length).toBe(1);
-        expect(state.ranges[0]).toEqual({ id: "range-0", ...DEFAULT_RANGE });
+        expect(state.ranges[0]).toEqual({ ...DEFAULT_RANGE, id: "range-0" });
       });
 
-      it("should properly increment the id of the newly added ranges", () => {
+      it("should increment the id of the newly added ranges", () => {
         const state = {
           ranges: [{ id: "range-0" }]
         };
 
         mutations.add(state);
 
-        expect(state.ranges[1]).toEqual({ id: "range-1", ...DEFAULT_RANGE });
+        expect(state.ranges[1]).toEqual({ ...DEFAULT_RANGE, id: "range-1" });
+      });
+    });
+
+    describe("update", () => {
+      it("should update the passed in range in the ranges array", () => {
+        const updated = {
+          id: "range-1",
+          value: 1
+        };
+        const state = {
+          ranges: [{ id: "range-0" }, { id: "range-1" }]
+        };
+
+        mutations.update(state, updated);
+
+        expect(state.ranges[0]).toEqual({ id: "range-0" });
+        expect(state.ranges[1]).toEqual(updated);
       });
     });
 
@@ -87,6 +90,15 @@ describe("ranges store module", () => {
         actions.add(context);
 
         expect(context.commit).toHaveBeenCalledWith("add");
+      });
+    });
+
+    describe("update", () => {
+      it("should call the appropriate mutation", () => {
+        const updated = { id: "range-0" };
+        actions.update(context, updated);
+
+        expect(context.commit).toHaveBeenCalledWith("update", updated);
       });
     });
 
