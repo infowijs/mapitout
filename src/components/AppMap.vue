@@ -59,11 +59,6 @@ export default {
       });
     },
 
-    rangesWithOrigin: function() {
-      this.drawOrigins();
-      this.drawCoverage();
-    },
-
     ranges: function() {
       this.drawOrigins();
       this.drawCoverage();

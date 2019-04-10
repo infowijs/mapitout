@@ -19,7 +19,6 @@ describe("AppMap", () => {
   const activateRangeSpy = jest.fn();
   const reportErrorSpy = jest.fn();
   const getLocationTypeByValueSpy = jest.fn();
-  const rangesWithOriginSpy = jest.fn();
   const store = new Vuex.Store({
     actions: {
       reportError: reportErrorSpy
@@ -38,9 +37,6 @@ describe("AppMap", () => {
         },
         actions: {
           activate: activateRangeSpy
-        },
-        getters: {
-          rangesWithOrigin: rangesWithOriginSpy
         }
       },
       areas: {
