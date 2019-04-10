@@ -5,6 +5,8 @@ import IconWork from "@/assets/icons/IconWork.svg";
 import IconEducation from "@/assets/icons/IconEducation.svg";
 import IconWellness from "@/assets/icons/IconWellness.svg";
 
+import { http } from "../../utils";
+
 import { isArray } from "lodash-es";
 
 export const mutations = {
@@ -35,35 +37,24 @@ export const actions = {
       method: "GET"
     };
 
+    let suggestions = [];
+
     try {
-      const response = await fetch(url, request);
+      const result = await http(url, request);
 
-      if (response.ok) {
-        const result = await response.json();
-
-        return result.response.docs.map(suggestion => ({
-          id: suggestion.id,
-          label: suggestion.weergavenaam
-        }));
-      } else {
-        dispatch("reportError", new Error("Invalid server response"), { root: true });
-
-        return [];
-      }
+      suggestions = result.response.docs.map(suggestion => ({
+        id: suggestion.id,
+        label: suggestion.weergavenaam
+      }));
     } catch (error) {
-      dispatch("reportError", new Error("Unable to perform network call"), { root: true });
-
-      return [];
+      dispatch("reportError", error, { root: true });
     }
+
+    return suggestions;
   },
 
   async resolve({ state, getters, commit, dispatch }, id) {
-    const resolved = getters.getResolvedById(state, id);
-    const defaultValue = {
-      id: undefined,
-      label: "",
-      value: null
-    };
+    let resolved = getters.getResolvedById(state, id);
 
     if (resolved) {
       return resolved;
@@ -77,19 +68,17 @@ export const actions = {
       method: "GET"
     };
 
-    const response = await fetch(url, request);
-
-    if (!response.ok) {
-      dispatch("reportError", new Error("Server error"), { root: true });
-
-      return defaultValue;
-    }
+    resolved = {
+      id: undefined,
+      label: "",
+      value: null
+    };
 
     try {
-      const result = await response.json();
+      const result = await http(url, request);
 
       if (result.response.docs[0]) {
-        const resolved = {
+        resolved = {
           id,
           value: result.response.docs[0].centroide_ll
             .replace("POINT(", "")
@@ -104,13 +93,12 @@ export const actions = {
         };
 
         commit("saveResolved", resolved);
-        return resolved;
       }
     } catch (error) {
-      dispatch("reportError", new Error("Invalid response format"), { root: true });
-
-      return defaultValue;
+      dispatch("reportError", error, { root: true });
     }
+
+    return resolved;
   },
 
   async fetch({ dispatch, commit }, { filters, areas }) {
@@ -146,19 +134,13 @@ export const actions = {
       };
 
       try {
-        const response = await fetch(url.toString(), request);
+        const result = await http(url, request);
 
-        if (response.ok) {
-          const result = await response.json();
-
-          if (isArray(result)) {
-            pois = result;
-          }
-        } else {
-          dispatch("reportError", new Error("Invalid server response"), { root: true });
+        if (isArray(result)) {
+          pois = result.map(locationData => locationData[0]);
         }
       } catch (error) {
-        dispatch("reportError", new Error("Unable to perform network call"), { root: true });
+        dispatch("reportError", error, { root: true });
       }
     }
 

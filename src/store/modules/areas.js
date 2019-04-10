@@ -1,3 +1,5 @@
+import { http } from "../../utils";
+
 export const mutations = {
   update(state, areas) {
     state.areas = areas;
@@ -7,14 +9,12 @@ export const mutations = {
 export const actions = {
   async fetch({ dispatch, commit }, ranges) {
     const url = new URL(process.env.VUE_APP_ENDPOINT_AREAS);
-    let headers = {
-      Accept: "application/json",
-      "Content-type": "application/json; charset=utf-8"
-    };
-
     const request = {
       method: "POST",
-      headers,
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8"
+      },
       body: JSON.stringify({
         departure_searches: ranges.map(range => {
           return {
@@ -48,31 +48,25 @@ export const actions = {
     let areas = [];
 
     try {
-      const response = await fetch(url.toString(), request);
+      const result = await http(url, request);
 
-      if (response.ok) {
-        const result = await response.json();
+      areas = result.results.map((timeMap, index) => {
+        return {
+          id: `area-${index}`,
+          rangeId: timeMap.search_id,
+          paths: timeMap.shapes.reduce((acc, shape) => {
+            let paths = [shape.shell];
 
-        areas = result.results.map((timeMap, index) => {
-          return {
-            id: `area-${index}`,
-            rangeId: timeMap.search_id,
-            paths: timeMap.shapes.reduce((acc, shape) => {
-              let paths = [shape.shell];
+            if (shape.holes.length > 0) {
+              paths = paths.concat(shape.holes);
+            }
 
-              if (shape.holes.length > 0) {
-                paths = paths.concat(shape.holes);
-              }
-
-              return acc.concat(paths);
-            }, [])
-          };
-        });
-      } else {
-        dispatch("reportError", new Error("Invalid server response"), { root: true });
-      }
+            return acc.concat(paths);
+          }, [])
+        };
+      });
     } catch (error) {
-      dispatch("reportError", new Error("Unable to perform network call"), { root: true });
+      dispatch("reportError", error, { root: true });
     }
 
     commit("update", areas);
