@@ -41,8 +41,10 @@ export default {
   },
   watch: {
     areas: function() {
-      this.drawOrigins();
-      this.drawCoverage();
+      if (this.google && this.map) {
+        this.drawOrigins();
+        this.drawCoverage();
+      }
     },
 
     activeRangeId: function(activeRangeId) {
@@ -60,8 +62,10 @@ export default {
     },
 
     ranges: function() {
-      this.drawOrigins();
-      this.drawCoverage();
+      if (this.google && this.map) {
+        this.drawOrigins();
+        this.drawCoverage();
+      }
     },
 
     pois: function(newValue, oldValue) {
@@ -201,11 +205,13 @@ export default {
     },
 
     drawArea(area) {
+      const range = this.ranges.find(range => range.id === area.rangeId);
+      const rangeType = this.getLocationTypeByValue(range.originType);
       const areaCoverage = new this.google.maps.Polygon({
         paths: [...area.paths],
         strokeOpacity: 0,
         strokeWeight: 0,
-        fillColor: this.ranges.find(range => range.id === area.rangeId).highlightColor,
+        fillColor: rangeType.highlightColor,
         fillOpacity: area.rangeId === this.activeRangeId ? 0.2 : 0,
         map: this.map
       });

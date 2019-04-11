@@ -2,7 +2,7 @@
   <nav class="nav">
     <ul class="tabs">
       <li class="tab">
-        <router-link :to="{ path: '/ranges' }" class="link" exact>
+        <router-link :to="{ path: '/ranges' }" class="link">
           <icon-area class="icon"></icon-area>
           <span>Range</span>
         </router-link>

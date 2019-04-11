@@ -59,7 +59,6 @@
 import LocationInput from "../input/LocationInput";
 import TransportType from "../input/TransportType";
 import TravelTime from "../input/TravelTime";
-import { mapState } from "vuex";
 
 export default {
   props: {
@@ -76,7 +75,6 @@ export default {
     return {
       travelTime: this.range.travelTime,
       transportType: this.range.transportType,
-      highlightColor: this.range.highlightColor,
       departureTime: this.range.departureTime,
       origin: {
         type: this.range.originType,
@@ -88,11 +86,6 @@ export default {
         }
       }
     };
-  },
-  computed: {
-    ...mapState("locations", {
-      originTypes: state => state.types
-    })
   },
   components: {
     LocationInput,
@@ -108,8 +101,7 @@ export default {
         originAddress: origin.address,
         originLat: origin.coordinates ? origin.coordinates.lat : null,
         originLng: origin.coordinates ? origin.coordinates.lng : null,
-        highlightColor: this.originTypes.find(type => type.value === origin.type).highlightColor,
-        departureTime: this.getDepartureTime(new Date())
+        departureTime: this.getDepartureTime(new Date()).toISOString()
       });
     },
 

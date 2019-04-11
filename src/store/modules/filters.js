@@ -7,6 +7,10 @@ export const mutations = {
 
       return { ...filter, selected };
     });
+  },
+
+  update(state, filters) {
+    state.filters = filters;
   }
 };
 
@@ -31,50 +35,6 @@ export default {
         children: null,
         icon: "icon-bus"
       },
-      // {
-      //   id: 9,
-      //   name: "Train Station",
-      //   value: "Train Station",
-      //   category: null,
-      //   root: false,
-      //   selected: false,
-      //   parent: 0,
-      //   children: null,
-      //   icon: "icon-train"
-      // },
-      // {
-      //   id: 2,
-      //   name: "Bus Station",
-      //   value: "Bus Station",
-      //   category: null,
-      //   root: false,
-      //   selected: false,
-      //   parent: 0,
-      //   children: null,
-      //   icon: "icon-bus"
-      // },
-      // {
-      //   id: 1,
-      //   name: "Tram Station",
-      //   value: "Tram Station",
-      //   category: null,
-      //   root: false,
-      //   selected: false,
-      //   parent: 0,
-      //   children: null,
-      //   icon: "icon-tram"
-      // },
-      // {
-      //   id: 10,
-      //   name: "Subway Station",
-      //   value: "Subway Station",
-      //   category: null,
-      //   root: false,
-      //   selected: false,
-      //   parent: 0,
-      //   children: null,
-      //   icon: "icon-subway"
-      // },
       {
         id: 3,
         name: "Schools",

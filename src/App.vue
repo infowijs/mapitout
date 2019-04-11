@@ -4,8 +4,8 @@
     <main>
       <app-map class="app-map" />
       <aside class="sidebar" :class="{ 'expanded-filters': showFilters }" v-expandable>
-        <app-navigation />
-        <router-view class="main" />
+        <app-navigation class="nav" />
+        <router-view />
         <filters-panel v-model="showFilters" />
       </aside>
     </main>
@@ -59,6 +59,10 @@ main {
   @media (min-width: $breakpoint-tablet-portrait) {
     bottom: 0;
   }
+}
+
+.nav {
+  z-index: 2;
 }
 
 .sidebar {

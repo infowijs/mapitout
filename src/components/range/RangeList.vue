@@ -136,8 +136,12 @@ export default {
     })
   },
   mounted() {
-    if (this.ranges.length === 0) {
+    const ranges = this.ranges;
+
+    if (ranges.length === 0) {
       this.addRange();
+    } else {
+      this.activateRange(ranges[ranges.length - 1].id);
     }
   },
   methods: {

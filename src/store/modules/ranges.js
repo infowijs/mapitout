@@ -7,7 +7,7 @@ export const DEFAULT_RANGE = {
   originLng: null,
   transportType: "public_transport",
   travelTime: 45,
-  highlightColor: "#ff0000"
+  departureTime: new Date().toISOString()
 };
 
 export const mutations = {
