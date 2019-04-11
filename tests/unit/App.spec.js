@@ -14,7 +14,10 @@ describe("App", () => {
 
     wrapper = shallowMount(App, {
       localVue,
-      stubs: ["app-header", "app-tabs", "app-map", "router-view"]
+      stubs: ["app-header", "app-tabs", "app-map", "router-view"],
+      mocks: {
+        $route: jest.fn()
+      }
     });
   });
 

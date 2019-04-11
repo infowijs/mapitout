@@ -18,6 +18,10 @@ export const mutations = {
 
   updatePois(state, pois) {
     state.pois = pois;
+  },
+
+  view(state, details) {
+    state.details = details;
   }
 };
 
@@ -145,6 +149,44 @@ export const actions = {
     }
 
     commit("updatePois", pois);
+  },
+
+  async lookup({ dispatch, commit, getters }, locationName) {
+    const url = new URL(process.env.VUE_APP_ENDPOINT_POI_SEARCH);
+
+    const request = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify({
+        poi_by_name: locationName
+      })
+    };
+
+    let details = null;
+
+    try {
+      const result = await http(url, request);
+
+      if (isArray(result)) {
+        details = {
+          name: result[0][0].name,
+          description: result[0][0].description,
+          address: `${result[0][0].street}, ${result[0][0].postalcode} ${result[0][0].city}`,
+          website: result[0][0].website,
+          phone: result[0][0].phone,
+          lng: result[0][0].geo_location.coordinates[0],
+          lat: result[0][0].geo_location.coordinates[1],
+          icon: getters.getLocationTypeById(result[0][0].poi_type_id).icon
+        };
+      }
+    } catch (error) {
+      dispatch("reportError", error, { root: true });
+    }
+
+    commit("view", details);
   }
 };
 
@@ -171,6 +213,7 @@ export default {
       },
       { value: "wellness", label: "Gym", icon: IconWellness, highlightColor: "#942190" }
     ],
+    details: null,
     resolved: [],
     pois: []
   },

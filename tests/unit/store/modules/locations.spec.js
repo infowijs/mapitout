@@ -42,6 +42,17 @@ describe("locations store module", () => {
         expect(state.pois).toEqual(pois);
       });
     });
+
+    describe("view", () => {
+      it("should update the state details with the passed value", () => {
+        const state = { details: null };
+        const details = { name: "test-name", lat: 1, lng: 2 };
+
+        mutations.view(state, details);
+
+        expect(state.details).toEqual(details);
+      });
+    });
   });
 
   describe("getters", () => {
@@ -111,7 +122,8 @@ describe("locations store module", () => {
       dispatch: jest.fn(),
       commit: jest.fn(),
       getters: {
-        getResolvedById: jest.fn()
+        getResolvedById: jest.fn(),
+        getLocationTypeById: jest.fn()
       }
     };
 
@@ -340,6 +352,88 @@ describe("locations store module", () => {
         expect(context.commit).toHaveBeenCalledTimes(1);
         expect(context.commit).toHaveBeenCalledWith("updatePois", []);
         expect(context.dispatch).toHaveBeenCalledTimes(1);
+        expect(context.dispatch.mock.calls[0][0]).toBe("reportError");
+        expect(context.dispatch.mock.calls[0][1]).toBeInstanceOf(Error);
+        expect(context.dispatch.mock.calls[0][2]).toEqual({ root: true });
+      });
+    });
+
+    describe("lookup", () => {
+      it("should call http with the correct url and request object", () => {
+        const name = "test name";
+        const expectedRequestObject = {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json; charset=utf-8"
+          },
+          body: '{"poi_by_name":"test name"}'
+        };
+        actions.lookup(context, name);
+
+        expect(http).toHaveBeenCalledTimes(1);
+
+        expect(http.mock.calls[0][1]).toEqual(expectedRequestObject);
+      });
+
+      it("should commit a details object provided a valid http call response ", async () => {
+        const name = "test-query";
+        const response = {
+          description: "description",
+          city: "Amsterdam",
+          street: "street",
+          postalcode: "postalcode",
+          website: "website",
+          phone: 2141234,
+          poi_type_id: 1,
+          geo_location: {
+            coordinates: [1, 2]
+          }
+        };
+        const icon = "icon";
+
+        context.getters.getLocationTypeById.mockReturnValue({ icon });
+
+        http.mockResolvedValue([[response]]);
+
+        const location = {
+          name: response.name,
+          description: response.description,
+          address: `${response.street}, ${response.postalcode} ${response.city}`,
+          website: response.website,
+          phone: response.phone,
+          lng: response.geo_location.coordinates[0],
+          lat: response.geo_location.coordinates[1],
+          icon
+        };
+
+        await actions.lookup(context, name);
+
+        expect(context.commit).toHaveBeenCalledTimes(1);
+        expect(context.commit).toHaveBeenCalledWith("view", location);
+      });
+
+      it("should commit a null details object provided an empty http call response ", async () => {
+        const name = "test-query";
+
+        http.mockResolvedValue({});
+
+        await actions.lookup(context, name);
+
+        expect(context.commit).toHaveBeenCalledTimes(1);
+        expect(context.commit).toHaveBeenCalledWith("view", null);
+      });
+
+      it("should commit a null details object and dispatch an error on a failed http call", async () => {
+        const query = "test-query";
+
+        http.mockRejectedValue(new Error());
+
+        await actions.lookup(context, query);
+
+        expect(context.commit).toHaveBeenCalledTimes(1);
+        expect(context.commit).toHaveBeenCalledWith("view", null);
+        expect(context.dispatch).toBeCalledTimes(1);
         expect(context.dispatch.mock.calls[0][0]).toBe("reportError");
         expect(context.dispatch.mock.calls[0][1]).toBeInstanceOf(Error);
         expect(context.dispatch.mock.calls[0][2]).toEqual({ root: true });

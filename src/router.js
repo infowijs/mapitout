@@ -1,8 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
-import RangesPanel from "./components/RangesPanel";
-import store from "./store";
 import qs from "qs";
+
+import store from "./store";
+
+import RangesPanel from "./components/RangesPanel";
+import DetailsPanel from "./components/DetailsPanel";
 
 Vue.use(Router);
 
@@ -17,6 +20,15 @@ const router = new Router({
     {
       path: "/ranges",
       component: RangesPanel
+    },
+    {
+      path: "/details",
+      component: DetailsPanel,
+      beforeEnter: async (to, from, next) => {
+        await store.dispatch("locations/lookup", to.query.name);
+
+        next();
+      }
     }
   ]
 });
