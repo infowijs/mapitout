@@ -1,12 +1,12 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 
-import SuggestInput from "@/components/input/SuggestInput.vue";
+import LocationAddress from "@/components/location/LocationAddress.vue";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("SuggestInput", () => {
+describe("LocationAddress", () => {
   let search;
   let resolve;
 
@@ -16,7 +16,7 @@ describe("SuggestInput", () => {
   });
 
   it("should create", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -27,25 +27,8 @@ describe("SuggestInput", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  it("should initialize the input with the passed in value label", () => {
-    const initialValue = {
-      label: "initial address",
-      value: { lat: 1, lng: 2 }
-    };
-    const wrapper = shallowMount(SuggestInput, {
-      localVue,
-      propsData: {
-        search,
-        resolve,
-        value: initialValue
-      }
-    });
-
-    expect(wrapper.vm.query).toEqual(initialValue.label);
-  });
-
   it("should change the emit a focus event whenever the input gains focus", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -62,7 +45,7 @@ describe("SuggestInput", () => {
   });
 
   it("should display the suggestions, if any, whenever the input gains focus", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -83,7 +66,7 @@ describe("SuggestInput", () => {
   });
 
   it("should palce the cursor on the first suggestion in the list whenever the list displayed", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -99,7 +82,7 @@ describe("SuggestInput", () => {
   });
 
   it("should reset the cursor whenever this list is hidden", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -123,7 +106,7 @@ describe("SuggestInput", () => {
   });
 
   it("should add the focused class whenever the input gains focus", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -137,7 +120,7 @@ describe("SuggestInput", () => {
   });
 
   it("should remove the focused class whenever the input loses focus", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -153,7 +136,7 @@ describe("SuggestInput", () => {
   });
 
   it("should trigger debounced suggestions whenever the user inputs text", done => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -177,7 +160,7 @@ describe("SuggestInput", () => {
   });
 
   it("should trigger a selection whenever a user clicks on a suggestion", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -196,32 +179,31 @@ describe("SuggestInput", () => {
     const selectSpy = jest.spyOn(wrapper.vm, "select").mockImplementation();
 
     wrapper
-      .findAll("ul li")
+      .findAll(".option")
       .at(0)
       .trigger("click");
 
     expect(selectSpy).toHaveBeenCalledWith(0);
-
-    wrapper
-      .findAll("li")
-      .at(1)
-      .trigger("click");
-
-    expect(selectSpy).toHaveBeenCalledWith(1);
   });
 
   it("should trigger a selection of the cursor index when pressing Enter", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
-        resolve
+        resolve,
+        value: {
+          id: "test-id",
+          address: "test address",
+          lat: 1,
+          lng: 2
+        }
       }
     });
 
     const selectSpy = jest.spyOn(wrapper.vm, "select").mockImplementation();
 
-    wrapper.setData({ cursorIndex: 0 });
+    wrapper.setData({ cursorIndex: 0, query: "other address" });
 
     wrapper.find("input").trigger("keydown", {
       key: "Enter"
@@ -231,7 +213,7 @@ describe("SuggestInput", () => {
   });
 
   it("should not trigger a selection of the cursor index when pressing any other key", () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -251,7 +233,7 @@ describe("SuggestInput", () => {
   });
 
   it("should only search for queries longer than two characters", async () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -272,7 +254,7 @@ describe("SuggestInput", () => {
   });
 
   it("should clear the suggestion list for queries shorter than three characters", async () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -287,7 +269,7 @@ describe("SuggestInput", () => {
   });
 
   it("should hide the list whenever a selection is triggered", async () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         resolve,
@@ -300,12 +282,10 @@ describe("SuggestInput", () => {
     });
 
     await wrapper.vm.select(-1);
-
-    expect(wrapper.vm.areSuggestionsVisible).toBeFalsy();
   });
 
   it("should emit an input event with an empty value whenever an invalid selection is triggered on a set value", async () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -322,11 +302,11 @@ describe("SuggestInput", () => {
     });
     await wrapper.vm.select(-1);
 
-    expect(wrapper.emitted().input[0][0]).toEqual({ id: undefined, label: "", value: null });
+    expect(wrapper.emitted().input[0][0]).toEqual({ id: "", address: "" });
   });
 
   it("should emit an input event whenever a selection is resolved", async () => {
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,
@@ -355,7 +335,7 @@ describe("SuggestInput", () => {
       id: "test-id",
       labe: "test-label"
     };
-    const wrapper = shallowMount(SuggestInput, {
+    const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
         search,

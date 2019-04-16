@@ -1,22 +1,15 @@
 export const mutations = {
-  toggle(state, { id, selected }) {
-    state.filters = state.filters.map(filter => {
-      if (filter.id !== id && filter.parent !== id) {
-        return filter;
-      }
-
-      return { ...filter, selected };
-    });
-  },
-
-  update(state, filters) {
-    state.filters = filters;
+  select(state, selectedIds) {
+    state.filters = state.filters.map(filter => ({
+      ...filter,
+      selected: selectedIds.includes(filter.id)
+    }));
   }
 };
 
 export const actions = {
-  toggle({ commit }, payload) {
-    commit("toggle", payload);
+  select({ commit }, filters) {
+    commit("select", filters);
   }
 };
 
@@ -25,68 +18,98 @@ export default {
   state: {
     filters: [
       {
-        id: 0,
+        id: 1,
         name: "Stations",
         value: "Station",
         category: null,
         root: true,
+        propertyId: null,
         selected: false,
         parent: null,
         children: null,
         icon: "icon-bus"
       },
       {
-        id: 3,
+        id: 2,
         name: "Schools",
         value: "School",
         category: null,
         root: true,
+        propertyId: null,
         selected: false,
         parent: null,
         children: [4, 5, 6, 7, 8],
         icon: "icon-education"
       },
       {
-        id: 4,
-        name: "Age range 4-11",
+        id: 3,
+        name: "Age Range 4-11",
         value: "Age range 4-11",
-        category: null,
+        category: "School programs",
         root: false,
+        propertyId: 1,
         selected: false,
-        parent: 3,
+        parent: 2,
+        children: null,
+        icon: "icon-education"
+      },
+      {
+        id: 4,
+        name: "Age Range 4-18",
+        value: "Age range 4-18",
+        category: "School programs",
+        root: false,
+        propertyId: 2,
+        selected: false,
+        parent: 2,
         children: null,
         icon: "icon-education"
       },
       {
         id: 5,
-        name: "Age range 4-18",
-        value: "Age range 4-18",
-        category: null,
+        name: "Primary Education",
+        value: "Primary education",
+        category: "School programs",
         root: false,
+        propertyId: 3,
         selected: false,
-        parent: 3,
+        parent: 2,
         children: null,
         icon: "icon-education"
       },
       {
         id: 6,
-        name: "Primary education",
-        value: "Primary education",
-        category: null,
+        name: "Secondary Education",
+        value: "Secondary education",
+        category: "School programs",
         root: false,
+        propertyId: 4,
         selected: false,
-        parent: 3,
+        parent: 2,
         children: null,
         icon: "icon-education"
       },
       {
         id: 7,
-        name: "Secondary education",
-        value: "Secondary education",
-        category: null,
+        name: "International Schools",
+        value: "International schools",
+        category: "School system",
         root: false,
+        propertyId: 5,
         selected: false,
-        parent: 3,
+        parent: 2,
+        children: null,
+        icon: "icon-education"
+      },
+      {
+        id: 8,
+        name: "Dutch Schools",
+        value: "Dutch schools",
+        category: "School system",
+        root: false,
+        propertyId: 6,
+        selected: false,
+        parent: 2,
         children: null,
         icon: "icon-education"
       }

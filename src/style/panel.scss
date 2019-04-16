@@ -2,14 +2,16 @@
 
 .panel {
   background: white;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   @media (min-width: $breakpoint-tablet-portrait) {
     box-shadow: 0 2px 8px 0 lighten($greyscale-1, 50);
-    overflow: scroll;
   }
 
   .header {
-    height: 50px;
+    min-height: 50px;
     background: $greyscale-0;
     display: flex;
     align-items: center;
@@ -34,7 +36,12 @@
     }
   }
 
+  .body {
+    max-height: 100%;
+    overflow: scroll;
+  }
+
   .footer {
-    margin-top: 48px;
+    margin-top: 36px;
   }
 }

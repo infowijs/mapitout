@@ -1,29 +1,36 @@
 <template>
   <div
-    :class="{ focused: isInputFocused, disabled: isDisabled }"
+    :class="['location-address', { focused: isInputFocused, disabled: isDisabled }]"
     v-overlay-container="{ togglePropName: 'areSuggestionsVisible' }"
     v-navigable-container="{ cursorPropName: 'cursorIndex' }"
   >
-    <input
-      type="text"
-      class="input"
-      @input="onInputInput"
-      @focus="onInputFocus"
-      @blur="onInputBlur"
-      @keydown="onInputKeyDown"
-      v-model="query"
-      :disabled="isDisabled"
-      :placeholder="placeholder"
-    />
+    <label>
+      <input
+        tabindex="0"
+        type="text"
+        class="input"
+        autocomplete="false"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        @input="onInputInput"
+        @focus="onInputFocus"
+        @blur="onInputBlur"
+        @keydown="onInputKeyDown"
+        v-model="query"
+        :disabled="isDisabled"
+        :placeholder="placeholder"
+      />
+    </label>
     <transition name="fade">
       <ul class="dropdown" v-if="areSuggestionsVisible">
         <li
           v-for="(suggestion, index) in suggestions"
           :key="suggestion.id"
           @click="onSuggestionClick(index)"
-          :class="{ cursor: index === cursorIndex }"
+          :class="['item', { cursor: index === cursorIndex }]"
         >
-          <span>{{ suggestion.label }}</span>
+          <button class="option">{{ suggestion.address }}</button>
         </li>
       </ul>
     </transition>
@@ -32,12 +39,29 @@
 <style scoped lang="scss">
 @import "../../style/variables";
 
-div {
+.location-address {
   position: relative;
   align-items: stretch;
   color: $greyscale-1;
 
-  .disabled & {
+  &::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25%;
+    height: calc(100% - 2px);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), $greyscale-2);
+  }
+
+  &.focused {
+    &::after {
+      content: none;
+    }
+  }
+
+  &.disabled {
     &::before {
       content: " ";
       display: block;
@@ -47,12 +71,18 @@ div {
       position: absolute;
       z-index: 1;
     }
+
+    &::after {
+      width: 40%;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+    }
   }
 }
 
 .input {
+  border-style: solid;
   border-color: $greyscale-1;
-  border-width: 1px;
+  border-width: 0 0 2px 0;
   color: $greyscale-1;
   outline: none;
   padding: 4px 0;
@@ -60,9 +90,17 @@ div {
   line-height: 1;
   font-size: unset;
   background: transparent;
+  transition: padding 0.1s ease-in-out;
 
   .disabled & {
     z-index: -1;
+    border-width: 0;
+    padding: 0;
+  }
+
+  &:focus {
+    background-color: white;
+    padding: 4px 0 4px 4px;
   }
 }
 
@@ -74,7 +112,7 @@ div {
   background-color: white;
   padding: 0;
   list-style: none;
-  box-shadow: 0 2px 4px 0 $greyscale-2;
+  box-shadow: 0 2px 4px 0 $greyscale-1;
   margin: 4px 0 0 0;
 
   &.fade-enter-active,
@@ -84,18 +122,26 @@ div {
 
   &.fade-enter,
   &.fade-leave-to {
-    margin-top: 8px;
+    margin-top: 0;
     opacity: 0;
   }
+}
 
-  li {
-    padding: 4px 8px;
-    cursor: pointer;
+.item {
+  padding: 4px 8px;
+  cursor: pointer;
 
-    &.cursor {
-      background-color: $greyscale-2;
-    }
+  &.cursor {
+    background-color: $greyscale-2;
   }
+}
+
+.option {
+  border: 0 none;
+  background-color: transparent;
+  outline: 0 none;
+  padding: 0;
+  text-align: left;
 }
 </style>
 <script>
@@ -114,9 +160,8 @@ export default {
       type: Object,
       default() {
         return {
-          id: undefined,
-          label: "",
-          value: null
+          id: "",
+          address: ""
         };
       }
     },
@@ -127,15 +172,11 @@ export default {
     search: {
       type: Function,
       required: true
-    },
-    resolve: {
-      type: Function,
-      required: true
     }
   },
   data() {
     return {
-      query: this.value.label,
+      query: this.value.address,
       isInputFocused: false,
       areSuggestionsVisible: false,
       suggestions: [],
@@ -146,6 +187,10 @@ export default {
   watch: {
     areSuggestionsVisible: function(value) {
       this.cursorIndex = value ? 0 : -1;
+    },
+
+    value: function(value) {
+      this.query = value.address;
     }
   },
 
@@ -172,13 +217,18 @@ export default {
 
     onSuggestionClick(index) {
       this.select(index);
+      this.areSuggestionsVisible = false;
     },
 
     onInputKeyDown(event) {
       if (event.key === "Enter") {
         event.preventDefault();
 
-        this.select(this.cursorIndex);
+        if (this.query !== this.value.address) {
+          this.select(this.cursorIndex);
+        }
+
+        this.areSuggestionsVisible = false;
       }
     },
 
@@ -196,26 +246,20 @@ export default {
 
     async select(index) {
       const suggestion = this.suggestions[index];
-      let value = { ...this.value };
+
+      let newValue = {
+        id: "",
+        address: ""
+      };
 
       if (suggestion) {
-        value = await this.resolve(suggestion.id);
-      } else if (this.value.label !== this.query || !this.query) {
-        value = {
-          id: undefined,
-          label: "",
-          value: null
-        };
+        newValue = { ...suggestion };
       }
 
-      if (this.value.label !== this.query) {
-        this.query = value.label;
-      }
+      if (!isEqual(newValue, this.value)) {
+        this.query = newValue.address;
 
-      this.areSuggestionsVisible = false;
-
-      if (!isEqual(value, { ...this.value })) {
-        this.$emit("input", value);
+        this.$emit("input", newValue);
       }
     }
   }

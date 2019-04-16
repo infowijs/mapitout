@@ -1,74 +1,53 @@
-import { mutations, actions, DEFAULT_RANGE } from "@/store/modules/ranges";
+import { mutations, actions } from "@/store/modules/ranges";
 
 describe("ranges store module", () => {
   describe("mutations", () => {
     describe("add", () => {
       it("should add a new default value range to the store", () => {
+        const range = { originId: "test" };
         const state = { ranges: [] };
 
-        mutations.add(state);
+        mutations.add(state, range);
 
         expect(state.ranges.length).toBe(1);
-        expect(state.ranges[0]).toEqual({ ...DEFAULT_RANGE, id: "range-0" });
+        expect(state.ranges[0]).toEqual({ ...range, id: 0 });
       });
 
       it("should increment the id of the newly added ranges", () => {
+        const range = { originId: "test" };
         const state = {
-          ranges: [{ id: "range-0" }]
+          ranges: [{ ...range, id: 0 }]
         };
 
-        mutations.add(state);
-
-        expect(state.ranges[1]).toEqual({ ...DEFAULT_RANGE, id: "range-1" });
-      });
-    });
-
-    describe("update", () => {
-      it("should update the passed in range in the ranges array", () => {
-        const updated = {
-          id: "range-1",
-          value: 1
-        };
-        const state = {
-          ranges: [{ id: "range-0" }, { id: "range-1" }]
-        };
-
-        mutations.update(state, updated);
-
-        expect(state.ranges[0]).toEqual({ id: "range-0" });
-        expect(state.ranges[1]).toEqual(updated);
-      });
-    });
-
-    describe("remove", () => {
-      it("should remove the corresponding range from the state", () => {
-        const state = {
-          ranges: [{ id: "test-id" }, { id: "test-id1" }]
-        };
-
-        mutations.remove(state, "test-id");
-
-        expect(state.ranges.length).toBe(1);
-      });
-
-      it("should never remove the last range of the array", () => {
-        const state = {
-          ranges: [{ id: "test-id" }]
-        };
-
-        mutations.remove(state, "test-id");
-
-        expect(state.ranges.length).toBe(1);
-      });
-
-      it("should do nothing if passed an invalid id", () => {
-        const state = {
-          ranges: [{ id: "range-0" }, { id: "range-1" }]
-        };
-
-        mutations.remove(state, "test-id");
+        mutations.add(state, range);
 
         expect(state.ranges.length).toBe(2);
+        expect(state.ranges).toEqual([{ ...range, id: 0 }, { ...range, id: 1 }]);
+      });
+    });
+
+    describe("activate", () => {
+      it("should update the value of the state activeId", () => {
+        const state = {
+          activeId: 0
+        };
+
+        mutations.activate(state, 1);
+
+        expect(state.activeId).toBe(1);
+      });
+    });
+
+    describe("replace", () => {
+      it("should update the value of the state ranges", () => {
+        const state = {
+          ranges: []
+        };
+        const ranges = [{ id: 0 }];
+
+        mutations.replace(state, ranges);
+
+        expect(state.ranges).toEqual(ranges);
       });
     });
   });
@@ -86,28 +65,31 @@ describe("ranges store module", () => {
     });
 
     describe("add", () => {
-      it("should call the appropriate mutation", () => {
-        actions.add(context);
+      it("should call the appropriate mutation and return the new id", () => {
+        const range = { id: 0 };
 
-        expect(context.commit).toHaveBeenCalledWith("add");
+        context.commit.mockReturnValue(0);
+
+        actions.add(context, range);
+
+        expect(context.commit).toHaveBeenCalledWith("add", range);
       });
     });
 
-    describe("update", () => {
-      it("should call the appropriate mutation", () => {
-        const updated = { id: "range-0" };
-        actions.update(context, updated);
+    describe("activate", () => {
+      it("should commit an activate action with the new activeRangeId", () => {
+        actions.activate(context, 0);
 
-        expect(context.commit).toHaveBeenCalledWith("update", updated);
+        expect(context.commit).toHaveBeenCalledWith("activate", 0);
       });
     });
 
-    describe("remove", () => {
-      it("should call the appropriate mutation", () => {
-        const id = "range-0";
-        actions.remove(context, id);
+    describe("replace", () => {
+      it("should commit a replace action with the new ranges", () => {
+        const ranges = [{ id: 0 }];
+        actions.replace(context, ranges);
 
-        expect(context.commit).toHaveBeenCalledWith("remove", id);
+        expect(context.commit).toHaveBeenCalledWith("replace", ranges);
       });
     });
   });

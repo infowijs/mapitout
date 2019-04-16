@@ -5,13 +5,17 @@ import FilterItem from "@/components/filter/FilterItem.vue";
 const localVue = createLocalVue();
 
 describe("FilterItem", () => {
+  const value = {
+    value: "test",
+    icon: "icon-bus",
+    selected: false
+  };
+
   it("should create", () => {
     const wrapper = shallowMount(FilterItem, {
       localVue,
       propsData: {
-        filter: {
-          icon: "icon-bus"
-        }
+        value
       }
     });
 
@@ -22,9 +26,7 @@ describe("FilterItem", () => {
     const wrapper = shallowMount(FilterItem, {
       localVue,
       propsData: {
-        filter: {
-          icon: "icon-bus"
-        }
+        value
       }
     });
     wrapper.find(".filter").trigger("click");
@@ -36,13 +38,12 @@ describe("FilterItem", () => {
     const wrapper = shallowMount(FilterItem, {
       localVue,
       propsData: {
-        filter: {
-          icon: "icon-bus"
-        }
+        value
       }
     });
     wrapper.find(".toggle").trigger("click");
 
-    expect(wrapper.emitted("toggle")).toBeTruthy();
+    expect(wrapper.emitted().input.length).toBe(1);
+    expect(wrapper.emitted().input[0][0]).toEqual({ ...value, selected: true });
   });
 });

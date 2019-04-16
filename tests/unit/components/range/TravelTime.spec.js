@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 
-import TravelTime from "@/components/input/TravelTime.vue";
+import TravelTime from "@/components/range/TravelTime.vue";
 
 const localVue = createLocalVue();
 

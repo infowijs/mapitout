@@ -1,8 +1,8 @@
 <template>
   <div class="filter" @click="$emit('click')">
-    <component :is="filter.icon" class="icon" />
-    <span class="name">{{ filter.name }}</span>
-    <button class="toggle" :class="{ selected: filter.selected }" @click="onClickToggle"></button>
+    <component :is="value.icon" class="icon" />
+    <span class="name">{{ value.name }}</span>
+    <button class="toggle" :class="{ selected: value.selected }" @click="onClickToggle"></button>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -74,14 +74,20 @@ export default {
   },
 
   props: {
-    filter: Object
+    value: Object
+  },
+
+  data() {
+    return {
+      selected: this.value.selected
+    };
   },
 
   methods: {
     onClickToggle(event) {
       event.stopPropagation();
 
-      this.$emit("toggle", this.filter, !this.filter.selected);
+      this.$emit("input", { ...this.value, selected: !this.value.selected });
     }
   }
 };

@@ -1,9 +1,9 @@
 [{
-  "featureType": "administrative",
-  "elementType": "all",
-  "stylers": [{
-    "visibility": "off"
-  }]
+  "featureType": "administrative.locality",
+  "elementType": "labels",
+  "stylers": [
+    { "visibility": "on" }
+  ]
 },
   {
     "featureType": "landscape",
@@ -30,9 +30,9 @@
   },
   {
     "featureType": "road",
-    "elementType": "all",
+    "elementType": "labels",
     "stylers": [{
-      "visibility": "simplified"
+      "visibility": "off"
     }]
   },
   {

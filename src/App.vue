@@ -8,8 +8,8 @@
         :class="{ 'expanded-filters': showFilters, expanded: $route.path === '/details' }"
         v-expandable
       >
-        <app-navigation class="nav" v-if="$route.path !== '/details'" />
-        <router-view class="main" />
+        <app-navigation class="nav" v-if="$route.name !== 'details'" />
+        <router-view />
         <filters-panel v-model="showFilters" />
       </aside>
     </main>

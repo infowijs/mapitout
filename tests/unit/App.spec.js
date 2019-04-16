@@ -1,5 +1,5 @@
-import Vuex from "vuex";
 import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
 
 import App from "@/App.vue";
 
@@ -23,5 +23,9 @@ describe("App", () => {
 
   it("should create", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
+  });
+
+  it("should contain a value to toggle filters with", () => {
+    expect(wrapper.vm).toHaveProperty("showFilters", false);
   });
 });

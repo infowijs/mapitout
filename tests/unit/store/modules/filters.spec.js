@@ -2,33 +2,22 @@ import { mutations, actions } from "@/store/modules/filters";
 
 describe("filters store module", () => {
   describe("mutations", () => {
-    describe("toggle", () => {
-      it("should update the state filters", () => {
-        const filter = { id: 0, selected: true };
+    describe("select", () => {
+      it("should update the state filters based on selectedIds passed", () => {
+        const filter1 = { id: 0, selected: false };
+        const filter2 = { id: 1, selected: true };
         const state = {
-          filters: [
-            {
-              id: 0,
-              selected: false
-            },
-            {
-              id: 1,
-              selected: false
-            }
-          ]
+          filters: [filter1, filter2]
         };
         const expected = [
+          filter1,
           {
-            id: 0,
+            ...filter2,
             selected: true
-          },
-          {
-            id: 1,
-            selected: false
           }
         ];
 
-        mutations.toggle(state, filter);
+        mutations.select(state, [1]);
 
         expect(state.filters).toEqual(expected);
       });
@@ -44,13 +33,14 @@ describe("filters store module", () => {
       jest.resetAllMocks();
     });
 
-    describe("toggle", () => {
-      it("should commit a state mutation to toggle the filter", () => {
-        const filter = { id: 0, selected: true };
+    describe("select", () => {
+      it("should commit a state mutation to select the filter ids", () => {
+        const filters = [{ id: 0, selected: true }];
 
-        actions.toggle(context, filter);
+        actions.select(context, filters);
 
-        expect(context.commit).toHaveBeenCalled();
+        expect(context.commit).toHaveBeenCalledTimes(1);
+        expect(context.commit).toHaveBeenCalledWith("select", filters);
       });
     });
   });

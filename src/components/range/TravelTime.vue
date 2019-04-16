@@ -1,5 +1,5 @@
 <template>
-  <div :class="['trave-time', { disabled: isDisabled }]">
+  <div :class="['travel-time', { disabled: isDisabled }]">
     <icon-time class="icon" v-if="!isDisabled" />
     <div class="rail-labels-value">
       <div class="current-value">
@@ -39,8 +39,9 @@ $rail-margin-vertical: ($handle-height - $slider-thinkness) / 2;
   }
 }
 
-svg {
+.icon {
   color: $greyscale-1;
+  margin: 0 4px;
 }
 
 .rail-labels-value {
@@ -158,13 +159,17 @@ export default {
         if (!this.handleHammerInstance) {
           const handleHammerInstance = Hammer(this.$refs.handle);
 
-          handleHammerInstance.get("pan").set({ direction: Hammer.DIRECTION_HORIZONTAL });
+          handleHammerInstance
+            .get("pan")
+            .set({ direction: Hammer.DIRECTION_HORIZONTAL, threshold: 1 });
 
           handleHammerInstance.on("panstart", this.onHandlePanStart);
 
           handleHammerInstance.on("pan", this.onHandlePan);
 
           handleHammerInstance.on("panend", this.onHandlePanEnd);
+
+          this.handleHammerInstance = handleHammerInstance;
         }
       } else {
         this.handleHammerInstance = null;
@@ -183,11 +188,11 @@ export default {
       const handleEl = this.$refs.handle;
       let newOffset = this.initialOffset + event.deltaX;
 
-      if (newOffset < this.minOffset) {
+      if (newOffset <= this.minOffset) {
         newOffset = this.minOffset;
       }
 
-      if (this.maxOffset < newOffset) {
+      if (this.maxOffset <= newOffset) {
         newOffset = this.maxOffset;
       }
 

@@ -12,6 +12,9 @@
       <p class="description" v-if="!details">Unable to retrieve location details</p>
       <dl class="details" v-if="details">
         <dd>
+          <span>{{ details.description }}</span>
+        </dd>
+        <dd>
           <icon-poi class="icon icon-poi" />
           <span>{{ details.address }}</span>
         </dd>
@@ -25,22 +28,24 @@
         </dd>
       </dl>
     </div>
+    <div class="footer">
+      <button class="range">
+        <icon-area class="icon" />
+        <span>Range</span>
+      </button>
+    </div>
   </div>
 </template>
 <style scoped lang="scss">
 @import "../style/variables.scss";
 
 .body {
-  background-color: $greyscale-2;
-  margin: 24px 16px;
-  padding: 16px 24px 24px 24px;
+  padding: 16px 24px;
   font-size: 14px;
-  display: flex;
-  flex-direction: column;
 }
 
 .footer {
-  padding: 24px;
+  padding: 0 24px 24px 24px;
 }
 
 .icon-poi,
@@ -71,8 +76,34 @@
   outline: none;
 }
 
+.range {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 auto;
+  border: 1px solid lighten($greyscale-1, 25);
+  background-color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: lighten($greyscale-1, 25);
+
+  .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+
+  &:hover {
+    color: $greyscale-1;
+    border-color: $greyscale-1;
+  }
+}
+
 .details {
   align-self: stretch;
+  padding: 16px;
+  background-color: $greyscale-2;
+
   dd {
     margin: 16px 0;
     display: flex;
@@ -104,35 +135,47 @@ import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg?inline";
 import IconPoi from "@/assets/icons/IconPoi.svg?inline";
 import IconWebsite from "@/assets/icons/IconWebsite.svg?inline";
 import IconPhone from "@/assets/icons/IconPhone.svg?inline";
-import { mapActions, mapState } from "vuex";
+import IconArea from "@/assets/icons/IconArea.svg?inline";
+import { mapActions } from "vuex";
 
 export default {
   components: {
     IconArrowLeft,
     IconPhone,
     IconWebsite,
-    IconPoi
+    IconPoi,
+    IconArea
   },
 
-  computed: {
-    ...mapState("locations", ["details"])
+  data() {
+    return {
+      details: null
+    };
   },
 
-  beforeRouteUpdate(to, from, next) {
-    if (to.query.name !== from.query.name) {
-      this.lookupPoi(to.query.name);
+  async beforeRouteUpdate(to, from, next) {
+    if (to.params.poi !== from.params.poi) {
+      await this.setDetails(to.params.poi);
     }
 
     next();
   },
 
+  async created() {
+    await this.setDetails(this.$route.params.poi);
+  },
+
   methods: {
-    ...mapActions("locations", {
+    ...mapActions("pois", {
       lookupPoi: "lookup"
     }),
 
     onClickBack() {
       this.$router.back();
+    },
+
+    async setDetails(poiName) {
+      this.details = await this.lookupPoi(poiName);
     }
   }
 };
