@@ -1,6 +1,12 @@
 # mapitout-frontend
 
 ## Project setup
+The google maps public key used in production is most likely restricted, in order to get the maps working, add an `.env.local` file to the root of the project with the following contents:
+
+```
+VUE_APP_GOOGLE_API_KEY=your-google-maps-key-here
+```
+Then run:
 ```
 yarn install
 ```
