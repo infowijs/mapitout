@@ -6,6 +6,8 @@ The google maps public key used in production is most likely restricted, in orde
 ```
 VUE_APP_GOOGLE_API_KEY=your-google-maps-key-here
 ```
+Use the `.env.local` file to override any api endpoint. The keys for the API endpoints can be found in the `.env` file.
+
 Then run:
 ```
 yarn install
