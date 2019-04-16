@@ -36,5 +36,10 @@ yarn run lint
 yarn run test:unit
 ```
 
+### Run your unit tests with coverage
+```
+yarn run test:unit --coverage
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
