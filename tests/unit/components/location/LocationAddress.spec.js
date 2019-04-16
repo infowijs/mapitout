@@ -27,7 +27,7 @@ describe("LocationAddress", () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  it("should change the emit a focus event whenever the input gains focus", () => {
+  it("should emit a focus event whenever the input gains focus", () => {
     const wrapper = shallowMount(LocationAddress, {
       localVue,
       propsData: {
@@ -39,7 +39,6 @@ describe("LocationAddress", () => {
     wrapper.find("input").trigger("focus");
 
     expect(wrapper.vm.isInputFocused).toBeTruthy();
-    expect(wrapper.emitted("focus")).toBeTruthy();
 
     wrapper.find("input").trigger("blur");
   });

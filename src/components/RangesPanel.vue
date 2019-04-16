@@ -184,6 +184,8 @@ export default {
       if (this.activeRangeId !== rangeId) {
         this.activateRange(rangeId);
       }
+
+      this.$emit("focus");
     },
 
     async onClickAddRange() {

@@ -4,12 +4,13 @@
     <main>
       <app-map class="app-map" />
       <aside
+        ref="sidebar"
         class="sidebar"
         :class="{ 'expanded-filters': showFilters, expanded: $route.path === '/details' }"
         v-expandable
       >
         <app-navigation class="nav" v-if="$route.name !== 'details'" />
-        <router-view />
+        <router-view @focus="onRouterViewFocus" />
         <filters-panel v-model="showFilters" />
       </aside>
     </main>
@@ -217,10 +218,17 @@ export default {
     AppNavigation,
     FiltersPanel
   },
+
   data() {
     return {
       showFilters: false
     };
+  },
+
+  methods: {
+    onRouterViewFocus() {
+      this.$refs.sidebar.classList.add("expanded");
+    }
   }
 };
 </script>

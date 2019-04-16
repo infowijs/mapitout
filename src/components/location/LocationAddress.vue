@@ -83,14 +83,19 @@
   border-style: solid;
   border-color: $greyscale-1;
   border-width: 0 0 2px 0;
+  border-radius: 0;
   color: $greyscale-1;
   outline: none;
   padding: 4px 0;
   width: 100%;
   line-height: 1;
-  font-size: unset;
+  font-size: 16px;
   background: transparent;
   transition: padding 0.1s ease-in-out;
+
+  @media (min-width: $breakpoint-tablet-portrait) {
+    font-size: 13px;
+  }
 
   .disabled & {
     z-index: -1;
@@ -203,8 +208,6 @@ export default {
       this.isInputFocused = true;
 
       this.areSuggestionsVisible = this.suggestions.length > 0;
-
-      this.$emit("focus");
     },
 
     onInputBlur() {
