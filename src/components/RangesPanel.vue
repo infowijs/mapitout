@@ -197,29 +197,23 @@ export default {
     },
 
     navigate(ranges) {
-      const rangesWithOrigin = ranges.filter(range => range.originId);
+      const rQueryString =
+        ranges.length > 0
+          ? qs.stringify(
+              ranges.map(ranges => ({
+                id: ranges.id,
+                otId: ranges.originTypeId,
+                oId: ranges.originId,
+                o: ranges.origin,
+                ttId: ranges.transportTypeId,
+                tt: ranges.travelTime,
+                t: new Date(ranges.departureTime).getTime()
+              }))
+            )
+          : undefined;
 
-      if (!this.$route.query.r && rangesWithOrigin.length === 0) {
-        this.replaceRanges(ranges);
-      } else {
-        const rQueryString =
-          rangesWithOrigin.length > 0
-            ? qs.stringify(
-                rangesWithOrigin.map(definedRange => ({
-                  id: definedRange.id,
-                  otId: definedRange.originTypeId,
-                  oId: definedRange.originId,
-                  o: definedRange.origin,
-                  ttId: definedRange.transportTypeId,
-                  tt: definedRange.travelTime,
-                  t: new Date(definedRange.departureTime).getTime()
-                }))
-              )
-            : undefined;
-
-        if (this.$route.query.r !== rQueryString) {
-          this.$router.push({ query: { ...this.$route.query, r: rQueryString } });
-        }
+      if (this.$route.query.r !== rQueryString) {
+        this.$router.push({ query: { ...this.$route.query, r: rQueryString } });
       }
     }
   }
