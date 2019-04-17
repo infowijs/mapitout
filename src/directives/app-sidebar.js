@@ -8,31 +8,30 @@ const STATE_ATTRIBUTE_PREFIX = "data-expandable-state";
 const STATE_ATTRIBUTE_ORIGINAL_HEIGHT = `${STATE_ATTRIBUTE_PREFIX}-original-height`;
 const STATE_ATTRIBUTE_DRAG_HANDLE_HEIGHT = `${STATE_ATTRIBUTE_PREFIX}-drag-handle-height`;
 
-function onSwipeUp(event) {
-  const el = event.target;
-
-  if (!el.classList.contains(CLASS_EXPANDED)) {
-    el.classList.add(CLASS_EXPANDED);
-  }
-}
-
-function onSwipeDown(event) {
-  const el = event.target;
-
-  if (el.classList.contains(CLASS_EXPANDED)) {
-    el.classList.remove(CLASS_EXPANDED);
-  }
-}
-
 // todo figure out an appropriate manner to unit test this, if at all unit testable
-Vue.directive("expandable", {
+Vue.directive("app-sidebar", {
   bind(el, binding, vNode) {
     const sidebarHammerInstance = Hammer(el);
     sidebarHammerInstance.get("swipe").set({ direction: Hammer.DIRECTION_VERTICAL });
 
-    sidebarHammerInstance.on("swipeup", onSwipeUp);
+    sidebarHammerInstance.on("swipeup", event => {
+      const el = event.target;
 
-    sidebarHammerInstance.on("swipedown", onSwipeDown);
+      if (!el.classList.contains(CLASS_EXPANDED)) {
+        el.classList.add(CLASS_EXPANDED);
+        vNode.context.sidebarExpanded = true;
+      }
+    });
+
+    sidebarHammerInstance.on("swipedown", event => {
+      const el = event.target;
+
+      if (el.classList.contains(CLASS_EXPANDED)) {
+        el.classList.remove(CLASS_EXPANDED);
+
+        vNode.context.sidebarExpanded = false;
+      }
+    });
 
     const dragHandle = document.createElement("div");
     dragHandle.classList.add(CLASS_HANDLE_DRAG);
@@ -41,6 +40,7 @@ Vue.directive("expandable", {
     el.prepend(dragHandle);
 
     dragHandle.addEventListener("click", () => {
+      vNode.context.sidebarExpanded = !vNode.context.sidebarExpanded;
       el.classList.toggle(CLASS_EXPANDED);
     });
 
@@ -49,6 +49,7 @@ Vue.directive("expandable", {
 
     dragHandleHammerInstance.on("panstart", () => {
       el.classList.add(CLASS_EXPANDING);
+      vNode.context.sidebarExpanding = true;
     });
 
     dragHandleHammerInstance.on("pan", event => {
@@ -69,13 +70,19 @@ Vue.directive("expandable", {
     });
 
     dragHandleHammerInstance.on("panend", () => {
+      vNode.context.sidebarExpanding = false;
+
       if (el.classList.contains(CLASS_EXPANDED)) {
         if (el.offsetHeight <= (3 * window.innerHeight) / 4) {
           el.classList.remove(CLASS_EXPANDED);
+
+          vNode.context.sidebarExpanded = false;
         }
       } else {
         if (el.offsetHeight >= window.innerHeight / 3) {
           el.classList.add(CLASS_EXPANDED);
+
+          vNode.context.sidebarExpanded = true;
         }
       }
 
@@ -95,8 +102,7 @@ Vue.directive("expandable", {
   unbind(el) {
     el.removeAttribute(STATE_ATTRIBUTE_ORIGINAL_HEIGHT);
 
-    Hammer.off(el, "swipeup", onSwipeUp);
-    Hammer.off(el, "swipedown", onSwipeDown);
+    Hammer.off(el);
 
     // unlike the element bound events, the drag handle hammer events do not require explicit removal.
     // They die out with the element, whereas on swipe, the element is NOT removed

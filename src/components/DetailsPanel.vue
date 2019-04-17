@@ -44,10 +44,6 @@
   font-size: 14px;
 }
 
-.footer {
-  padding: 0 24px 24px 24px;
-}
-
 .icon-poi,
 .icon-website,
 .icon-phone {
@@ -80,7 +76,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 auto;
   border: 1px solid lighten($greyscale-1, 25);
   background-color: white;
   padding: 8px 16px;

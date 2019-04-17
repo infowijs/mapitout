@@ -1,27 +1,25 @@
 <template>
   <div class="panel panel-ranges">
     <div class="body">
-      <ul class="range-list">
+      <ul class="ranges">
         <li
-          class="item"
           v-for="range in ranges"
           :key="range.id"
-          :class="{ active: range.id === activeRangeId }"
-          @click="onRangeClick(range.id)"
+          :class="['item', { active: range.id === activeRangeId }]"
         >
-          <range :isDisabled="range.id !== activeRangeId" :value="range" @input="onInputRange" />
-          <div class="controls">
-            <button
-              class="delete"
-              v-if="range.id !== activeRangeId"
-              @click.stop="onClickRangeDelete(range.id)"
-            >
-              <icon-delete class="icon" />
-            </button>
-          </div>
+          <range
+            :class="{ defined: !!range.originId }"
+            :collapsed="range.id !== activeRangeId"
+            :value="range"
+            @click="onRangeClick"
+            @input="onRangeChange"
+            v-on:remove="onRangeRemove"
+          />
         </li>
       </ul>
-      <button class="add" @click="onClickAddRange" v-if="ranges.length < 3">
+    </div>
+    <div class="footer" v-if="ranges.length < 3">
+      <button class="add" @click="onAddClick">
         New Range
       </button>
     </div>
@@ -30,87 +28,87 @@
 <style scoped lang="scss">
 @import "../style/variables";
 
-.range-list {
+.panel-ranges {
+  &.collapsed {
+    @media (max-width: $breakpoint-tablet-portrait - 1) {
+      .footer {
+        display: none;
+      }
+
+      .body {
+        height: 80px;
+        overflow: hidden;
+      }
+
+      .item {
+        display: none;
+
+        &.active {
+          display: block;
+          overflow: hidden;
+
+          .range::v-deep {
+            .origin {
+              &::after {
+                content: " ";
+                display: block;
+                position: absolute;
+                z-index: 4;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+              }
+            }
+
+            &.defined {
+              .travel-time {
+                background-color: $greyscale-2;
+                order: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ranges {
   margin: 0;
   padding: 0;
-  list-style: none;
+  list-style: none inside;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
 
 .item {
-  border-color: rgba($greyscale-1, 0.4);
-  border-style: solid;
-  border-width: 2px 0;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-
-  &:first-child {
-    border-top-width: 0;
-  }
-
-  &:last-child {
-    border-bottom-width: 0;
+  &:hover {
+    background-color: $greyscale-2;
+    cursor: pointer;
   }
 
   .range {
-    flex-grow: 1;
-  }
-
-  .controls {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .delete {
-    border: 0 none;
-    background: transparent;
-    outline: none;
-    cursor: pointer;
-    margin: 0 12px;
-    padding: 0;
-
-    .icon {
-      display: block;
-      width: 16px;
-      height: 16px;
-      color: lighten($greyscale-1, 25);
-    }
-
-    &:hover {
-      .icon {
-        color: $greyscale-1;
-      }
-    }
+    margin: 0 16px;
+    border-bottom: 2px solid $greyscale-2;
   }
 
   &.active {
-    height: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    background: white;
-  }
+    &:hover {
+      background-color: transparent;
+      cursor: default;
+    }
 
-  &:not(.active) {
     .range {
-      flex-grow: 1;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      background-color: white;
-      cursor: pointer;
-      overflow: hidden;
+      margin: 0;
+      border-bottom: 0 none;
     }
   }
 }
 
 .add {
   display: block;
-  margin: 72px auto 24px auto;
   border: 1px solid lighten($greyscale-1, 25);
   background-color: white;
   padding: 8px 16px;
@@ -128,12 +126,10 @@ import qs from "qs";
 import { mapActions, mapState } from "vuex";
 
 import Range from "./range/Range";
-import IconDelete from "@/assets/icons/IconDelete.svg?inline";
 
 export default {
   components: {
-    Range,
-    IconDelete
+    Range
   },
 
   computed: {
@@ -174,27 +170,19 @@ export default {
       }
     },
 
-    onClickRangeDelete(removedRangeId) {
-      const ranges = this.ranges.map(range => (range.id === removedRangeId ? undefined : range));
+    onRangeRemove(event, rangeId) {
+      const ranges = this.ranges.map(range => (range.id === rangeId ? undefined : range));
 
       this.navigate(ranges.filter(range => range));
     },
 
-    onRangeClick(rangeId) {
+    onRangeClick(event, rangeId) {
       if (this.activeRangeId !== rangeId) {
         this.activateRange(rangeId);
       }
-
-      this.$emit("focus");
     },
 
-    async onClickAddRange() {
-      await this.addRange(Range.props.value.default());
-
-      this.activateRange(this.ranges[this.ranges.length - 1].id);
-    },
-
-    onInputRange(updatedRange) {
+    onRangeChange(updatedRange) {
       const ranges = this.ranges.map(range =>
         range.id === updatedRange.id ? updatedRange : range
       );
@@ -202,26 +190,36 @@ export default {
       this.navigate(ranges);
     },
 
+    async onAddClick() {
+      await this.addRange(Range.props.value.default());
+
+      this.activateRange(this.ranges[this.ranges.length - 1].id);
+    },
+
     navigate(ranges) {
-      const definedRanges = ranges.filter(range => range.originId);
+      const rangesWithOrigin = ranges.filter(range => range.originId);
 
-      const rQueryString =
-        definedRanges.length > 0
-          ? qs.stringify(
-              definedRanges.map(definedRange => ({
-                id: definedRange.id,
-                otId: definedRange.originTypeId,
-                oId: definedRange.originId,
-                o: definedRange.origin,
-                ttId: definedRange.transportTypeId,
-                tt: definedRange.travelTime,
-                t: new Date(definedRange.departureTime).getTime()
-              }))
-            )
-          : undefined;
+      if (!this.$route.query.r && rangesWithOrigin.length === 0) {
+        this.replaceRanges(ranges);
+      } else {
+        const rQueryString =
+          rangesWithOrigin.length > 0
+            ? qs.stringify(
+                rangesWithOrigin.map(definedRange => ({
+                  id: definedRange.id,
+                  otId: definedRange.originTypeId,
+                  oId: definedRange.originId,
+                  o: definedRange.origin,
+                  ttId: definedRange.transportTypeId,
+                  tt: definedRange.travelTime,
+                  t: new Date(definedRange.departureTime).getTime()
+                }))
+              )
+            : undefined;
 
-      if (this.$route.query.r !== rQueryString) {
-        this.$router.push({ query: { ...this.$route.query, r: rQueryString } });
+        if (this.$route.query.r !== rQueryString) {
+          this.$router.push({ query: { ...this.$route.query, r: rQueryString } });
+        }
       }
     }
   }

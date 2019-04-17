@@ -135,7 +135,7 @@ describe("RangesPanel", () => {
 
     await flushPromises();
 
-    wrapper.vm.onClickRangeDelete(1);
+    wrapper.vm.onRangeRemove(null, 1);
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith([{ id: 2 }]);
@@ -158,7 +158,7 @@ describe("RangesPanel", () => {
 
     activateSpy.mockReset();
 
-    wrapper.vm.onRangeClick(2);
+    wrapper.vm.onRangeClick(null, 2);
 
     expect(activateSpy).toHaveBeenCalledTimes(1);
     expect(activateSpy.mock.calls[0][1]).toBe(2);
@@ -183,7 +183,7 @@ describe("RangesPanel", () => {
 
     await flushPromises();
 
-    wrapper.vm.onInputRange({ id: 1, value: "test" });
+    wrapper.vm.onRangeChange({ id: 1, value: "test" });
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith([{ id: 1, value: "test" }, { id: 2 }]);

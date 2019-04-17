@@ -159,7 +159,7 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: ""
+      default: "Address..."
     },
     value: {
       type: Object,

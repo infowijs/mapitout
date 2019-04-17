@@ -45,6 +45,24 @@ describe("origins store module", () => {
       });
     });
 
+    describe("getOriginIconComponentByOriginTypeId", () => {
+      const state = {
+        types: [{ id: "test", iconComponent: "icon" }]
+      };
+
+      it("should return the icon of the origin type stored in the state by passed type id", () => {
+        const result = getters.getOriginIconComponentByOriginTypeId(state)("test");
+
+        expect(result).toEqual(state.types[0].icon);
+      });
+
+      it("should return undefined if the requested id was not saved into the state", () => {
+        const result = getters.getOriginIconComponentByOriginTypeId(state)("other-id");
+
+        expect(result).toBeUndefined();
+      });
+    });
+
     describe("getOriginHighlightColorByOriginTypeId", () => {
       const state = {
         types: [{ id: "test", highlightColor: "#color" }]

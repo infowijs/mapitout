@@ -14,9 +14,6 @@
 @import "../style/variables";
 
 .nav {
-  padding-bottom: 2px;
-  background-color: $greyscale-2;
-
   .tabs {
     list-style: none;
     margin: 0;

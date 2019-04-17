@@ -1,5 +1,5 @@
 <template>
-  <div :class="['travel-time', { disabled: isDisabled }]">
+  <div :class="['slider', { disabled: isDisabled }]">
     <icon-time class="icon" v-if="!isDisabled" />
     <div class="rail-labels-value">
       <div class="current-value">
@@ -28,7 +28,7 @@ $slider-thinkness: 4px;
 $handle-height: 24px;
 $rail-margin-vertical: ($handle-height - $slider-thinkness) / 2;
 
-.travel-time {
+.slider {
   position: relative;
   display: flex;
   flex-direction: row;

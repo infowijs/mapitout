@@ -16,6 +16,12 @@ export const getters = {
     return originType ? originType.icon : undefined;
   },
 
+  getOriginIconComponentByOriginTypeId: state => id => {
+    const originType = state.types.find(originType => originType.id === id);
+
+    return originType ? originType.iconComponent : undefined;
+  },
+
   getOriginHighlightColorByOriginTypeId: state => id => {
     const originType = state.types.find(originType => originType.id === id);
 

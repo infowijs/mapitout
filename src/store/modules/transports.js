@@ -3,6 +3,12 @@ export const getters = {
     const type = state.types.find(type => type.id === id);
 
     return type ? type.value : undefined;
+  },
+
+  getTransportIconComponentById: state => id => {
+    const type = state.types.find(type => type.id === id);
+
+    return type ? type.icon : undefined;
   }
 };
 
