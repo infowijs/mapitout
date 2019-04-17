@@ -157,15 +157,15 @@ export default {
     }),
 
     async init() {
-      let rangeId;
+      if (!this.ranges.find(range => range.id === this.activeRangeId)) {
+        let rangeId;
 
-      if (this.ranges.length === 0) {
-        await this.addRange(Range.props.value.default());
-      }
+        if (this.ranges.length === 0) {
+          await this.addRange(Range.props.value.default());
+        }
 
-      rangeId = this.ranges[this.ranges.length - 1].id;
+        rangeId = this.ranges[this.ranges.length - 1].id;
 
-      if (this.activeRangeId !== rangeId) {
         this.activateRange(rangeId);
       }
     },
