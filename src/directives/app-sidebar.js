@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Hammer from "hammerjs";
 
-const CLASS_EXPANDED = "expanded";
-const CLASS_EXPANDING = "expanding";
 const CLASS_HANDLE_DRAG = "handle-drag";
 const STATE_ATTRIBUTE_PREFIX = "data-expandable-state";
 const STATE_ATTRIBUTE_ORIGINAL_HEIGHT = `${STATE_ATTRIBUTE_PREFIX}-original-height`;
@@ -14,23 +12,12 @@ Vue.directive("app-sidebar", {
     const sidebarHammerInstance = Hammer(el);
     sidebarHammerInstance.get("swipe").set({ direction: Hammer.DIRECTION_VERTICAL });
 
-    sidebarHammerInstance.on("swipeup", event => {
-      const el = event.target;
-
-      if (!el.classList.contains(CLASS_EXPANDED)) {
-        el.classList.add(CLASS_EXPANDED);
-        vNode.context.sidebarExpanded = true;
-      }
+    sidebarHammerInstance.on("swipeup", () => {
+      vNode.context.sidebarExpanded = true;
     });
 
-    sidebarHammerInstance.on("swipedown", event => {
-      const el = event.target;
-
-      if (el.classList.contains(CLASS_EXPANDED)) {
-        el.classList.remove(CLASS_EXPANDED);
-
-        vNode.context.sidebarExpanded = false;
-      }
+    sidebarHammerInstance.on("swipedown", () => {
+      vNode.context.sidebarExpanded = false;
     });
 
     const dragHandle = document.createElement("div");
@@ -41,14 +28,12 @@ Vue.directive("app-sidebar", {
 
     dragHandle.addEventListener("click", () => {
       vNode.context.sidebarExpanded = !vNode.context.sidebarExpanded;
-      el.classList.toggle(CLASS_EXPANDED);
     });
 
     const dragHandleHammerInstance = Hammer(dragHandle);
     dragHandleHammerInstance.get("pan").set({ direction: Hammer.DIRECTION_VERTICAL });
 
     dragHandleHammerInstance.on("panstart", () => {
-      el.classList.add(CLASS_EXPANDING);
       vNode.context.sidebarExpanding = true;
     });
 
@@ -58,7 +43,7 @@ Vue.directive("app-sidebar", {
 
       let temporaryHeight;
 
-      if (el.classList.contains(CLASS_EXPANDED)) {
+      if (vNode.context.sidebarExpanded) {
         temporaryHeight = window.innerHeight - event.deltaY;
       } else {
         temporaryHeight = originalHeight - event.deltaY;
@@ -72,21 +57,17 @@ Vue.directive("app-sidebar", {
     dragHandleHammerInstance.on("panend", () => {
       vNode.context.sidebarExpanding = false;
 
-      if (el.classList.contains(CLASS_EXPANDED)) {
+      if (vNode.context.sidebarExpanded) {
         if (el.offsetHeight <= (3 * window.innerHeight) / 4) {
-          el.classList.remove(CLASS_EXPANDED);
-
           vNode.context.sidebarExpanded = false;
         }
       } else {
         if (el.offsetHeight >= window.innerHeight / 3) {
-          el.classList.add(CLASS_EXPANDED);
-
           vNode.context.sidebarExpanded = true;
         }
       }
 
-      el.classList.remove(CLASS_EXPANDING);
+      vNode.context.sidebarExpanding = false;
       el.style.height = "";
     });
   },

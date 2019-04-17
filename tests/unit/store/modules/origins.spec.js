@@ -53,7 +53,7 @@ describe("origins store module", () => {
       it("should return the icon of the origin type stored in the state by passed type id", () => {
         const result = getters.getOriginIconComponentByOriginTypeId(state)("test");
 
-        expect(result).toEqual(state.types[0].icon);
+        expect(result).toEqual(state.types[0].iconComponent);
       });
 
       it("should return undefined if the requested id was not saved into the state", () => {

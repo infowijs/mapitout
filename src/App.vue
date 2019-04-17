@@ -7,10 +7,18 @@
         v-app-sidebar
         ref="sidebar"
         class="sidebar"
-        :class="{ 'expanded-filters': showFilters, expanded: $route.path === '/details' }"
+        :class="{
+          expanded: sidebarExpanded || showFilters,
+          expanding: sidebarExpanding,
+          'show-filters': showFilters
+        }"
       >
         <app-navigation class="nav" v-if="$route.name !== 'details'" />
-        <router-view @focus="onRouterViewFocus" :class="{ collapsed: !sidebarExpanded }" />
+        <router-view
+          @focus="onRouterViewFocus"
+          :class="{ collapsed: !sidebarExpanded }"
+          class="main"
+        />
         <filters-panel v-model="showFilters" />
       </aside>
     </main>
@@ -155,8 +163,7 @@ main {
     background-color: white;
   }
 
-  &.expanded,
-  &.expanded-filters {
+  &.expanded {
     height: 100%;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -168,37 +175,28 @@ main {
     }
   }
 
-  &.expanded-filters {
+  &.show-filters {
     .handle-drag {
       display: none;
     }
   }
 
   @media (max-width: $breakpoint-tablet-portrait - 1) {
-    &.expanded {
-      .ranges {
-        .panel-ranges {
-          display: block;
-          flex-grow: 1;
-        }
-
-        .panel-filters {
-          display: none;
-        }
-      }
+    .panel-filters {
+      display: none;
     }
 
-    &.expanded-filters {
+    &.show-filters {
       .nav {
         display: none;
       }
-      .panel-ranges {
+
+      .main {
         display: none;
       }
+
       .panel-filters {
         display: block;
-        flex-grow: 1;
-        margin-top: 0;
       }
     }
   }
@@ -221,9 +219,16 @@ export default {
 
   data() {
     return {
+      sidebarExpanding: false,
       sidebarExpanded: false,
       showFilters: false
     };
+  },
+
+  watch: {
+    showFilters: function(showFilters) {
+      this.sidebarExpanded = showFilters;
+    }
   },
 
   methods: {
