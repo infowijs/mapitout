@@ -17,4 +17,5 @@ COPY cmd.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/cmd.sh
 
 COPY --from=build-deps /build/dist/ /usr/share/nginx/html/
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 CMD cmd.sh
