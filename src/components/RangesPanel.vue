@@ -49,6 +49,8 @@
 
           .range::v-deep {
             .origin {
+              position: relative;
+
               &::after {
                 content: " ";
                 display: block;
@@ -152,8 +154,7 @@ export default {
   methods: {
     ...mapActions("ranges", {
       addRange: "add",
-      activateRange: "activate",
-      replaceRanges: "replace"
+      activateRange: "activate"
     }),
 
     async init() {
