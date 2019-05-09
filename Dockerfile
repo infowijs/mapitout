@@ -1,5 +1,5 @@
 # build image
-FROM node:latest as build-deps
+FROM node:11.15 as build-deps
 MAINTAINER datapunt.ois@amsterdam.nl
 
 RUN npm i -g yarn
