@@ -107,7 +107,7 @@ describe("pois store module", () => {
         expect(http).toHaveBeenCalledTimes(1);
         expect(http.mock.calls[0][1]).toEqual({
           body:
-            '{"poi_in_polygon":{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[2,1],[4,3],[6,5]]]],"crs":{"type":"name","properties":{"name":"EPSG:43  26"}}}},"poi_by_type":["test"]}',
+            '{"poi_in_polygon":{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[2,1],[4,3],[6,5]]]],"crs":{"type":"name","properties":{"name":"EPSG:4326"}}}},"poi_by_type":["test"]}',
           headers: {
             Accept: "application/json",
             "Content-type": "application/json; charset=utf-8"
@@ -136,7 +136,7 @@ describe("pois store module", () => {
         expect(http).toHaveBeenCalledTimes(1);
         expect(http.mock.calls[0][1]).toEqual({
           body:
-            '{"poi_in_polygon":{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[2,1],[4,3],[6,5]]]],"crs":{"type":"name","properties":{"name":"EPSG:43  26"}}}},"poi_by_property":["test"]}',
+            '{"poi_in_polygon":{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[2,1],[4,3],[6,5]]]],"crs":{"type":"name","properties":{"name":"EPSG:4326"}}}},"poi_by_property":["test"]}',
           headers: {
             Accept: "application/json",
             "Content-type": "application/json; charset=utf-8"
