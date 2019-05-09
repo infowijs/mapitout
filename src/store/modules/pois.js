@@ -38,7 +38,7 @@ export const actions = {
             crs: {
               type: "name",
               properties: {
-                name: "EPSG:43  26"
+                name: "EPSG:4326"
               }
             }
           }
