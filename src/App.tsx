@@ -55,6 +55,13 @@ export class Component extends React.Component<PropsUnion, State> {
 			}
 		])
 	}
+
+	private removeTravelTime = (id: string) => {
+		const currentTravelTimes = this.props.travelTimes || []
+		this.props.getTravelTimes([
+			...currentTravelTimes.filter((travelTime) => travelTime.res.search_id !== id)
+		])
+	}
 }
 
 const mapStateToProps = (state: ReduxState) => ({
