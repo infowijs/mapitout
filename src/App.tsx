@@ -74,6 +74,22 @@ export class Component extends React.Component<PropsUnion, State> {
 		props.getTravelTimes(travelsDecoded)
 	}
 
+	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
+		if (this.props.travelTimes && this.props.travelTimes !== prevProps.travelTimes) {
+			const path: string = this.props.travelTimes.map((travelTime) => {
+				return [
+					travelTime.title,
+					travelTime.location.lat,
+					travelTime.location.lng,
+					travelTime.duration / 60,
+					travelTime.transport
+				].join(encodingDivider)
+			}).join('/')
+
+			this.props.history.replace('/' + path)
+		}
+	}
+
 	public render() {
 		const {loading, travelTimes, overlap} = this.props
 
