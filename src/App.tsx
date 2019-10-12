@@ -7,6 +7,12 @@ import styled from 'styled-components'
 import { ReduxState, getTravelTimes, purgeTravelTimes } from './store'
 import { TravelType } from './enums'
 
+const StyledTravel = styled.div`
+	margin: 10px;
+	padding: 10px;
+	border: 1px solid black;
+`
+
 interface StateProps {
 	loading: ReduxState['travelTime']['loading']
 	travelTimes: ReduxState['travelTime']['travelTimes']
@@ -96,6 +102,17 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<div>
 				<h1>App</h1>
+				<p>loading: {loading.toString()}</p>
+				<button onClick={this.purgeTravelTimes}>Purge traveltimes</button>
+				{travelTimes && travelTimes.map((travelTime) => (
+					<StyledTravel key={travelTime.res.search_id}>
+						<button onClick={() => this.removeTravelTime(travelTime.res.search_id)}>Remove travel time</button>
+						<h1>{travelTime.title}</h1>
+						<h2>{travelTime.duration / 60}</h2>
+						<p>{travelTime.location.lat} {travelTime.location.lng}</p>
+						<p>{travelTime.transport}</p>
+					</StyledTravel>
+				))}
 			</div>
 		)
 	}
