@@ -30,9 +30,50 @@ interface Params {
 	travelSix: string
 }
 
+const encodingDivider = '--'
 
 export class Component extends React.Component<PropsUnion, State> {
 	public readonly state: State = {}
+
+	constructor(props: PropsUnion) {
+		super(props)
+
+		const params = props.match.params
+
+		const travelsEncoded: string[] = [
+			params.travelOne,
+			params.travelTwo,
+			params.travelThree,
+			params.travelFour,
+			params.travelFive,
+			params.travelSix
+		].filter((v) => !!v)
+
+		if (travelsEncoded.length === 0) return
+
+		const travelsDecoded: Parameters<typeof getTravelTimes>[0] = travelsEncoded.map((encodedTravel) => {
+			const [
+				title,
+				lat,
+				lng,
+				duration,
+				transport
+			] = encodedTravel.split(encodingDivider)
+
+			return {
+				title,
+				location: {
+					lat: parseFloat(lat),
+					lng: parseFloat(lng)
+				},
+				duration: parseInt(duration, 10) * 60,
+				transport: transport as TravelType
+			}
+		})
+
+		props.getTravelTimes(travelsDecoded)
+	}
+
 	public render() {
 		const {loading, travelTimes, overlap} = this.props
 
