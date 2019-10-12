@@ -66,3 +66,9 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
             })
     }
 }
+
+export function purgeTravelTimes() {
+    return {
+        type: ActionType.PurgeTravelTimes
+    }
+}
