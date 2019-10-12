@@ -42,6 +42,19 @@ export class Component extends React.Component<PropsUnion, State> {
 			</div>
 		)
 	}
+
+	private addTravelTime = (title: string, location: {lat: number, lng: number}, duration: number, transport: TravelType) => {
+		const currentTravelTimes = this.props.travelTimes || []
+		this.props.getTravelTimes([
+			...currentTravelTimes,
+			{
+				title,
+				location,
+				duration,
+				transport
+			}
+		])
+	}
 }
 
 const mapStateToProps = (state: ReduxState) => ({
