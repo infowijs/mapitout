@@ -62,6 +62,11 @@ export class Component extends React.Component<PropsUnion, State> {
 			...currentTravelTimes.filter((travelTime) => travelTime.res.search_id !== id)
 		])
 	}
+
+	private purgeTravelTimes = () => {
+		this.props.purgeTravelTimes()
+		this.props.history.replace('/')
+	}
 }
 
 const mapStateToProps = (state: ReduxState) => ({
