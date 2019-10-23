@@ -17,6 +17,7 @@
     "redux": "^4.0.4",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
+    "simplify-js": "^1.2.3",
     "styled-components": "^4.4.0",
     "typescript": "3.6.3"
   },
