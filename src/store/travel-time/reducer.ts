@@ -16,6 +16,7 @@ const initialState: State = {
 
 export type ActionDispatch = SetLoading
     | GetTravelTimes
+	| RemoveTravelTime
     | PurgeTravelTimes
 
 export const reducer: Reducer<State, ActionDispatch> = (state: State = initialState, action: ActionDispatch) => {
@@ -24,6 +25,8 @@ export const reducer: Reducer<State, ActionDispatch> = (state: State = initialSt
             return reduceSetLoading(state, action)
         case ActionType.GetTravelTimes:
             return reduceGetTravelTimes(state, action)
+		case ActionType.RemoveTravelTime:
+			return reduceRemoveTravelTime(state, action)
         case ActionType.PurgeTravelTimes:
             return reducePurgeTravelTimes(state, action)
         default:
@@ -43,7 +46,7 @@ const reduceSetLoading = (state: State, action: SetLoading) => {
 }
 
 interface GetTravelTimes {
-    type: ActionType.GetTravelTimes,
+    type: ActionType.GetTravelTimes
     data: {
         travelTimes: TravelTimeStored[]
         union: TravelTimeResponse['results'][0]
@@ -57,6 +60,19 @@ const reduceGetTravelTimes = (state: State, action: GetTravelTimes) => {
         travelTimes: action.data.travelTimes,
         overlap: action.data.union
     }
+}
+
+interface RemoveTravelTime {
+	type: ActionType.RemoveTravelTime,
+	data: string
+}
+
+const reduceRemoveTravelTime = (state: State, action: RemoveTravelTime) => {
+	return {
+		...state,
+		loading: false,
+		travelTimes: state.travelTimes && state.travelTimes.filter((travelTime) => travelTime.res.search_id !== action.data)
+	}
 }
 
 interface PurgeTravelTimes {

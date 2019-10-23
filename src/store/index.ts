@@ -5,4 +5,4 @@ import { ReduxState } from './configureStore'
 
 export type ReduxState = ReduxState
 export { configureStore } from './configureStore'
-export { getTravelTimes, purgeTravelTimes } from './travel-time/actions'
+export { getTravelTimes, removeTravelTime, purgeTravelTimes } from './travel-time/actions'

@@ -8,6 +8,7 @@ import { TravelTimeAbstraction, TravelTimeBody, TravelTimeResponse } from '../..
 export enum ActionType {
     SetLoading = '@@travel-time/loading',
     GetTravelTimes = '@@travel-time/get',
+	RemoveTravelTime = '@@travel-time/remove',
     PurgeTravelTimes = '@@travel-time/purge'
 }
 
@@ -65,6 +66,17 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
                 })
             })
     }
+}
+
+// This method only removes the entry from the local data, in order to obtain a new union (in order to display the
+// overlap between polygons) a call to `getTravelTimes` has to be made. This workaround is implemented because the
+// back-end calculates the union, but the user should receive instantaneous feedback when removing a single travel-time
+// item.
+export function removeTravelTime(id: string) {
+	return {
+		type: ActionType.RemoveTravelTime,
+		data: id
+	}
 }
 
 export function purgeTravelTimes() {
