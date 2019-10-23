@@ -1,0 +1,17 @@
+* {
+    font-family: Avenir, sans-serif;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+p {
+
+}
+
+p.label {
+    font-size: .75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}

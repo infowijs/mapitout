@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter, Route } from 'react-router-dom'
+import dotenv from 'dotenv'
 
 import { configureStore } from './store'
 import { App } from './App'
 
 import '../node_modules/normalize.css/normalize.css'
+import './index.css'
 
-import dotenv from 'dotenv'
 dotenv.config()
 
 const { store, persistor } = configureStore()
