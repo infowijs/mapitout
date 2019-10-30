@@ -12,8 +12,16 @@ import { MapContent } from './lib'
 
 const StyledZoomControl = styled.div`
 	position: absolute;
-	bottom: 25px;
-	right: 50px;
+	
+	@media (min-width: 900px) {
+		bottom: 1.5rem;
+		right: 1.5rem;
+	}
+	
+	@media (max-width: 900px) {
+		bottom: 4.75rem;
+		right: 1rem;
+	}
 	
 	background: #fff;
 	border-radius: 3px;
