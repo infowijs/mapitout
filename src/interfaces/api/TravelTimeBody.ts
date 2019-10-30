@@ -1,4 +1,4 @@
-import {TravelType} from "../../enums";
+import { TravelType } from 'enums'
 
 interface DepartureSearch {
     id: string,
@@ -13,12 +13,13 @@ interface DepartureSearch {
     }
 }
 
-interface Union {
+interface MergedType {
     id: string,
     search_ids: string[]
 }
 
 export interface TravelTimeBody {
-    departure_searches: DepartureSearch[],
-    unions: Union[]
+    departure_searches: DepartureSearch[]
+	intersections: MergedType[]
+	unions: MergedType[]
 }
