@@ -40,6 +40,7 @@ const StyledZoomControlButton = styled.div`
 interface StateProps {}
 interface DispatchProps {
 	setZoomLevel: typeof setZoomLevel
+	setTooltip: typeof setTooltip
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
@@ -70,6 +71,35 @@ export class Component extends React.Component<PropsUnion, State> {
 					styles: googleMapsStyles
 				}}
 				onZoomChanged={() => this.props.setZoomLevel(Math.round(this.mapRef.current!.getZoom()))}
+				onClick={(e) => {
+					const location = {
+						lat: e.latLng.lat(),
+						lng: e.latLng.lng()
+					}
+					const geocoder = new google.maps.Geocoder()
+					geocoder.geocode({location}, (results, status) => {
+						const address = (results && results.length > 0 && results[0].address_components) || []
+
+						const city = address.filter((a) => a.types.indexOf('locality') !== -1)[0]
+						const streetName = address.filter((a) => a.types.indexOf('route') !== -1)[0]
+						const number = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
+
+						const addressString = ((streetName
+							? streetName.short_name
+							: '')
+						+ (number
+							? ' ' + number.short_name
+							: '')
+						+ (city
+							? ', ' + city.short_name
+							: '')) || 'Somewhere on a boat'
+
+						this.props.setTooltip({
+							location,
+							title: addressString
+						})
+					})
+				}}
 			>
 				{this.renderZoomControls()}
 				<MapContent/>
@@ -130,6 +160,7 @@ const mapStateToProps = (state: ReduxState) => ({})
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	setZoomLevel,
+	setTooltip
 }, dispatch)
 
 export const Map = connect<StateProps, DispatchProps, Props, ReduxState>(
