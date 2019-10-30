@@ -1,5 +1,5 @@
 export enum TravelType {
-    PublicTransport = 'public-transport',
+    PublicTransport = 'public_transport',
     Driving = 'driving',
     Cycling = 'cycling',
     Walking = 'walking',
