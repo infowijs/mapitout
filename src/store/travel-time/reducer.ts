@@ -1,23 +1,28 @@
 import { ActionType } from './actions'
 import { Reducer } from 'redux'
-import { TravelTimeResponse, TravelTimeStored } from '../../interfaces'
+import { POIApiResponse, TravelTimeResponse, TravelTimeStored } from '../../interfaces'
 
 export interface State {
     loading: boolean
     travelTimes: TravelTimeStored[] | null
     overlap: TravelTimeResponse['results'][0] | null
+	primaryEducation: POIApiResponse | null
+	secondaryEducation: POIApiResponse | null
 }
 
 const initialState: State = {
     loading: false,
     travelTimes: null,
-    overlap: null
+    overlap: null,
+	primaryEducation: null,
+	secondaryEducation: null
 }
 
 export type ActionDispatch = SetLoading
     | GetTravelTimes
 	| RemoveTravelTime
     | PurgeTravelTimes
+	| GetPOIs
 
 export const reducer: Reducer<State, ActionDispatch> = (state: State = initialState, action: ActionDispatch) => {
     switch (action.type) {
@@ -29,6 +34,8 @@ export const reducer: Reducer<State, ActionDispatch> = (state: State = initialSt
 			return reduceRemoveTravelTime(state, action)
         case ActionType.PurgeTravelTimes:
             return reducePurgeTravelTimes(state, action)
+		case ActionType.GetPOIs:
+			return reduceGetPOIs(state, action)
         default:
             return state
     }
@@ -49,7 +56,7 @@ interface GetTravelTimes {
     type: ActionType.GetTravelTimes
     data: {
         travelTimes: TravelTimeStored[]
-        union: TravelTimeResponse['results'][0]
+		overlap: TravelTimeResponse['results'][0]
     }
 }
 
@@ -58,7 +65,7 @@ const reduceGetTravelTimes = (state: State, action: GetTravelTimes) => {
         ...state,
         loading: false,
         travelTimes: action.data.travelTimes,
-        overlap: action.data.union
+        overlap: action.data.overlap
     }
 }
 
@@ -86,4 +93,20 @@ const reducePurgeTravelTimes = (state: State, action: PurgeTravelTimes) => {
         travelTimes: null,
         overlap: null
     }
+}
+
+interface GetPOIs {
+	type: ActionType.GetPOIs,
+	data: {
+		type: 'Primary education' | 'Secondary education'
+		res: POIApiResponse
+	}
+}
+
+const reduceGetPOIs = (state: State, action: GetPOIs) => {
+	return {
+		...state,
+		...action.data.type === 'Primary education' && {primaryEducation: action.data.res},
+		...action.data.type === 'Secondary education' && {secondaryEducation: action.data.res},
+	}
 }

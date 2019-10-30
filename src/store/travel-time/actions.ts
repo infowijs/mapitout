@@ -1,15 +1,16 @@
 import moment from 'moment'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 
-import { api } from '../../utils'
+import { api } from 'utils'
 import { ActionDispatch } from './reducer'
-import { TravelTimeAbstraction, TravelTimeBody, TravelTimeResponse } from '../../interfaces'
+import { POIApiResponse, TravelTimeAbstraction, TravelTimeBody, TravelTimeResponse } from 'interfaces'
 
 export enum ActionType {
     SetLoading = '@@travel-time/loading',
     GetTravelTimes = '@@travel-time/get',
 	RemoveTravelTime = '@@travel-time/remove',
-    PurgeTravelTimes = '@@travel-time/purge'
+    PurgeTravelTimes = '@@travel-time/purge',
+	GetPOIs = '@@travel-time/poi'
 }
 
 // NOTE: Since the API calculates the overlapping areas of all travels every time a new one is added, all the travels
@@ -37,17 +38,24 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
                 type: travel.transport
             }
         })),
-        unions: [
+		intersections: [
             {
-                id: 'union',
+                id: 'intersection',
                 search_ids: []
             }
-        ]
+        ],
+		unions: [
+			{
+				id: 'union',
+				search_ids: []
+			}
+		]
     }
 
-    data.unions[0].search_ids = data.departure_searches.map((search) => search.id)
+    data.intersections[0].search_ids = data.departure_searches.map((search) => search.id)
+	data.unions[0].search_ids = data.departure_searches.map((search) => search.id)
 
-    return (dispatch: (action: ActionDispatch) => {}) => {
+	return (dispatch: (action: ActionDispatch) => {}) => {
         dispatch({
             type: ActionType.SetLoading
         })
@@ -61,11 +69,67 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
                             ...travel,
                             res: res.data.results.filter((result) => result.search_id === travel.id)[0]
                         })),
-                        union: res.data.results.filter((result) => result.search_id === 'union')[0]
+                        overlap: res.data.results.filter((result) => result.search_id === 'intersection')[0]
                     }
                 })
+				getPoi('Primary education', res.data)
+					.then((res: AxiosResponse<POIApiResponse>) => {
+						if (Array.isArray(res.data)) {
+							dispatch({
+								type: ActionType.GetPOIs,
+								data: {
+									type: 'Primary education',
+									res: res.data
+								}
+							})
+						}
+					})
+				getPoi('Secondary education', res.data)
+					.then((res: AxiosResponse<POIApiResponse>) => {
+						if (Array.isArray(res.data)) {
+							dispatch({
+								type: ActionType.GetPOIs,
+								data: {
+									type: 'Secondary education',
+									res: res.data
+								}
+							})
+						}
+					})
             })
+			.catch((err: AxiosError) => {console.log(err)})
     }
+}
+
+const getPoi = (type: string, res: TravelTimeResponse) => {
+	const data = {
+		poi_in_polygon: {
+			type: 'Feature',
+			geometry: {
+				type: 'MultiPolygon',
+				coordinates: [res.results
+					.filter((result) => result.search_id === 'union')[0].shapes
+					.map((shape) => shape.shell || [])
+						.map((polygon) => polygon
+							.map((coordinate) => ([
+								coordinate.lng,
+								coordinate.lat
+							])
+						)
+					)
+				],
+				crs: {
+					type: 'name',
+					properties: {
+						name: 'EPSG:4326'
+					}
+				}
+			}
+		},
+		poi_by_type: ['School'],
+		poi_by_property: [type]
+	}
+	return api.post('/PoiApi/cmd', data)
 }
 
 // This method only removes the entry from the local data, in order to obtain a new union (in order to display the
@@ -73,14 +137,18 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
 // back-end calculates the union, but the user should receive instantaneous feedback when removing a single travel-time
 // item.
 export function removeTravelTime(id: string) {
-	return {
-		type: ActionType.RemoveTravelTime,
-		data: id
+	return (dispatch: (action: ActionDispatch) => {}) => {
+		dispatch({
+			type: ActionType.RemoveTravelTime,
+			data: id
+		})
 	}
 }
 
 export function purgeTravelTimes() {
-    return {
-        type: ActionType.PurgeTravelTimes
+	return (dispatch: (action: ActionDispatch) => {}) => {
+		dispatch({
+			type: ActionType.PurgeTravelTimes
+		})
     }
 }
