@@ -8,6 +8,9 @@ import dotenv from 'dotenv'
 import { configureStore } from 'store'
 import { Map, App } from 'containers'
 
+import 'react-app-polyfill/ie11'
+import 'flexibility/flexibility'
+
 import '../node_modules/normalize.css/normalize.css'
 import './index.css'
 
