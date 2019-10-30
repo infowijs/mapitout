@@ -171,9 +171,9 @@ export class Component extends React.Component<PropsUnion, State> {
 						</StyledTravelCardInfoMetaItem>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>
-								<ClockIcon/>
+								{getTravelTypeInfo(transport).icon}
 							</StyledTravelCardInfoMetaItemIcon>
-							<p className='label'>{this.getTravelTypePrettyName(transport)}</p>
+							<p className='label'>{getTravelTypeInfo(transport).name}</p>
 						</StyledTravelCardInfoMetaItem>
 					</StyledTravelCardInfoMeta>
 				</StyledTravelCardInfo>
@@ -187,21 +187,6 @@ export class Component extends React.Component<PropsUnion, State> {
 				</StyledTravelCardAction>
 			</StyledTravelCard>
 		)
-	}
-
-	private getTravelTypePrettyName(type: TravelType): string {
-		switch (type) {
-			case TravelType.Cycling:
-				return 'Cycling'
-			case TravelType.Driving:
-				return 'Driving'
-			case TravelType.PublicTransport:
-				return 'Public transport'
-			case TravelType.PublicTransportAndCycling:
-				return 'Public transport & cycling'
-			case TravelType.Walking:
-				return 'Walking'
-		}
 	}
 }
 
