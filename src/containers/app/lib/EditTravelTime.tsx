@@ -383,7 +383,8 @@ export class Component extends React.Component<PropsUnion, State> {
 							<StyledAddressInput
 								{...getInputProps({
 									placeholder: 'Address',
-									name: 'address'
+									name: 'address',
+									onBlur: () => window.scrollTo(0, 0)
 								})}
 							/>
 						</StyledSegment>
@@ -438,6 +439,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					minWidth={110}
 					value={options.filter((t) => t.value === this.state.duration)[0] || null}
 					onChange={(v: Entry) => v && 'value' in v && this.setState({duration: v.value})}
+					onBlur={() => window.scrollTo(0, 0)}
 					options={options}
 					components={{
 						DropdownIndicator: () => <DropdownIcon style={{marginLeft: '.25rem'}}/>,
@@ -470,6 +472,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					minWidth={160}
 					value={currentOption}
 					onChange={(v: Entry) => v && 'value' in v && this.setState({transport: v.value})}
+					onBlur={() => window.scrollTo(0, 0)}
 					options={options}
 					components={{
 						DropdownIndicator: () => <DropdownIcon style={{marginLeft: 10}}/>,
