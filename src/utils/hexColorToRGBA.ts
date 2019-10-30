@@ -4,7 +4,7 @@ export function hexColorToRGBA(color: string, opacity: number = 1) {
 	}
 	color = color[0] === '#' ? color.slice(1) : color
 
-	if ([0, 1, 2, 4, 5].includes(color.length) || color.length > 6) {
+	if ((color.length < 6 && color.length !== 3) || color.length > 6) {
 		throw new Error('The provided hex color is invalid, it should be of either 3 or 6 characters in length ' +
 			'(excluding the (optional) prefixed hash)')
 	}
