@@ -5,7 +5,7 @@ import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled from 'styled-components'
 
 import { ZoomInIcon, ZoomOutIcon } from 'icons'
-import { ReduxState } from 'store'
+import { ReduxState, setZoomLevel, setTooltip } from 'store'
 
 import { googleMapsStyles } from '../../constants'
 import { MapContent } from './lib'
@@ -30,7 +30,9 @@ const StyledZoomControlButton = styled.div`
 `
 
 interface StateProps {}
-interface DispatchProps {}
+interface DispatchProps {
+	setZoomLevel: typeof setZoomLevel
+}
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
 
@@ -59,6 +61,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					disableDefaultUI: true,
 					styles: googleMapsStyles
 				}}
+				onZoomChanged={() => this.props.setZoomLevel(Math.round(this.mapRef.current!.getZoom()))}
 			>
 				{this.renderZoomControls()}
 				<MapContent/>
@@ -117,7 +120,9 @@ export class Component extends React.Component<PropsUnion, State> {
 
 const mapStateToProps = (state: ReduxState) => ({})
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+	setZoomLevel,
+}, dispatch)
 
 export const Map = connect<StateProps, DispatchProps, Props, ReduxState>(
 	mapStateToProps,
