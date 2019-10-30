@@ -4,19 +4,25 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import storage from 'redux-persist/lib/storage'
 
+import { reducer as applicationReducer, State as ApplicationState } from './application/reducer'
 import { reducer as travelTimeReducer, State as TravelTimeState } from './travel-time/reducer'
 
 export interface ReduxState {
+	application: ApplicationState
 	travelTime: TravelTimeState
 }
 
 const persistConfig = {
     version: 1,
     key: 'mapitout',
-    storage
+    storage,
+	blacklist: [
+		'application'
+	]
 }
 
 const rootReducer = combineReducers({
+	application: applicationReducer,
 	travelTime: travelTimeReducer
 })
 
