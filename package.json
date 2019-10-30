@@ -9,6 +9,7 @@
     "moment": "^2.24.0",
     "normalize.css": "^8.0.1",
     "react": "^16.10.2",
+    "react-app-polyfill": "^1.0.4",
     "react-dom": "^16.10.2",
     "react-google-maps": "^9.4.5",
     "react-places-autocomplete": "^7.2.1",
