@@ -6,73 +6,113 @@ import styled from 'styled-components'
 import { ReduxState } from 'store'
 import { ClockIcon, CrossIcon, EditIcon } from 'icons'
 import { TravelType } from 'enums'
-import { hexColorToRGBA } from 'utils'
+import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
+import { shadows } from '../../../constants'
 
 const StyledTravelCard = styled.div<{color: string}>`
-	position: relative;
-	width: 25rem;
-	border-radius: 30px;
-	overflow: auto;
-	// Width of action buttons including padding, this rule makes sure the title ellipses at the right spot.
-	padding-right: ${34 + 16 * 2}px;
-	box-sizing: border-box;
+	border-radius: 2rem;
+	
 	background-color: ${(props) => hexColorToRGBA(props.color, .9)};
 	color: #fff;
+	${shadows.normal};
 	
-	&:not(:last-child) {
+	@media (min-width: 900px) {
+		display: flex;
+		flex-direction: row;
 		margin-bottom: 16px;
+	}
+	
+	@media (max-width: 900px) {
+		height: 2.5rem;
+		width: 2.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: .5rem;
 	}
 `
 
 const StyledTravelCardInfo = styled.div`
-	float: left;
-	padding: 25px;
-	width: 100%;
+	@media (min-width: 900px) {
+		flex: 1;
+		padding: 25px;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
 	
 	h1 {
-		margin: 0;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		margin-bottom: 1rem;
+		
+		@media (max-width: 900px) {
+			display: none;
+		}
 	}
 `
 
 const StyledTravelCardInfoMeta = styled.div`
-	float: left;
+	@media (min-width: 900px) {
+		display: flex;
+		flex-direction: row;
+	}
 `
 
-const StyledTravelCardInfoMetaItem = styled.div`
-	float: left;
-	
-	&:not(:last-child) {
-		margin-right: 8px;
+const StyledTravelCardInfoMetaItem = styled.div`	
+	@media (min-width: 900px) {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 	
-	* {
-		display: inline-block;
-		vertical-align: middle;
+	&:not(:last-child) {
+		margin-right: 2rem;
+		
+		@media (max-width: 900px) {
+			display: none;
+		}
+	}
+	@media (max-width: 900px) {
+		&:last-child {
+			p {
+				display: none;
+			}
+		}
 	}
 `
 
 const StyledTravelCardInfoMetaItemIcon = styled.div`
-	width: 16px;
-	margin-right: 8px;
+	width: 1rem;
+	height: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	@media (min-width: 900px) {
+		margin-right: .5rem;
+	}
 `
 
 const StyledTravelCardAction = styled.div`
-	position: absolute;
-	top: 0;
-	right: 0;
-	padding: 16px;
+	padding: 1rem 1rem 0 0;
+	
+	@media (max-width: 900px) {
+		display: none;
+	}
 `
 
 const StyledTravelCardActionItem = styled.div`
 	cursor: pointer;
 	position: relative;
-	width: 32px;
-	height: 32px;
+	width: 2rem;
+	height: 2rem;
 	border-radius: 50%;
 	background-color: rgba(0, 0, 0, .1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	
 	:before {
 		content: '';
@@ -90,16 +130,12 @@ const StyledTravelCardActionItem = styled.div`
 	}
 	
 	svg {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		max-width: 16px;
-		max-height: 16px;
+		max-width: 1rem;
+		max-height: 1rem;
 	}
 	
 	&:not(:last-child) {
-		margin-bottom: 8px;
+		margin-bottom: .5rem;
 	}
 `
 
