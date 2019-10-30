@@ -6,7 +6,7 @@
     <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="iPhone-XS-Copy-2" transform="translate(-307.000000, -251.000000)">
             <g id="dropdown" transform="translate(300.000000, 241.000000)">
-                <polygon id="Path" fill="#000000" fill-rule="nonzero" points="7 10 12 15 17 10"></polygon>
+                <polygon id="Path" fill="currentColor" fill-rule="nonzero" points="7 10 12 15 17 10"></polygon>
                 <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
             </g>
         </g>
