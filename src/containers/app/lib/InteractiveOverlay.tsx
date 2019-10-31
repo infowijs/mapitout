@@ -6,7 +6,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOverlapState } from 'store'
 import { TravelTimeAbstraction } from 'interfaces'
-import { AddIcon, LayersIcon, LinkIcon, LogoIcon } from 'icons'
+import { AddIcon, InfoIcon, LayersIcon, LinkIcon, LogoIcon } from 'icons'
 import { colorList, hexColorToRGBA } from 'utils'
 import { shadows } from '../../../constants'
 
@@ -56,6 +56,7 @@ const StyledFilterContainer = styled.div`
 
 const StyledLogoContainer = styled.div`
 	padding-left: 1rem;
+	z-index: 10;
 `
 
 const StyledActionContainer = styled.div`
@@ -203,6 +204,55 @@ const StyledEditWrapper = styled.div`
 	}
 `
 
+const StyledEntryTravelTimeContainer = styled.div`
+	position: absolute;
+	left: 0;
+	width: 100%;
+	
+	@media (min-width: 900px) {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding-top: 4rem;
+	}
+	
+	@media (max-width: 900px) {
+		padding: 6rem 1rem 0;
+		box-sizing: border-box;
+		z-index: 0;
+		
+		:before {
+    		content: '';
+    		position: absolute;
+    		top: 0;
+    		left: 0;
+    		width: 100%;
+    		height: 100%;
+    		background: linear-gradient(to bottom, #D9F0F3 0%, #D9F0F3 15%, ${hexColorToRGBA('#D9F0F3', 0)} 50%);
+    		z-index: -1;
+    	}
+	}
+`
+
+const StyledOnboardingTooltip = styled.div`
+	position: absolute;
+	bottom: 2rem;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: rgba(0, 0, 0, .6);
+	border-radius: 99px;
+	height: 40px;
+	padding: 0 .75rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	color: white;
+	
+	& > *:first-child {
+		margin-right: .5rem;
+	}
+`
+
 interface StateProps {
 	loading: ReduxState['travelTime']['loading']
 	travelTimes: ReduxState['travelTime']['travelTimes']
@@ -243,6 +293,29 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	public render() {
+		if (!this.props.travelTimes || this.props.travelTimes.length === 0) {
+			return (
+				<>
+					<div style={{position: 'absolute', top: 0, left: 0}}>
+						<StyledLogoContainer>
+							<LogoIcon/>
+						</StyledLogoContainer>
+					</div>
+					<StyledEntryTravelTimeContainer>
+						<EditTravelTime
+							color={colorList[0]}
+							onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
+							onCancel={() => null}
+						/>
+					</StyledEntryTravelTimeContainer>
+					<StyledOnboardingTooltip>
+						<InfoIcon/>
+						<p>Click anywhere on the map to add a location</p>
+					</StyledOnboardingTooltip>
+				</>
+			)
+		}
+
 		return (
 			<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
 				<StyledUIContainerInner>
