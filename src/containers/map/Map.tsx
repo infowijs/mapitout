@@ -52,7 +52,7 @@ export class Component extends React.Component<PropsUnion, State> {
 	public mapRef = React.createRef<GoogleMap>()
 
 	public render() {
-		const MapFactory = withScriptjs(withGoogleMap((props: any) =>
+		const MapFactory = withGoogleMap((props: any) =>
 			<GoogleMap
 				ref={this.mapRef}
 				defaultZoom={10}
@@ -107,12 +107,10 @@ export class Component extends React.Component<PropsUnion, State> {
 				<Polygons/>
 				<Tooltip/>
 			</GoogleMap>
-		))
+		)
 
 		return (
 			<MapFactory
-				googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_TOKEN}&v=3.exp&libraries=geometry,drawing,places`}
-				loadingElement={<div/>}
 				containerElement={<div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }} />}
 				mapElement={<div style={{ height: `100%` }} />}
 			/>
