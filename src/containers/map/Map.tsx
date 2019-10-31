@@ -8,7 +8,7 @@ import { ZoomInIcon, ZoomOutIcon } from 'icons'
 import { ReduxState, setZoomLevel, setTooltip } from 'store'
 
 import { googleMapsStyles } from '../../constants'
-import { MapContent } from './lib'
+import { Markers, Pois, Polygons, Tooltip } from './lib'
 
 const StyledZoomControl = styled.div`
 	position: absolute;
@@ -102,7 +102,10 @@ export class Component extends React.Component<PropsUnion, State> {
 				}}
 			>
 				{this.renderZoomControls()}
-				<MapContent/>
+				<Markers/>
+				<Pois/>
+				<Polygons/>
+				<Tooltip/>
 			</GoogleMap>
 		))
 
