@@ -76,6 +76,10 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
+		if ((this.props.travelTimes || (this.props.travelTimes === null && prevProps.travelTimes !== null)) && this.props.travelTimes !== prevProps.travelTimes) {
+			this.props.history.replace('/')
+		}
+
 		if (this.props.travelTimes && this.props.travelTimes !== prevProps.travelTimes) {
 			this.updatePath()
 		}
