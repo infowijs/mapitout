@@ -150,5 +150,19 @@ export function purgeTravelTimes() {
 		dispatch({
 			type: ActionType.PurgeTravelTimes
 		})
+		dispatch({
+			type: ActionType.GetPOIs,
+			data: {
+				type: 'Primary education',
+				res: null
+			}
+		})
+		dispatch({
+			type: ActionType.GetPOIs,
+			data: {
+				type: 'Secondary education',
+				res: null
+			}
+		})
     }
 }

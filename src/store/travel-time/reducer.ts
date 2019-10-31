@@ -99,7 +99,7 @@ interface GetPOIs {
 	type: ActionType.GetPOIs,
 	data: {
 		type: 'Primary education' | 'Secondary education'
-		res: POIApiResponse
+		res: POIApiResponse | null
 	}
 }
 
