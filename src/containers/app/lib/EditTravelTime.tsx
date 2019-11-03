@@ -375,6 +375,11 @@ export class Component extends React.Component<PropsUnion, State> {
 				value={this.state.title}
 				onChange={this.handlePlacesAutocompleteChange}
 				onSelect={this.handlePlacesAutocompleteSelect}
+				searchOptions={{
+					location: new google.maps.LatLng(52.3645568, 4.8958031),
+					radius: 25000,
+					types: ['address']
+				}}
 			>
 				{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 					<StyledAutocompleteContainer>
