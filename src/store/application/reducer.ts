@@ -67,13 +67,13 @@ const reduceSetOverlapState = (state: State, action: SetOverlapState) => {
 
 interface SetTooltip {
 	type: ActionType.SetTooltip
-	data: Tooltip
+	data: Tooltip | null
 }
 
 const reduceSetTooltip = (state: State, action: SetTooltip) => {
 	return {
 		...state,
-		tooltip: state.tooltip === null ? action.data : null
+		tooltip: action.data
 	}
 }
 

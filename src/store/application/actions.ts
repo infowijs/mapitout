@@ -27,7 +27,7 @@ export function setOverlapState(displayEnabled: boolean) {
 	}
 }
 
-export function setTooltip(tooltip: Tooltip) {
+export function setTooltip(tooltip: Tooltip | null) {
 	return (dispatch: (action: ActionDispatch) => {}) => {
 		dispatch({
 			type: ActionType.SetTooltip,
