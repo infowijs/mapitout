@@ -289,6 +289,9 @@ const StyledDropdownIconContainer = styled.div`
 `
 
 const StyledCancelButtonContainer = styled.div`
+	@media (min-width: 900px) {
+		display: inline-block;
+	}
 	@media (max-width: 900px) {
 		text-align: center;
 	}
