@@ -37,7 +37,9 @@ const StyledZoomControlButton = styled.div`
 	width: 30px;
 `
 
-interface StateProps {}
+interface StateProps {
+	tooltip: ReduxState['application']['tooltip']
+}
 interface DispatchProps {
 	setZoomLevel: typeof setZoomLevel
 	setTooltip: typeof setTooltip
@@ -51,6 +53,7 @@ export class Component extends React.Component<PropsUnion, State> {
 	public readonly state: State = {}
 	public mapRef = React.createRef<GoogleMap>()
 
+	public setTooltipTimeout: ReturnType<typeof setTimeout> | null = null
 	public render() {
 		const MapFactory = withGoogleMap((props: any) =>
 			<GoogleMap
@@ -71,34 +74,43 @@ export class Component extends React.Component<PropsUnion, State> {
 					styles: googleMapsStyles
 				}}
 				onZoomChanged={() => this.props.setZoomLevel(Math.round(this.mapRef.current!.getZoom()))}
+				onDblClick={() => this.setTooltipTimeout && clearTimeout(this.setTooltipTimeout)}
 				onClick={(e) => {
-					const location = {
-						lat: e.latLng.lat(),
-						lng: e.latLng.lng()
+					if (this.props.tooltip) {
+						this.setTooltipTimeout = setTimeout(() => {
+							this.props.setTooltip(null)
+						}, 250)
+					} else {
+						this.setTooltipTimeout = setTimeout(() => {
+							const location = {
+								lat: e.latLng.lat(),
+								lng: e.latLng.lng()
+							}
+							const geocoder = new google.maps.Geocoder()
+							geocoder.geocode({location}, (results, status) => {
+								const address = (results && results.length > 0 && results[0].address_components) || []
+
+								const city = address.filter((a) => a.types.indexOf('locality') !== -1)[0]
+								const streetName = address.filter((a) => a.types.indexOf('route') !== -1)[0]
+								const number = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
+
+								const addressString = ((streetName
+									? streetName.short_name
+									: '')
+									+ (number
+										? ' ' + number.short_name
+										: '')
+									+ (city
+										? ', ' + city.short_name
+										: '')) || 'Somewhere on a boat'
+
+								this.props.setTooltip({
+									location,
+									title: addressString
+								})
+							})
+						}, 250)
 					}
-					const geocoder = new google.maps.Geocoder()
-					geocoder.geocode({location}, (results, status) => {
-						const address = (results && results.length > 0 && results[0].address_components) || []
-
-						const city = address.filter((a) => a.types.indexOf('locality') !== -1)[0]
-						const streetName = address.filter((a) => a.types.indexOf('route') !== -1)[0]
-						const number = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
-
-						const addressString = ((streetName
-							? streetName.short_name
-							: '')
-						+ (number
-							? ' ' + number.short_name
-							: '')
-						+ (city
-							? ', ' + city.short_name
-							: '')) || 'Somewhere on a boat'
-
-						this.props.setTooltip({
-							location,
-							title: addressString
-						})
-					})
 				}}
 			>
 				{this.renderZoomControls()}
@@ -157,7 +169,9 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 }
 
-const mapStateToProps = (state: ReduxState) => ({})
+const mapStateToProps = (state: ReduxState) => ({
+	tooltip: state.application.tooltip
+})
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	setZoomLevel,
