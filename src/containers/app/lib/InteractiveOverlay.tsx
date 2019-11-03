@@ -172,15 +172,41 @@ const StyledLoaderContainer = styled.div`
 	margin: 1rem 0 1rem 1rem;
 `
 
-const StyledCardContainer = styled.div`	
-	pointer-events: auto;
+const sharedWrapperVisibilityAnimation = css<{visible: boolean}>`
+	pointer-events: ${(props) => props.visible ? 'auto' : 'none'};
+	transition: 500ms;
+	
+	& > * {
+		transition: 500ms;
+	}
+	
+	${(props) => props.visible ? css`
+		max-height: 200px;
+		
+		& > * {
+			opacity: 1;
+		}
+	` : css`
+		max-height: 0;
+		
+		& > * {
+		opacity: 0;
+		}
+	`}
+	}
+`
+
+
+
+const StyledCardContainer = styled.div<{visible: boolean}>`	
+	${sharedWrapperVisibilityAnimation};
 	
 	width: 25rem;
 	max-width: 100vw;
 `
 
-const StyledEditWrapper = styled.div`
-	pointer-events: auto;
+const StyledEditWrapper = styled.div<{visible: boolean}>`
+	${sharedWrapperVisibilityAnimation};
 	
 	@media (max-width: 900px) {
 		position: absolute;
@@ -234,21 +260,33 @@ const StyledEntryTravelTimeContainer = styled.div`
 	}
 `
 
-const StyledOnboardingTooltip = styled.div`
+const StyledOnboardingTooltipContainer = styled.div`
+	width: 100%;
 	position: absolute;
-	bottom: 2rem;
-	left: 50%;
-	transform: translateX(-50%);
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`
+
+const StyledOnboardingTooltip = styled.div`
+	display: flex;
+	margin: 0 1rem 2rem;
 	background-color: rgba(0, 0, 0, .6);
 	border-radius: 99px;
-	height: 40px;
-	padding: 0 .75rem;
-	display: flex;
+	min-height: 40px;
 	flex-direction: row;
 	align-items: center;
 	color: white;
+	padding: 0 .75rem;
+	
+	@media (max-width: 900px) {
+		padding: .25rem .75rem;
+	}
 	
 	& > *:first-child {
+		min-width: 1rem;
 		margin-right: .5rem;
 	}
 `
@@ -302,16 +340,18 @@ export class Component extends React.Component<PropsUnion, State> {
 						</StyledLogoContainer>
 					</div>
 					<StyledEntryTravelTimeContainer>
-						<EditTravelTime
+						{this.props.loading ? <Loader/> : <EditTravelTime
 							color={colorList[0]}
 							onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
 							onCancel={() => null}
-						/>
+						/>}
 					</StyledEntryTravelTimeContainer>
-					<StyledOnboardingTooltip>
-						<InfoIcon/>
-						<p>Click anywhere on the map to add a location</p>
-					</StyledOnboardingTooltip>
+					<StyledOnboardingTooltipContainer>
+						<StyledOnboardingTooltip>
+							<InfoIcon/>
+							<p>Click anywhere on the map to add a location</p>
+						</StyledOnboardingTooltip>
+					</StyledOnboardingTooltipContainer>
 				</>
 			)
 		}
@@ -339,23 +379,22 @@ export class Component extends React.Component<PropsUnion, State> {
 	private renderTravelTimes() {
 		return (
 			<>
-				{this.props.travelTimes && this.props.travelTimes.map((travelTime, i) => travelTime.res.search_id !== this.state.currentTravelTimeEditing
-					? (
+				{this.props.travelTimes && this.props.travelTimes.map((travelTime, i) => (
+					<React.Fragment key={travelTime.res.search_id}>
 						<StyledCardContainer
-							key={travelTime.res.search_id}
+							visible={travelTime.res.search_id !== this.state.currentTravelTimeEditing}
 							onClick={() => window.innerWidth <= 900 && this.edit(travelTime.res.search_id)}
 						>
 							<TravelCard
 								color={colorList[i]}
-								title={travelTime.title}
-								duration={travelTime.duration}
-								transport={travelTime.transport}
 								onDelete={() => this.removeTravelTime(travelTime.res.search_id)}
 								onEdit={() => this.edit(travelTime.res.search_id)}
+								{...travelTime}
 							/>
 						</StyledCardContainer>
-					) : (
-						<StyledEditWrapper key={travelTime.res.search_id}>
+						<StyledEditWrapper
+							visible={travelTime.res.search_id === this.state.currentTravelTimeEditing}
+						>
 							<EditTravelTime
 								color={colorList[i]}
 								onFinish={(v: TravelTimeAbstraction) => this.save(travelTime.res.search_id, v)}
@@ -367,8 +406,8 @@ export class Component extends React.Component<PropsUnion, State> {
 								{...travelTime}
 							/>
 						</StyledEditWrapper>
-					)
-				)}
+					</React.Fragment>
+				))}
 			</>
 		)
 	}
@@ -437,19 +476,15 @@ export class Component extends React.Component<PropsUnion, State> {
 
 	private renderActiveNew() {
 		return (
-			<>
-				{this.state.isCurrentlyAddingNewTravelTime && (
-					<StyledEditWrapper>
-						<EditTravelTime
-							color={colorList[(this.props.travelTimes && this.props.travelTimes.length) || 0]}
-							onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
-							onCancel={() => this.setState({
-								isCurrentlyAddingNewTravelTime: false
-							})}
-						/>
-					</StyledEditWrapper>
-				)}
-			</>
+			<StyledEditWrapper visible={this.state.isCurrentlyAddingNewTravelTime}>
+				<EditTravelTime
+					color={colorList[(this.props.travelTimes && this.props.travelTimes.length) || 0]}
+					onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
+					onCancel={() => this.setState({
+						isCurrentlyAddingNewTravelTime: false
+					})}
+				/>
+			</StyledEditWrapper>
 		)
 	}
 
