@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 58 (84663) - https://sketch.com -->
+    <title>clock</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-3" transform="translate(-78.000000, -133.000000)" fill="currentColor" fill-rule="nonzero">
+            <g id="clock" transform="translate(78.000000, 133.000000)">
+                <path d="M8.99166667,0.666666667 C4.39166667,0.666666667 0.666666667,4.4 0.666666667,9 C0.666666667,13.6 4.39166667,17.3333333 8.99166667,17.3333333 C13.6,17.3333333 17.3333333,13.6 17.3333333,9 C17.3333333,4.4 13.6,0.666666667 8.99166667,0.666666667 Z M9,15.6666667 C5.31666667,15.6666667 2.33333333,12.6833333 2.33333333,9 C2.33333333,5.31666667 5.31666667,2.33333333 9,2.33333333 C12.6833333,2.33333333 15.6666667,5.31666667 15.6666667,9 C15.6666667,12.6833333 12.6833333,15.6666667 9,15.6666667 Z" id="Shape"></path>
+                <polygon id="Path" points="9.41666667 4.83333333 8.16666667 4.83333333 8.16666667 9.83333333 12.5416667 12.4583333 13.1666667 11.4333333 9.41666667 9.20833333"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

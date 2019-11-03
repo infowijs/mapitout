@@ -1,5 +1,0 @@
-# Redirects all sub pages to root index.html since routing is handled by JS.
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
