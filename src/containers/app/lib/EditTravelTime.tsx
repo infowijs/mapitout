@@ -349,7 +349,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						<StyledActionButton
 							color={this.props.color}
 							isDisabled={!this.isValid(this.state)}
-							onClick={() => this.props.onFinish(this.state)}
+							onClick={() => this.isValid(this.state) && this.props.onFinish(this.state)}
 						>
 							<GoIcon/>
 						</StyledActionButton>
