@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps'
+import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled from 'styled-components'
 
 import { ZoomInIcon, ZoomOutIcon } from 'icons'
