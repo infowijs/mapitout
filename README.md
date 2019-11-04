@@ -5,8 +5,8 @@ MapItOut is a tool to calculate how far you can travel with certain types of tra
 ![Screenshot of the application in a browser window](/docs/preview.png)
 
 
-## Tech
-### Backend
+# Tech
+## Backend
 The backend consists out of several python scripts that serve as database wrappers, endpoint server and a proxy to the [Travel Time Platform's API](https://www.traveltimeplatform.com/).
 
 The backend specific documentation can be found inside the `api` directory.
