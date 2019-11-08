@@ -9,8 +9,8 @@ jobs:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
-      - checkout
-          - path: /app
+      - checkout:
+          path: /app
       - setup_remote_docker
       - run:
           name: Install dependencies
