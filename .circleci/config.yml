@@ -5,12 +5,12 @@ orbs:
 
 jobs:
   build_backend:
-    working_directory: /app/api
+    working_directory: /home/circleci/app/api
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout:
-          path: /app
+          path: /home/circleci/app
       - setup_remote_docker
       - run:
           name: Install dependencies
@@ -47,12 +47,12 @@ jobs:
             fi
 
   build_frontend:
-    working_directory: /app/web
+    working_directory: /home/circleci/app/web
     docker:
       - image: circleci/node:8.15.0
     steps:
       - checkout:
-          path: /app
+          path: /home/circleci/app
       - run: sudo apt-get install python-dev
       - run:
           name: Install dependencies
