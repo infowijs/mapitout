@@ -1,11 +1,16 @@
-version: 2
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@1.0.9
+
 jobs:
-  build:
-    working_directory: /app
+  build_backend:
+    working_directory: /app/api
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - checkout
+          - path: /app
       - setup_remote_docker
       - run:
           name: Install dependencies
@@ -40,9 +45,36 @@ jobs:
               chmod +x ecs-deploy
               ./ecs-deploy -c Includable -n "${IMAGE_NAME}" -i "${ECR_ENDPOINT}/${IMAGE_NAME}:latest" -t 240
             fi
+
+  build_frontend:
+    working_directory: /app/web
+    docker:
+      - image: circleci/node:8.15.0
+    steps:
+      - checkout:
+          path: /app
+      - run: sudo apt-get install python-dev
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Build React app
+          command: yarn build
+      - aws-s3/sync:
+          from: build
+          to: 's3://mapitout.iamsterdam.com'
+          arguments: --acl public-read --cache-control "max-age=86400"
+          overwrite: true
+      - run: aws cloudfront create-invalidation --distribution-id E5M144WQ6D3CE --paths /\*
+
 workflows:
   version: 2
   workflow:
     jobs:
-      - build:
+      - build_backend:
           context: includable-ecs
+      - build_frontend:
+          context: includable-ecs
+          filters:
+            branches:
+              only: master
