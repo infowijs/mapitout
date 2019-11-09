@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter, Route } from 'react-router-dom'
 // @ts-ignore
 import scriptjs from 'scriptjs'
@@ -19,7 +18,7 @@ import './index.css'
 
 dotenv.config()
 
-const { store, persistor } = configureStore()
+const store = configureStore()
 
 class Root extends React.Component<{}, {loaded: boolean}> {
 	public readonly state = {
@@ -34,12 +33,10 @@ class Root extends React.Component<{}, {loaded: boolean}> {
 
 		return (
 			<Provider store={store}>
-				<PersistGate loading={null} persistor={persistor}>
-					<Map/>
-					<BrowserRouter>
-						<Route component={App} path='/:travelOne?/:travelTwo?/:travelThree?/:travelFour?/:travelFive?/:travelSix?'/>
-					</BrowserRouter>
-				</PersistGate>
+				<Map/>
+				<BrowserRouter>
+					<Route component={App} path='/:travelOne?/:travelTwo?/:travelThree?/:travelFour?/:travelFive?/:travelSix?'/>
+				</BrowserRouter>
 			</Provider>
 		)
 	}
