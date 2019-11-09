@@ -56,9 +56,7 @@ jobs:
       - run: sudo apt-get install python-dev
       - run:
           name: Install dependencies
-          command: |
-            yarn
-            echo "REACT_APP_API_BASE_URL=\"https://mapitout-api.internal.includable.com/api/\"\nREACT_APP_GOOGLE_MAPS_TOKEN=\"AIzaSyCKGAxENxVpDhER2eIJk9AiSclXNhkubpE\"" > .env
+          command: yarn
       - run:
           name: Build React app
           command: yarn build
