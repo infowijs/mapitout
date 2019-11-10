@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components'
 import { ReduxState, setTooltip, getTravelTimes } from 'store'
 import { AddIcon } from 'icons'
 import { TravelTimeAbstraction } from 'interfaces'
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 import { shadows } from '../../../constants'
 
 const StyledTooltip = styled.div`
@@ -112,7 +112,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							this.addTravelTime({
 								...tooltip!,
 								duration: 30 * 60,
-								transport: TravelType.PublicTransport
+								transport: TransportType.PublicTransport
 							})
 						}}
 					>

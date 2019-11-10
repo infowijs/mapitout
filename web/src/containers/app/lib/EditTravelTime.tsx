@@ -7,7 +7,7 @@ import Select from 'react-select'
 
 import { ReduxState } from 'store'
 import { TravelTimeAbstraction } from 'interfaces'
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
 import { DropdownIcon, GoIcon, TrashcanIcon } from 'icons'
 import { shadows } from '../../../constants'
@@ -334,7 +334,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			title: props.title || '',
 			location: props.location || {lat: -1, lng: -1},
 			duration: props.duration || 900,
-			transport: props.transport || TravelType.Walking
+			transport: props.transport || TransportType.Walking
 		}
 	}
 
@@ -460,13 +460,13 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private renderInputTraveltype() {
-		type Entry = {value: TravelType, label: React.ReactNode}
+		type Entry = {value: TransportType, label: React.ReactNode}
 		const options: Entry[] = [
-			{ value: TravelType.Walking, label: getTravelTypeInfo(TravelType.Walking).name },
-			{ value: TravelType.PublicTransportAndCycling, label: getTravelTypeInfo(TravelType.PublicTransportAndCycling).name },
-			{ value: TravelType.PublicTransport, label: getTravelTypeInfo(TravelType.PublicTransport).name },
-			{ value: TravelType.Cycling, label: getTravelTypeInfo(TravelType.Cycling).name },
-			{ value: TravelType.Driving, label: getTravelTypeInfo(TravelType.Driving).name }
+			{ value: TransportType.Walking, label: getTravelTypeInfo(TransportType.Walking).name },
+			{ value: TransportType.PublicTransportAndCycling, label: getTravelTypeInfo(TransportType.PublicTransportAndCycling).name },
+			{ value: TransportType.PublicTransport, label: getTravelTypeInfo(TransportType.PublicTransport).name },
+			{ value: TransportType.Cycling, label: getTravelTypeInfo(TransportType.Cycling).name },
+			{ value: TransportType.Driving, label: getTravelTypeInfo(TransportType.Driving).name }
 		]
 
 		const currentOption = options.filter((t) => t.value === this.state.transport)[0]

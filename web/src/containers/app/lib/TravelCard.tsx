@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ReduxState } from 'store'
 import { ClockIcon, CrossIcon, EditIcon } from 'icons'
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
 import { shadows } from '../../../constants'
 
@@ -145,7 +145,7 @@ interface Props {
 	color: string
 	title: string
 	duration: number
-	transport: TravelType
+	transport: TransportType
 	onDelete: () => any
 	onEdit: () => any
 }

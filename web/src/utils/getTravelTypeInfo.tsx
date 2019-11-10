@@ -1,30 +1,30 @@
 import React, { ReactNode } from 'react'
 
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 import { BikeIcon, BusBikeIcon, BusIcon, CarIcon, WalkIcon } from 'icons'
 
-export function getTravelTypeInfo(type: TravelType) {
+export function getTravelTypeInfo(type: TransportType) {
 	let name!: string
 	let icon!: ReactNode
 
 	switch (type) {
-		case TravelType.Driving:
+		case TransportType.Driving:
 			name = 'Driving'
 			icon = <CarIcon/>
 			break;
-		case TravelType.Cycling:
+		case TransportType.Cycling:
 			name = 'Cycling'
 			icon = <BikeIcon/>
 			break;
-		case TravelType.PublicTransport:
+		case TransportType.PublicTransport:
 			name = 'Public transport'
 			icon = <BusIcon/>
 			break;
-		case TravelType.PublicTransportAndCycling:
+		case TransportType.PublicTransportAndCycling:
 			name = 'Public transport & cycling'
 			icon = <BusBikeIcon/>
 			break;
-		case TravelType.Walking:
+		case TransportType.Walking:
 			name = 'Walking'
 			icon = <WalkIcon/>
 			break;

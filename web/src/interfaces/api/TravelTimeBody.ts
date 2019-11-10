@@ -1,4 +1,4 @@
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 
 interface DepartureSearch {
     id: string,
@@ -9,7 +9,7 @@ interface DepartureSearch {
     departure_time: string,
     travel_time: number,
     transportation: {
-        type: TravelType
+        type: TransportType
     }
 }
 

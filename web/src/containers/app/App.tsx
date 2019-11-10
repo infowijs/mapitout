@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router-dom'
 
 import { ReduxState, getTravelTimes, getPois } from 'store'
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 
 import { InteractiveOverlay } from './lib'
 
@@ -69,7 +69,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					lng: parseFloat(lng)
 				},
 				duration: parseInt(duration, 10) * 60,
-				transport: transport as TravelType
+				transport: transport as TransportType
 			}
 		})
 

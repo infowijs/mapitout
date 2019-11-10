@@ -1,1 +1,1 @@
-export { TravelType } from './TravelType'
+export { TransportType } from './TransportType'

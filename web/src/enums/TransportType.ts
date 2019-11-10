@@ -1,4 +1,4 @@
-export enum TravelType {
+export enum TransportType {
     PublicTransport = 'public_transport',
     Driving = 'driving',
     Cycling = 'cycling',
