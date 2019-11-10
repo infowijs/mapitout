@@ -1,5 +1,5 @@
 import { ActionDispatch } from './reducer'
-import {Tooltip} from './lib/Tooltip'
+import { Tooltip } from './lib/Tooltip'
 
 export enum ActionType {
 	SetZoomLevel = '@@application/zoom',
