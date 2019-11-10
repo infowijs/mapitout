@@ -268,6 +268,7 @@ const StyledOnboardingTooltipContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	pointer-events: none;
 `
 
 const StyledOnboardingTooltip = styled.div`
