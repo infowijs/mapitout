@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router-dom'
 
-import { ReduxState, getTravelTimes } from 'store'
+import { ReduxState, getTravelTimes, getPois } from 'store'
 import { TravelType } from 'enums'
 
 import { InteractiveOverlay } from './lib'
@@ -13,6 +13,7 @@ interface StateProps {
 }
 interface DispatchProps {
 	getTravelTimes: typeof getTravelTimes
+	getPois: typeof getPois
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props & RouteComponentProps<Params>
@@ -73,6 +74,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		})
 
 		props.getTravelTimes(travelsDecoded)
+		props.getPois()
 	}
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
@@ -113,7 +115,8 @@ const mapStateToProps = (state: ReduxState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-	getTravelTimes
+	getTravelTimes,
+	getPois
 }, dispatch)
 
 export const App = connect<StateProps, DispatchProps, Props, ReduxState>(
