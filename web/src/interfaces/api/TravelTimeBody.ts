@@ -20,6 +20,5 @@ interface MergedType {
 
 export interface TravelTimeBody {
     departure_searches: DepartureSearch[]
-	intersections: MergedType[]
-	unions: MergedType[]
+	intersections?: MergedType[]
 }
