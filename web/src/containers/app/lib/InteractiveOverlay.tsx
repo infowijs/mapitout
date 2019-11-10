@@ -451,9 +451,13 @@ export class Component extends React.Component<PropsUnion, State> {
 					>
 						<LayersIcon/>
 					</StyledActionIcon>
-					<p>{this.props.overlapVisible
-						? 'Back to normal'
-						: 'Show overlapping area'}</p>
+					<p>{
+						this.isOverlapAvailable()
+							? (this.props.overlapVisible
+								? 'Back to normal'
+								: 'Show overlapping area')
+							: 'No overlapping area'
+					}</p>
 				</StyledAction>
 				<CopyToClipboard text={window.location.href} onCopy={this.handleCopy}>
 					<StyledAction>
