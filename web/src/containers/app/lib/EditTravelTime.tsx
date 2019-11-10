@@ -463,7 +463,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		type Entry = {value: TransportType, label: React.ReactNode}
 		const options: Entry[] = [
 			{ value: TransportType.Walking, label: getTravelTypeInfo(TransportType.Walking).name },
-			{ value: TransportType.PublicTransportAndCycling, label: getTravelTypeInfo(TransportType.PublicTransportAndCycling).name },
+			{ value: TransportType.Cycling_PublicTransport, label: getTravelTypeInfo(TransportType.Cycling_PublicTransport).name },
 			{ value: TransportType.PublicTransport, label: getTravelTypeInfo(TransportType.PublicTransport).name },
 			{ value: TransportType.Cycling, label: getTravelTypeInfo(TransportType.Cycling).name },
 			{ value: TransportType.Driving, label: getTravelTypeInfo(TransportType.Driving).name }

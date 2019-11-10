@@ -20,7 +20,7 @@ export function getTravelTypeInfo(type: TransportType) {
 			name = 'Public transport'
 			icon = <BusIcon/>
 			break;
-		case TransportType.PublicTransportAndCycling:
+		case TransportType.Cycling_PublicTransport:
 			name = 'Public transport & cycling'
 			icon = <BusBikeIcon/>
 			break;
