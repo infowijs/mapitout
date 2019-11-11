@@ -24,7 +24,7 @@ const StyledAttribution = styled.p`
 	right: 5.5rem;
 	white-space: nowrap;
 	font-size: .75rem;
-	
+
 	@media (max-width: 900px) {
 		bottom: 7rem;
     	right: 5rem;
@@ -33,21 +33,21 @@ const StyledAttribution = styled.p`
 
 const StyledZoomControl = styled.div`
 	position: absolute;
-	
+
 	@media (min-width: 900px) {
 		bottom: 1.5rem;
 		right: 1.5rem;
 	}
-	
+
 	@media (max-width: 900px) {
 		bottom: 4.75rem;
 		right: 1rem;
 	}
-	
+
 	background: #fff;
 	border-radius: 3px;
 	padding: 10px;
-	
+
 	& > *:first-child {
 		padding-bottom: 5px;
 	}
@@ -148,7 +148,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				{this.renderControls()}
 				<GlobalGoogleMapsAttributionOffset/>
 				<StyledAttribution>
-					Powered by <a href='https://www.traveltimeplatform.com/' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' target='_blank'>Privacy policy</a>
+					Powered by <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' rel='noopener noreferrer' target='_blank'>Privacy policy</a>
 				</StyledAttribution>
 				<Markers onMarkerClick={(travelTime) => {
 					this.animateFitToBounds(travelTime)

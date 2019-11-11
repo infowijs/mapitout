@@ -6,7 +6,6 @@ import styled, { css } from 'styled-components'
 
 import { ReduxState, setTooltip, setNewTravelTimeDetails } from 'store'
 import { AddIcon, CrossIcon } from 'icons'
-import { TransportType } from 'enums'
 import { colors, shadows } from '../../../constants'
 
 const StyledTooltip = styled.div`
@@ -16,7 +15,7 @@ const StyledTooltip = styled.div`
 	border-radius: 5px;
 	background-color: #fff;
 	font-size: 1rem;
-	
+
 	:after {
 		content: '';
 		position: absolute;
@@ -71,12 +70,12 @@ const StyledIconContainer = styled.div<{isDisabled: boolean}>`
 	background-color: rgba(0, 0, 0, .1);
 	transition: 100ms;
 	border-radius: 99px;
-	
+
 	& > * {
 		max-width: 1rem;
 		max-height: 1rem;
 	}
-	
+
 	${StyledContentContainer}:hover & {
 		${(props) => !props.isDisabled && css`
 			transform: scale(1.2);
