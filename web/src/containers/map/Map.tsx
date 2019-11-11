@@ -133,7 +133,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								const streetName = address.filter((a) => a.types.indexOf('route') !== -1)[0]
 								const number = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
 
-								const addressString = ((streetName
+								const title = ((streetName
 									? streetName.short_name
 									: '')
 									+ (number
@@ -144,8 +144,9 @@ export class Component extends React.Component<PropsUnion, State> {
 										: '')) || 'Somewhere on a boat'
 
 								this.props.setTooltip({
-									location,
-									title: addressString
+									title,
+									lat: location.lat,
+									lng: location.lng
 								})
 							})
 						}, 250)

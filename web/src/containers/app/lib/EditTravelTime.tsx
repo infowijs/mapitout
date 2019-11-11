@@ -317,6 +317,7 @@ const StyledCancelButton = styled.p`
 interface StateProps {}
 interface DispatchProps {}
 interface Props extends Partial<TravelTimeAbstraction> {
+	ref?: React.RefObject<Component>
 	color: string;
 	onFinish: (v: TravelTimeAbstraction) => any
 	onCancel: () => any
@@ -324,17 +325,17 @@ interface Props extends Partial<TravelTimeAbstraction> {
 }
 type PropsUnion = StateProps & DispatchProps & Props
 
-interface State extends TravelTimeAbstraction {}
+interface State extends Partial<TravelTimeAbstraction> {}
 
 export class Component extends React.Component<PropsUnion, State> {
 	constructor(props: PropsUnion) {
 		super(props)
 
 		this.state = {
-			title: props.title || '',
-			location: props.location || {lat: -1, lng: -1},
-			duration: props.duration || 900,
-			transport: props.transport || TransportType.Walking
+			title: props.title,
+			location: props.location,
+			duration: props.duration,
+			transport: props.transport
 		}
 	}
 
@@ -352,13 +353,13 @@ export class Component extends React.Component<PropsUnion, State> {
 						<StyledActionButton
 							color={this.props.color}
 							isDisabled={!this.isValid(this.state)}
-							onClick={() => this.isValid(this.state) && this.props.onFinish(this.state)}
+							onClick={() => this.isValid(this.state) && this.props.onFinish(this.state as TravelTimeAbstraction)}
 						>
 							<GoIcon/>
 						</StyledActionButton>
 						{this.props.onDelete && <StyledActionButton
 							color={this.props.color}
-							onClick={() => this.props.onDelete!(this.state)}
+							onClick={() => this.isValid(this.state) && this.props.onDelete!(this.state as TravelTimeAbstraction)}
 							onlyVisibleOnMobile={true}
 						>
 							<TrashcanIcon/>
@@ -372,10 +373,28 @@ export class Component extends React.Component<PropsUnion, State> {
 		)
 	}
 
+	private updateValues(value: Partial<TravelTimeAbstraction> | null) {
+		if (value) {
+			this.setState({
+				title: value.title,
+				location: value.location,
+				duration: value.duration,
+				transport: value.transport
+			})
+		} else {
+			this.setState({
+				title: undefined,
+				location: undefined,
+				duration: undefined,
+				transport: undefined
+			})
+		}
+	}
+
 	private renderInputAddress() {
 		return (
 			<PlacesAutocomplete
-				value={this.state.title}
+				value={this.state.title || ''}
 				onChange={this.handlePlacesAutocompleteChange}
 				onSelect={this.handlePlacesAutocompleteSelect}
 				searchOptions={{
@@ -392,7 +411,12 @@ export class Component extends React.Component<PropsUnion, State> {
 								{...getInputProps({
 									placeholder: 'Address',
 									name: 'address',
-									onBlur: () => window.scrollTo(0, 0)
+									onBlur: () => {
+										// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input
+										// field so that the input field is always in view, it does unfortunately not
+										// reset when you close the keyboard
+										window.scrollTo(0, 0)
+									}
 								})}
 							/>
 						</StyledSegment>
@@ -425,7 +449,10 @@ export class Component extends React.Component<PropsUnion, State> {
 			.then(async (results) => {
 				this.setState({
 					title,
-					location: await getLatLng(results[0])
+					location: {
+						title,
+						...await getLatLng(results[0])
+					}
 				})
 			})
 	}
@@ -438,6 +465,8 @@ export class Component extends React.Component<PropsUnion, State> {
 			{ value: 2700, label: '45 minutes' },
 			{ value: 3600, label: '60 minutes' },
 		]
+
+		const currentOption = options.filter((t) => t.value === this.state.duration)[0] || ''
 		return (
 			<StyledSegment>
 				<StyledLabel className='label' as='p' color={this.props.color}>in</StyledLabel>
@@ -445,9 +474,14 @@ export class Component extends React.Component<PropsUnion, State> {
 					styles={{control: () => null}}
 					classNamePrefix='react-select'
 					minWidth={110}
-					value={options.filter((t) => t.value === this.state.duration)[0] || null}
+					value={currentOption}
 					onChange={(v: Entry) => v && 'value' in v && this.setState({duration: v.value})}
-					onBlur={() => window.scrollTo(0, 0)}
+					onBlur={() => {
+						// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input field so that
+						// the input field is always in view, it does unfortunately not reset when you close the
+						// keyboard
+						window.scrollTo(0, 0)
+					}}
 					options={options}
 					components={{
 						DropdownIndicator: () => <DropdownIcon style={{marginLeft: '.25rem'}}/>,
@@ -469,7 +503,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			{ value: TransportType.Driving, label: getTravelTypeInfo(TransportType.Driving).name }
 		]
 
-		const currentOption = options.filter((t) => t.value === this.state.transport)[0]
+		const currentOption = options.filter((t) => t.value === this.state.transport)[0] || ''
 
 		return (
 			<StyledSegment withoutRightMargin={true}>
@@ -480,7 +514,12 @@ export class Component extends React.Component<PropsUnion, State> {
 					minWidth={160}
 					value={currentOption}
 					onChange={(v: Entry) => v && 'value' in v && this.setState({transport: v.value})}
-					onBlur={() => window.scrollTo(0, 0)}
+					onBlur={() => {
+						// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input field so that
+						// the input field is always in view, it does unfortunately not reset when you close the
+						// keyboard
+						window.scrollTo(0, 0)
+					}}
 					options={options}
 					components={{
 						DropdownIndicator: () => <DropdownIcon style={{marginLeft: 10}}/>,
@@ -496,13 +535,21 @@ export class Component extends React.Component<PropsUnion, State> {
 		)
 	}
 
-	private isValid(travelTime: TravelTimeAbstraction): boolean {
-		return (
-			!!travelTime.title
+	private isValid(travelTime: Partial<TravelTimeAbstraction>): boolean {
+		return !!(
+			// Ensure that a title has been set (an empty string is valid)
+			typeof travelTime.title === 'string'
+			// Ensure that the location object exists and the properties are filled in correctly
+			&& travelTime.location
+			&& typeof travelTime.title === 'string'
 			&& travelTime.location.lat > 0
 			&& travelTime.location.lng > 0
-			&& !!travelTime.transport
-			&& travelTime.duration > 0
+			// Ensure that a `TransportType` has been set, this enum is a string at runtime
+			&& travelTime.transport
+			// Ensure that the duration exists and is within the valid range
+			&& travelTime.duration
+			&& travelTime.duration >= 60
+			&& travelTime.duration <= 14400
 		)
 	}
 }
@@ -513,5 +560,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({}, dispat
 
 export const EditTravelTime = connect<StateProps, DispatchProps, Props, ReduxState>(
 	mapStateToProps,
-	mapDispatchToProps
+	mapDispatchToProps,
+	null,
+	{
+		forwardRef: true
+	}
 )(Component)

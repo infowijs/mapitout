@@ -29,7 +29,7 @@ interface Params {
 	travelSix: string
 }
 
-const encodingDivider = '--'
+const encodingDivider = '::'
 
 export class Component extends React.Component<PropsUnion, State> {
 	public readonly state: State = {}
@@ -56,6 +56,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const travelsDecoded: Parameters<typeof getTravelTimes>[0] = travelsEncoded.map((encodedTravel) => {
 			const [
 				title,
+				locationTitle,
 				lat,
 				lng,
 				duration,
@@ -65,6 +66,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			return {
 				title,
 				location: {
+					title: locationTitle,
 					lat: parseFloat(lat),
 					lng: parseFloat(lng)
 				},
@@ -99,6 +101,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const path: string = this.props.travelTimes.map((travelTime) => {
 			return [
 				travelTime.title,
+				travelTime.location.title,
 				travelTime.location.lat,
 				travelTime.location.lng,
 				travelTime.duration / 60,

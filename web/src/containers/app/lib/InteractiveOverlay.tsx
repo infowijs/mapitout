@@ -297,6 +297,7 @@ interface StateProps {
 	travelTimes: ReduxState['travelTime']['travelTimes']
 	overlap: ReduxState['travelTime']['overlap']
 	overlapVisible: ReduxState['application']['overlapVisible']
+	newTravelTimeDetails: ReduxState['application']['newTravelTimeDetails']
 }
 interface DispatchProps {
 	getTravelTimes: typeof getTravelTimes
@@ -322,8 +323,16 @@ export class Component extends React.Component<PropsUnion, State> {
 		justCopied: false
 	}
 	public addressFieldRef = React.createRef<any>()
+	public newEditTravelTimeRef = React.createRef<typeof EditTravelTime.prototype>()
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
+		if (this.props.newTravelTimeDetails !== prevProps.newTravelTimeDetails) {
+			this.setState({isCurrentlyAddingNewTravelTime: true})
+
+			if (this.newEditTravelTimeRef.current) {
+				this.newEditTravelTimeRef.current.updateValues(this.props.newTravelTimeDetails)
+			}
+		}
 		if (this.state.currentTravelTimeEditSaving) {
 			this.setState({
 				currentTravelTimeEditSaving: null
@@ -398,7 +407,13 @@ export class Component extends React.Component<PropsUnion, State> {
 						>
 							<EditTravelTime
 								color={colorList[i]}
-								onFinish={(v: TravelTimeAbstraction) => this.save(travelTime.res.search_id, v)}
+								onFinish={(v: TravelTimeAbstraction) => {
+									this.save(travelTime.res.search_id, v)
+
+									if (this.newEditTravelTimeRef.current) {
+										this.newEditTravelTimeRef.current.updateValues(null)
+									}
+								}}
 								onCancel={() => this.setState({
 									currentTravelTimeEditing: null,
 									currentTravelTimeEditSaving: null
@@ -483,8 +498,15 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<StyledEditWrapper visible={this.state.isCurrentlyAddingNewTravelTime}>
 				<EditTravelTime
+					ref={this.newEditTravelTimeRef}
 					color={colorList[(this.props.travelTimes && this.props.travelTimes.length) || 0]}
-					onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
+					onFinish={(v: TravelTimeAbstraction) => {
+						this.addTravelTime(v)
+
+						if (this.newEditTravelTimeRef.current) {
+							this.newEditTravelTimeRef.current.updateValues(null)
+						}
+					}}
 					onCancel={() => this.setState({
 						isCurrentlyAddingNewTravelTime: false
 					})}
@@ -495,6 +517,7 @@ export class Component extends React.Component<PropsUnion, State> {
 
 	private edit = (id: string) => {
 		this.setState({
+			isCurrentlyAddingNewTravelTime: false,
 			currentTravelTimeEditing: id
 		}, () => this.setFocus())
 	}
@@ -512,8 +535,9 @@ export class Component extends React.Component<PropsUnion, State> {
 			return id === v.res.search_id ? travelTime : {
 				title: v.title,
 				location: {
+					title: v.location.title,
 					lat: v.location.lat,
-					lng: v.location.lng,
+					lng: v.location.lng
 				},
 				duration: v.duration,
 				transport: v.transport
@@ -573,7 +597,8 @@ const mapStateToProps = (state: ReduxState) => ({
 	loading: state.travelTime.loading,
 	travelTimes: state.travelTime.travelTimes,
 	overlap: state.travelTime.overlap,
-	overlapVisible: state.application.overlapVisible
+	overlapVisible: state.application.overlapVisible,
+	newTravelTimeDetails: state.application.newTravelTimeDetails
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
