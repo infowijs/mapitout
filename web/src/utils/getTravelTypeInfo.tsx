@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 import { TransportType } from 'enums'
 import { BikeIcon, BusBikeIcon, BusIcon, CarIcon, WalkIcon } from 'icons'
 
-export function getTravelTypeInfo(type: TransportType) {
+export function getTravelTypeInfo(type: TransportType | undefined) {
 	let name!: string
 	let icon!: ReactNode
 
@@ -27,6 +27,10 @@ export function getTravelTypeInfo(type: TransportType) {
 		case TransportType.Walking:
 			name = 'Walking'
 			icon = <WalkIcon/>
+			break;
+		default:
+			name = ''
+			icon = null
 			break;
 	}
 
