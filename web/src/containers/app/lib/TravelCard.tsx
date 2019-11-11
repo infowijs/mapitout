@@ -40,16 +40,16 @@ const StyledTravelCardInfo = styled.div`
 		flex-direction: column;
 		overflow: hidden;
 	}
+`
+
+const StyledTravelCardTitle = styled.h1`
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-bottom: 1rem;
 	
-	h1 {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		margin-bottom: 1rem;
-		
-		@media (max-width: 900px) {
-			display: none;
-		}
+	@media (max-width: 900px) {
+		display: none;
 	}
 `
 
@@ -161,7 +161,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<StyledTravelCard color={color}>
 				<StyledTravelCardInfo>
-					<h1>{title}</h1>
+					<StyledTravelCardTitle>{title}</StyledTravelCardTitle>
 					<StyledTravelCardInfoMeta>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>
