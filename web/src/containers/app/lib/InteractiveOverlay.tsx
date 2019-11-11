@@ -499,6 +499,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			<StyledEditWrapper visible={this.state.isCurrentlyAddingNewTravelTime}>
 				<EditTravelTime
 					ref={this.newEditTravelTimeRef}
+					new={true}
 					color={colorList[(this.props.travelTimes && this.props.travelTimes.length) || 0]}
 					onFinish={(v: TravelTimeAbstraction) => {
 						this.addTravelTime(v)

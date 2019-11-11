@@ -322,6 +322,7 @@ interface Props extends Partial<TravelTimeAbstraction> {
 	onFinish: (v: TravelTimeAbstraction) => any
 	onCancel: () => any
 	onDelete?: (v: TravelTimeAbstraction) => any
+	new?: boolean
 }
 type PropsUnion = StateProps & DispatchProps & Props
 
@@ -367,7 +368,11 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledActionContainer>
 				</StyledContainer>
 				<StyledCancelButtonContainer>
-					<StyledCancelButton className="label" onClick={() => this.props.onCancel()}>cancel</StyledCancelButton>
+					<StyledCancelButton className="label" onClick={() => this.props.onCancel()}>
+						{this.props.new
+							? 'cancel new location'
+							: 'cancel'}
+					</StyledCancelButton>
 				</StyledCancelButtonContainer>
 			</>
 		)
