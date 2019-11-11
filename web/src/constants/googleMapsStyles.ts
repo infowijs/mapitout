@@ -32,15 +32,6 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 		]
 	},
 	{
-		featureType: 'all',
-		elementType: 'labels.icon',
-		stylers: [
-			{
-				visibility: 'off'
-			}
-		]
-	},
-	{
 		featureType: 'administrative',
 		elementType: 'geometry.fill',
 		stylers: [
