@@ -9,7 +9,7 @@ import { ReduxState } from 'store'
 import { TravelTimeAbstraction } from 'interfaces'
 import { TransportType } from 'enums'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
-import { DropdownIcon, GoIcon, TrashcanIcon } from 'icons'
+import { DropdownIcon, GoIcon, CrossIcon } from 'icons'
 import { shadows } from '../../../constants'
 
 // Component container styling
@@ -363,7 +363,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							onClick={() => this.isValid(this.state) && this.props.onDelete!(this.state as TravelTimeAbstraction)}
 							onlyVisibleOnMobile={true}
 						>
-							<TrashcanIcon/>
+							<CrossIcon/>
 						</StyledActionButton>}
 					</StyledActionContainer>
 				</StyledContainer>
