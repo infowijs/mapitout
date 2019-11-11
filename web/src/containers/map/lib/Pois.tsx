@@ -7,7 +7,10 @@ import { createGlobalStyle } from 'styled-components'
 
 import { ReduxState } from 'store'
 
-import educationMarkerIcon from '../../../icons/education-cluster.svg'
+import educationPrimaryIcon from 'assets/education-primary.svg'
+import educationPrimaryClusterIcon from 'assets/education-primary-cluster.svg'
+import educationSecondaryIcon from 'assets/education-secondary.svg'
+import educationSecondaryClusterIcon from 'assets/education-secondary-cluster.svg'
 
 const ClusterMarkerGlobalStyles = createGlobalStyle`
 	.cluster {
@@ -44,16 +47,22 @@ const ClusterMarkerGlobalStyles = createGlobalStyle`
 			display: inline;
 			padding: 2px 6px;
 			border-radius: 99px;
-			background-color: #1BBD9D;
 			text-align: left;
+		}
+		
+		&--green p {
+			background-color: #1BBD9D;
+		}
+		&--blue p {
+			background-color: #3699DC;
 		}
 	}
 `
 
 interface StateProps {
 	zoom: ReduxState['application']['zoom']
-	primaryEducation: ReduxState['travelTime']['primaryEducation']
-	secondaryEducation: ReduxState['travelTime']['secondaryEducation']
+	primaryEducation: ReduxState['poi']['primaryEducation']
+	secondaryEducation: ReduxState['poi']['secondaryEducation']
 	primaryEducationVisible: ReduxState['application']['primaryEducationVisible']
 	secondaryEducationVisible: ReduxState['application']['secondaryEducationVisible']
 }
@@ -94,57 +103,69 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<>
 				<ClusterMarkerGlobalStyles/>
-				<MarkerClusterer
-					averageCenter
-					enableRetinaIcons
-					ignoreHidden
-					calculator={(markers: any[], numStyles: number) => ({
-						text: `<div class='cluster-marker-text-container'><p>${markers.length <= 50 ? markers.length : '50+'}</p></div>`,
-						index: Math.min(0, numStyles),
-						title: ''
-					})}
-					styles={[
-						{
-							textColor: '#fff',
-							url: educationMarkerIcon,
-							height: 30,
-							width: 30,
-							anchorText: [-15, 15 + 5]
-						}
-					]}
-				>
-					{(primaryEducation || []).map((v, i) => (
-						<Marker
-							key={i}
-							visible={zoom >= zoomLevelTolerance && primaryEducationVisible}
-							position={{
-								lat: v[0].geo_location.coordinates[1],
-								lng: v[0].geo_location.coordinates[0]
-							}}
-							icon={educationMarkerIcon}
-						/>
-					))}
-					{(secondaryEducation || []).map((v, i) => (
-						<Marker
-							key={i}
-							visible={zoom >= zoomLevelTolerance && secondaryEducationVisible}
-							position={{
-								lat: v[0].geo_location.coordinates[1],
-								lng: v[0].geo_location.coordinates[0]
-							}}
-							icon={educationMarkerIcon}
-						/>
-					))}
-				</MarkerClusterer>
+				{this.renderCluster(
+					educationPrimaryClusterIcon,
+					educationPrimaryIcon,
+					primaryEducation,
+					zoom >= zoomLevelTolerance && primaryEducationVisible,
+					'blue'
+				)}
+				{this.renderCluster(
+					educationSecondaryClusterIcon,
+					educationSecondaryIcon,
+					secondaryEducation,
+					zoom >= zoomLevelTolerance && secondaryEducationVisible,
+					'green'
+				)}
 			</>
+		)
+	}
+
+	private renderCluster(clusterIcon: any, markerIcon: any, markers: ReduxState['poi']['primaryEducation'], visible: boolean, color: 'green' | 'blue') {
+		return (
+			<MarkerClusterer
+				averageCenter
+				enableRetinaIcons
+				ignoreHidden
+				gridSize={100}
+				calculator={(markers: any[], numStyles: number) => ({
+					text: `<div class='cluster-marker-text-container${
+						color === 'green' ? ' cluster-marker-text-container--green' : '' +
+						color === 'blue' ? ' cluster-marker-text-container--blue' : ''
+					}'><p>${markers.length <= 10 ? markers.length : '10+'}</p></div>`,
+					index: Math.min(0, numStyles),
+					title: ''
+				})}
+				styles={[
+					{
+						textColor: '#fff',
+						url: clusterIcon,
+						height: 30,
+						width: 30,
+						anchorText: [-15, 15 + 5]
+					}
+				]}
+			>
+				{markers && markers.length > 0 && markers.map((v, i) => (
+					<Marker
+						key={i}
+						visible={visible}
+						position={{
+							lat: v[0].geo_location.coordinates[1],
+							lng: v[0].geo_location.coordinates[0]
+						}}
+						icon={markerIcon}
+					/>
+				))}
+			</MarkerClusterer>
 		)
 	}
 }
 
 const mapStateToProps = (state: ReduxState) => ({
 	zoom: state.application.zoom,
-	primaryEducation: state.travelTime.primaryEducation,
-	secondaryEducation: state.travelTime.secondaryEducation,
+	primaryEducation: state.poi.primaryEducation,
+	secondaryEducation: state.poi.secondaryEducation,
 	primaryEducationVisible: state.application.primaryEducationVisible,
 	secondaryEducationVisible: state.application.secondaryEducationVisible
 })

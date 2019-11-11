@@ -7,6 +7,9 @@ import { ReduxState, setPrimaryEducationVisibility, setSecondaryEducationVisibil
 import { CrossIcon, FilterIcon } from 'icons'
 import { colors } from '../../../constants'
 
+import educationPrimaryIcon from 'assets/education-primary.svg'
+import educationSecondaryIcon from 'assets/education-secondary.svg'
+
 const StyledContainer = styled.div`
 	position: relative;
 `
@@ -92,6 +95,10 @@ const StyledFilterOption = styled.div`
 	}
 `
 
+const StyledMarkerIcon = styled.img`
+	margin-right: .5rem;
+`
+
 const StyledLabel = styled.p<{disabled: boolean}>`
 	${(props) => props.disabled && css`
 		opacity: .5;
@@ -152,8 +159,8 @@ const StyledToggleVirtual = styled.span`
 interface StateProps {
 	primaryEducationVisible: ReduxState['application']['primaryEducationVisible']
 	secondaryEducationVisible: ReduxState['application']['secondaryEducationVisible']
-	primaryEducation: ReduxState['travelTime']['primaryEducation']
-	secondaryEducation: ReduxState['travelTime']['secondaryEducation']
+	primaryEducation: ReduxState['poi']['primaryEducation']
+	secondaryEducation: ReduxState['poi']['secondaryEducation']
 }
 interface DispatchProps {
 	setPrimaryEducationVisibility: typeof setPrimaryEducationVisibility
@@ -214,6 +221,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			<>
 				<StyledFilterOptionContainer>
 					<StyledFilterOption>
+						<StyledMarkerIcon src={educationPrimaryIcon} alt='Primary education icon'/>
 						<StyledLabel disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}>Primary education</StyledLabel>
 						<StyledToggle>
 							<StyledToggleInput
@@ -226,6 +234,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						</StyledToggle>
 					</StyledFilterOption>
 					<StyledFilterOption>
+						<StyledMarkerIcon src={educationSecondaryIcon} alt='Secondary education icon'/>
 						<StyledLabel disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}>Secondary education</StyledLabel>
 						<StyledToggle>
 							<StyledToggleInput
@@ -247,8 +256,8 @@ export class Component extends React.Component<PropsUnion, State> {
 const mapStateToProps = (state: ReduxState) => ({
 	primaryEducationVisible: state.application.primaryEducationVisible,
 	secondaryEducationVisible: state.application.secondaryEducationVisible,
-	primaryEducation: state.travelTime.primaryEducation,
-	secondaryEducation: state.travelTime.secondaryEducation
+	primaryEducation: state.poi.primaryEducation,
+	secondaryEducation: state.poi.secondaryEducation
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({

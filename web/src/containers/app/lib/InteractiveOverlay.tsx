@@ -43,7 +43,31 @@ const StyledUIContainerInner = styled.div`
 
 const StyledUIContainerInnerMainContent = styled.div`
 	flex: 1;
-	padding: 1rem;
+	padding: 1rem 1rem 60px;
+	display: flex;
+	flex-direction: column;
+`
+
+const StyledSlogan = styled.h1`
+	margin-bottom: 1rem;
+	margin-left: .5rem;
+`
+
+const StyledUIContainerInnerMainContentInner = styled.div<{isEditing: boolean}>`
+	flex: 1 1 auto;
+    overflow: auto;
+    height: 100px;
+    
+    ::-webkit-scrollbar {
+		display: none;
+	}
+    
+    ${(props) => !props.isEditing && css`
+		@media (min-width: 900px) {
+			pointer-events: all;
+			width: 27rem;
+		}
+	`}
 `
 
 const StyledFilterContainer = styled.div`
@@ -55,7 +79,9 @@ const StyledFilterContainer = styled.div`
 `
 
 const StyledLogoContainer = styled.div`
-	padding-left: 1rem;
+	position: absolute;
+	top: 0;
+	right: 1rem;
 	z-index: 10;
 `
 
@@ -268,6 +294,7 @@ const StyledOnboardingTooltipContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	pointer-events: none;
 `
 
 const StyledOnboardingTooltip = styled.div`
@@ -296,6 +323,7 @@ interface StateProps {
 	travelTimes: ReduxState['travelTime']['travelTimes']
 	overlap: ReduxState['travelTime']['overlap']
 	overlapVisible: ReduxState['application']['overlapVisible']
+	newTravelTimeDetails: ReduxState['application']['newTravelTimeDetails']
 }
 interface DispatchProps {
 	getTravelTimes: typeof getTravelTimes
@@ -321,8 +349,21 @@ export class Component extends React.Component<PropsUnion, State> {
 		justCopied: false
 	}
 	public addressFieldRef = React.createRef<any>()
+	public newEditTravelTimeRef = React.createRef<typeof EditTravelTime.prototype>()
+	public scrollableTravelTimesContainer = React.createRef<HTMLDivElement>()
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
+		if (this.props.newTravelTimeDetails !== prevProps.newTravelTimeDetails) {
+			this.setState({isCurrentlyAddingNewTravelTime: true})
+
+			if (this.scrollableTravelTimesContainer.current) {
+				this.scrollableTravelTimesContainer.current.scrollBy({behavior: 'smooth', top: 2000})
+			}
+
+			if (this.newEditTravelTimeRef.current) {
+				this.newEditTravelTimeRef.current.updateValues(this.props.newTravelTimeDetails)
+			}
+		}
 		if (this.state.currentTravelTimeEditSaving) {
 			this.setState({
 				currentTravelTimeEditSaving: null
@@ -334,11 +375,9 @@ export class Component extends React.Component<PropsUnion, State> {
 		if (!this.props.travelTimes || this.props.travelTimes.length === 0) {
 			return (
 				<>
-					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<StyledLogoContainer>
-							<LogoIcon/>
-						</StyledLogoContainer>
-					</div>
+					<StyledLogoContainer>
+						<LogoIcon/>
+					</StyledLogoContainer>
 					<StyledEntryTravelTimeContainer>
 						{this.props.loading ? <Loader/> : <EditTravelTime
 							color={colorList[0]}
@@ -357,22 +396,30 @@ export class Component extends React.Component<PropsUnion, State> {
 		}
 
 		return (
-			<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
-				<StyledUIContainerInner>
-					<StyledLogoContainer>
-						<LogoIcon/>
-					</StyledLogoContainer>
-					<StyledUIContainerInnerMainContent>
-						{this.renderTravelTimes()}
-						{this.renderActiveNew()}
-						{this.renderLoader()}
-						{this.renderMapActions()}
-					</StyledUIContainerInnerMainContent>
-					<StyledFilterContainer>
-						<Filter/>
-					</StyledFilterContainer>
-				</StyledUIContainerInner>
-			</StyledUIContainer>
+			<>
+				<StyledLogoContainer>
+					<LogoIcon/>
+				</StyledLogoContainer>
+				<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
+					<StyledUIContainerInner>
+						<StyledUIContainerInnerMainContent>
+							<StyledSlogan>How far would I live from</StyledSlogan>
+							<StyledUIContainerInnerMainContentInner
+								ref={this.scrollableTravelTimesContainer}
+								isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
+							>
+								{this.renderTravelTimes()}
+								{this.renderActiveNew()}
+								{this.renderLoader()}
+							</StyledUIContainerInnerMainContentInner>
+							{this.renderMapActions()}
+						</StyledUIContainerInnerMainContent>
+						<StyledFilterContainer>
+							<Filter/>
+						</StyledFilterContainer>
+					</StyledUIContainerInner>
+				</StyledUIContainer>
+			</>
 		)
 	}
 
@@ -397,7 +444,13 @@ export class Component extends React.Component<PropsUnion, State> {
 						>
 							<EditTravelTime
 								color={colorList[i]}
-								onFinish={(v: TravelTimeAbstraction) => this.save(travelTime.res.search_id, v)}
+								onFinish={(v: TravelTimeAbstraction) => {
+									this.save(travelTime.res.search_id, v)
+
+									if (this.newEditTravelTimeRef.current) {
+										this.newEditTravelTimeRef.current.updateValues(null)
+									}
+								}}
 								onCancel={() => this.setState({
 									currentTravelTimeEditing: null,
 									currentTravelTimeEditSaving: null
@@ -427,13 +480,18 @@ export class Component extends React.Component<PropsUnion, State> {
 			<StyledActionContainer>
 				<StyledAction
 					isDisabled={!!(this.props.travelTimes && this.props.travelTimes.length >= 6)}
-					onClick={() => !(this.props.travelTimes && this.props.travelTimes.length >= 6)
-						&& this.setState({
-							isCurrentlyAddingNewTravelTime: true,
-							currentTravelTimeEditing: null,
-							currentTravelTimeEditSaving: null
-						})
-					}
+					onClick={() => {
+						if (!(this.props.travelTimes && this.props.travelTimes.length >= 6)) {
+							this.setState({
+								isCurrentlyAddingNewTravelTime: true,
+								currentTravelTimeEditing: null,
+								currentTravelTimeEditSaving: null
+							})
+						}
+						if (this.scrollableTravelTimesContainer.current) {
+							this.scrollableTravelTimesContainer.current.scrollBy({behavior: 'smooth', top: 2000})
+						}
+					}}
 				>
 					<StyledActionIcon>
 						<AddIcon/>
@@ -451,9 +509,13 @@ export class Component extends React.Component<PropsUnion, State> {
 					>
 						<LayersIcon/>
 					</StyledActionIcon>
-					<p>{this.props.overlapVisible
-						? 'Back to normal'
-						: 'Show overlapping area'}</p>
+					<p>{
+						this.isOverlapAvailable()
+							? (this.props.overlapVisible
+								? 'Back to normal'
+								: 'Show overlapping area')
+							: 'No overlapping area'
+					}</p>
 				</StyledAction>
 				<CopyToClipboard text={window.location.href} onCopy={this.handleCopy}>
 					<StyledAction>
@@ -478,8 +540,16 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<StyledEditWrapper visible={this.state.isCurrentlyAddingNewTravelTime}>
 				<EditTravelTime
+					ref={this.newEditTravelTimeRef}
+					new={true}
 					color={colorList[(this.props.travelTimes && this.props.travelTimes.length) || 0]}
-					onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
+					onFinish={(v: TravelTimeAbstraction) => {
+						this.addTravelTime(v)
+
+						if (this.newEditTravelTimeRef.current) {
+							this.newEditTravelTimeRef.current.updateValues(null)
+						}
+					}}
 					onCancel={() => this.setState({
 						isCurrentlyAddingNewTravelTime: false
 					})}
@@ -490,6 +560,7 @@ export class Component extends React.Component<PropsUnion, State> {
 
 	private edit = (id: string) => {
 		this.setState({
+			isCurrentlyAddingNewTravelTime: false,
 			currentTravelTimeEditing: id
 		}, () => this.setFocus())
 	}
@@ -507,8 +578,9 @@ export class Component extends React.Component<PropsUnion, State> {
 			return id === v.res.search_id ? travelTime : {
 				title: v.title,
 				location: {
+					title: v.location.title,
 					lat: v.location.lat,
-					lng: v.location.lng,
+					lng: v.location.lng
 				},
 				duration: v.duration,
 				transport: v.transport
@@ -568,7 +640,8 @@ const mapStateToProps = (state: ReduxState) => ({
 	loading: state.travelTime.loading,
 	travelTimes: state.travelTime.travelTimes,
 	overlap: state.travelTime.overlap,
-	overlapVisible: state.application.overlapVisible
+	overlapVisible: state.application.overlapVisible,
+	newTravelTimeDetails: state.application.newTravelTimeDetails
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({

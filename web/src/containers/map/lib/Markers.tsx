@@ -53,7 +53,9 @@ interface StateProps {
 	overlapVisible: ReduxState['application']['overlapVisible']
 }
 interface DispatchProps {}
-interface Props {}
+interface Props {
+	onMarkerClick: (travelTimes: NonNullable<ReduxState['travelTime']['travelTimes']>) => any
+}
 type PropsUnion = StateProps & DispatchProps & Props
 
 interface State {}
@@ -70,13 +72,13 @@ export class Component extends React.Component<PropsUnion, State> {
 					<OverlayView
 						key={i}
 						position={travelTime.location}
-						mapPaneName={OverlayView.MARKER_LAYER}
+						mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
 						getPixelPositionOffset={(width, height) => ({
 							x: -(width / 2),
 							y: -(height / 2)
 						})}
 					>
-						<StyledMarker color={colorList[i]} minimalStyle={overlapVisible}>
+						<StyledMarker onClick={() => this.props.onMarkerClick([travelTime])} color={colorList[i]} minimalStyle={overlapVisible}>
 							{getTravelTypeInfo(travelTime.transport).icon}
 						</StyledMarker>
 					</OverlayView>

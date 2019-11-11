@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router-dom'
 
-import { ReduxState, getTravelTimes } from 'store'
-import { TravelType } from 'enums'
+import { ReduxState, getTravelTimes, getPois } from 'store'
+import { TransportType } from 'enums'
 
 import { InteractiveOverlay } from './lib'
 
@@ -13,6 +13,7 @@ interface StateProps {
 }
 interface DispatchProps {
 	getTravelTimes: typeof getTravelTimes
+	getPois: typeof getPois
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props & RouteComponentProps<Params>
@@ -28,7 +29,7 @@ interface Params {
 	travelSix: string
 }
 
-const encodingDivider = '--'
+const encodingDivider = '::'
 
 export class Component extends React.Component<PropsUnion, State> {
 	public readonly state: State = {}
@@ -55,6 +56,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const travelsDecoded: Parameters<typeof getTravelTimes>[0] = travelsEncoded.map((encodedTravel) => {
 			const [
 				title,
+				locationTitle,
 				lat,
 				lng,
 				duration,
@@ -64,15 +66,17 @@ export class Component extends React.Component<PropsUnion, State> {
 			return {
 				title,
 				location: {
+					title: locationTitle,
 					lat: parseFloat(lat),
 					lng: parseFloat(lng)
 				},
 				duration: parseInt(duration, 10) * 60,
-				transport: transport as TravelType
+				transport: transport as TransportType
 			}
 		})
 
 		props.getTravelTimes(travelsDecoded)
+		props.getPois()
 	}
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
@@ -97,6 +101,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const path: string = this.props.travelTimes.map((travelTime) => {
 			return [
 				travelTime.title,
+				travelTime.location.title,
 				travelTime.location.lat,
 				travelTime.location.lng,
 				travelTime.duration / 60,
@@ -113,7 +118,8 @@ const mapStateToProps = (state: ReduxState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-	getTravelTimes
+	getTravelTimes,
+	getPois
 }, dispatch)
 
 export const App = connect<StateProps, DispatchProps, Props, ReduxState>(

@@ -1,11 +1,13 @@
 import { ActionType } from './actions'
 import { Reducer } from 'redux'
-import {Tooltip} from './lib/Tooltip'
+import { Tooltip } from './lib/Tooltip'
+import { TravelTimeAbstraction } from 'interfaces'
 
 export interface State {
 	zoom: number
 	overlapVisible: boolean
 	tooltip: Tooltip | null
+	newTravelTimeDetails: Partial<TravelTimeAbstraction> | null
 	primaryEducationVisible: boolean
 	secondaryEducationVisible: boolean
 }
@@ -14,6 +16,7 @@ const initialState: State = {
 	zoom: 10,
 	overlapVisible: false,
 	tooltip: null,
+	newTravelTimeDetails: null,
 	primaryEducationVisible: false,
 	secondaryEducationVisible: false
 }
@@ -21,6 +24,7 @@ const initialState: State = {
 export type ActionDispatch = SetZoomLevel
 	| SetOverlapState
 	| SetTooltip
+	| SetNewTravelTimeDetails
 	| SetPrimaryEducationVisibility
 	| SetSecondaryEducationVisibility
 
@@ -32,6 +36,8 @@ export const reducer: Reducer<State, ActionDispatch> = (state: State = initialSt
 			return reduceSetOverlapState(state, action)
 		case ActionType.SetTooltip:
 			return reduceSetTooltip(state, action)
+		case ActionType.SetNewTravelTimeDetails:
+			return reduceSetNewTravelTimeDetails(state, action)
 		case ActionType.SetPrimaryEducationVisibility:
 			return reduceSetPrimaryEducationVisibility(state, action)
 		case ActionType.SetSecondaryEducationVisibility:
@@ -74,6 +80,18 @@ const reduceSetTooltip = (state: State, action: SetTooltip) => {
 	return {
 		...state,
 		tooltip: action.data
+	}
+}
+
+interface SetNewTravelTimeDetails {
+	type: ActionType.SetNewTravelTimeDetails
+	data: Partial<TravelTimeAbstraction> | null
+}
+
+const reduceSetNewTravelTimeDetails = (state: State, action: SetNewTravelTimeDetails) => {
+	return {
+		...state,
+		newTravelTimeDetails: action.data
 	}
 }
 

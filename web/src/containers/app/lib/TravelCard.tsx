@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ReduxState } from 'store'
 import { ClockIcon, CrossIcon, EditIcon } from 'icons'
-import { TravelType } from 'enums'
+import { TransportType } from 'enums'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
 import { shadows } from '../../../constants'
 
@@ -40,16 +40,16 @@ const StyledTravelCardInfo = styled.div`
 		flex-direction: column;
 		overflow: hidden;
 	}
+`
+
+const StyledTravelCardTitle = styled.h1`
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-bottom: 1rem;
 	
-	h1 {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		margin-bottom: 1rem;
-		
-		@media (max-width: 900px) {
-			display: none;
-		}
+	@media (max-width: 900px) {
+		display: none;
 	}
 `
 
@@ -145,7 +145,7 @@ interface Props {
 	color: string
 	title: string
 	duration: number
-	transport: TravelType
+	transport: TransportType
 	onDelete: () => any
 	onEdit: () => any
 }
@@ -161,13 +161,13 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<StyledTravelCard color={color}>
 				<StyledTravelCardInfo>
-					<h1>{title}</h1>
+					<StyledTravelCardTitle>{title}</StyledTravelCardTitle>
 					<StyledTravelCardInfoMeta>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>
 								<ClockIcon/>
 							</StyledTravelCardInfoMetaItemIcon>
-							<p className='label'>{duration / 60} minutes</p>
+							<p className='label' style={{whiteSpace: 'nowrap'}}>{duration / 60} minutes</p>
 						</StyledTravelCardInfoMetaItem>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>

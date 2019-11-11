@@ -5,5 +5,14 @@ import { ReduxState } from './configureStore'
 
 export type ReduxState = ReduxState
 export { configureStore } from './configureStore'
+
 export { getTravelTimes, removeTravelTime, purgeTravelTimes } from './travel-time/actions'
-export { setZoomLevel, setOverlapState, setTooltip, setPrimaryEducationVisibility, setSecondaryEducationVisibility } from './application/actions'
+export { getPois } from './poi/actions'
+export {
+	setZoomLevel,
+	setOverlapState,
+	setTooltip,
+	setNewTravelTimeDetails,
+	setPrimaryEducationVisibility,
+	setSecondaryEducationVisibility
+} from './application/actions'

@@ -4,11 +4,10 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { OverlayView } from 'react-google-maps'
 import styled, { css } from 'styled-components'
 
-import { ReduxState, setTooltip, getTravelTimes } from 'store'
-import { AddIcon } from 'icons'
-import { TravelTimeAbstraction } from 'interfaces'
-import { TravelType } from 'enums'
-import { shadows } from '../../../constants'
+import { ReduxState, setTooltip, setNewTravelTimeDetails } from 'store'
+import { AddIcon, CrossIcon } from 'icons'
+import { TransportType } from 'enums'
+import { colors, shadows } from '../../../constants'
 
 const StyledTooltip = styled.div`
 	position: relative;
@@ -32,11 +31,23 @@ const StyledTooltip = styled.div`
 `
 
 const StyledTooltipHeader = styled.div`
-	background-color: #1BAABD;
+	background-color: ${colors.darkGrey};
 	padding: .75rem;
-	color: #fff;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+`
+
+const StyledTooltipHeaderContent = styled.div`
+	color: #fff;
+	padding-right: .5rem;
+	flex: 1;
+`
+
+const StyledTooltipHeaderIcon = styled(CrossIcon)`
+	color: #fff;
 `
 
 const StyledContentContainer = styled.div<{isDisabled: boolean}>`
@@ -79,7 +90,7 @@ interface StateProps {
 }
 interface DispatchProps {
 	setTooltip: typeof setTooltip
-	getTravelTimes: typeof getTravelTimes
+	setNewTravelTimeDetails: typeof setNewTravelTimeDetails
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
@@ -96,7 +107,10 @@ export class Component extends React.Component<PropsUnion, State> {
 
 		return (
 			<OverlayView
-				position={tooltip.location}
+				position={{
+					lat: tooltip.lat,
+					lng: tooltip.lng
+				}}
 				mapPaneName={OverlayView.FLOAT_PANE}
 				getPixelPositionOffset={(width, height) => ({
 					x: -(width / 2),
@@ -104,15 +118,21 @@ export class Component extends React.Component<PropsUnion, State> {
 				})}
 			>
 				<StyledTooltip>
-					<StyledTooltipHeader>{tooltip.title}</StyledTooltipHeader>
+					<StyledTooltipHeader>
+						<StyledTooltipHeaderContent>{tooltip.title}</StyledTooltipHeaderContent>
+						<StyledTooltipHeaderIcon/>
+					</StyledTooltipHeader>
 					<StyledContentContainer
 						isDisabled={!!(travelTimes && travelTimes.length >= 6)}
 						onClick={() => {
 							if (travelTimes && travelTimes.length >= 6) return
-							this.addTravelTime({
-								...tooltip!,
-								duration: 30 * 60,
-								transport: TravelType.PublicTransport
+							this.props.setNewTravelTimeDetails({
+								title: tooltip.title,
+								location: {
+									title: tooltip.title,
+									lat: tooltip.lat,
+									lng: tooltip.lng
+								}
 							})
 						}}
 					>
@@ -127,17 +147,6 @@ export class Component extends React.Component<PropsUnion, State> {
 			</OverlayView>
 		)
 	}
-
-	private addTravelTime = (travelTime: TravelTimeAbstraction) => {
-		const currentTravelTimes = this.props.travelTimes || []
-		this.props.getTravelTimes([
-			...currentTravelTimes,
-			travelTime
-		])
-		this.setState({
-			isCurrentlyAddingNewTravelTime: false
-		})
-	}
 }
 
 const mapStateToProps = (state: ReduxState) => ({
@@ -146,7 +155,7 @@ const mapStateToProps = (state: ReduxState) => ({
 })
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	setTooltip,
-	getTravelTimes
+	setNewTravelTimeDetails
 }, dispatch)
 
 export const Tooltip = connect<StateProps, DispatchProps, Props, ReduxState>(

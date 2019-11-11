@@ -19,7 +19,6 @@
     "react-scripts": "3.2.0",
     "react-select": "^3.0.8",
     "redux": "^4.0.4",
-    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "scriptjs": "^2.5.9",
     "simplify-js": "^1.2.3",

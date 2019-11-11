@@ -2,13 +2,34 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
-import styled from 'styled-components'
+import styled, {createGlobalStyle} from 'styled-components'
 
 import { ZoomInIcon, ZoomOutIcon } from 'icons'
 import { ReduxState, setZoomLevel, setTooltip } from 'store'
 
 import { googleMapsStyles } from '../../constants'
 import { Markers, Pois, Polygons, Tooltip } from './lib'
+
+const GlobalGoogleMapsAttributionOffset = createGlobalStyle`
+	@media (max-width: 900px) {
+		.gm-style-cc {
+			transform: translate(-4.7rem,-5.5rem);
+		}
+	}
+`
+
+const StyledAttribution = styled.p`
+	position: absolute;
+	bottom: 1.5rem;
+	right: 5.5rem;
+	white-space: nowrap;
+	font-size: .75rem;
+	
+	@media (max-width: 900px) {
+		bottom: 7rem;
+    	right: 5rem;
+	}
+`
 
 const StyledZoomControl = styled.div`
 	position: absolute;
@@ -57,37 +78,8 @@ export class Component extends React.Component<PropsUnion, State> {
 	public setTooltipTimeout: ReturnType<typeof setTimeout> | null = null
 
 	public shouldComponentUpdate(nextProps: Readonly<PropsUnion>, nextState: Readonly<State>, nextContext: any): boolean {
-		if (this.mapRef.current && nextProps.travelTimes && nextProps.travelTimes !== this.props.travelTimes) {
-			let north = 0
-			let east = 0
-			let south = 99
-			let west = 99
-
-			for (const coordinate of nextProps.travelTimes.map((v) => v.res.shapes.map((s) => s.shell)).flat(2)) {
-				north = Math.max(north, coordinate.lat)
-				east = Math.max(east, coordinate.lng)
-				south = Math.min(south, coordinate.lat)
-				west = Math.min(west, coordinate.lng)
-			}
-
-			const zoomLevel = Math.min(getBoundsZoomLevel(
-				new google.maps.LatLngBounds(
-				{lat: south, lng: west},
-				{lat: north, lng: east}
-				),
-				{
-					width: window.innerWidth,
-					height: window.innerHeight
-				}), 12)
-
-			if (this.mapRef.current.getZoom() !== zoomLevel) {
-				this.zoomTo(this.mapRef.current.getZoom(), zoomLevel, this.mapRef.current.getZoom() > zoomLevel ? 'out' : 'in')
-			}
-
-			this.mapRef.current.panTo({
-				lat: (north + south) / 2,
-				lng: (east + west) / 2
-			})
+		if (nextProps.travelTimes && nextProps.travelTimes !== this.props.travelTimes) {
+			this.animateFitToBounds(nextProps.travelTimes)
 		}
 
 		return false
@@ -97,7 +89,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const MapFactory = withGoogleMap((props: any) =>
 			<GoogleMap
 				ref={this.mapRef}
-				defaultZoom={10}
+				defaultZoom={9}
 				defaultCenter={{
 					lat: 52.3645568,
 					lng: 4.8958031
@@ -133,7 +125,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								const streetName = address.filter((a) => a.types.indexOf('route') !== -1)[0]
 								const number = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
 
-								const addressString = ((streetName
+								const title = ((streetName
 									? streetName.short_name
 									: '')
 									+ (number
@@ -144,16 +136,27 @@ export class Component extends React.Component<PropsUnion, State> {
 										: '')) || 'Somewhere on a boat'
 
 								this.props.setTooltip({
-									location,
-									title: addressString
+									title,
+									lat: location.lat,
+									lng: location.lng
 								})
 							})
 						}, 250)
 					}
 				}}
 			>
-				{this.renderZoomControls()}
-				<Markers/>
+				{this.renderControls()}
+				<GlobalGoogleMapsAttributionOffset/>
+				<StyledAttribution>
+					Powered by <a href='https://www.traveltimeplatform.com/' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' target='_blank'>Privacy policy</a>
+				</StyledAttribution>
+				<Markers onMarkerClick={(travelTime) => {
+					this.animateFitToBounds(travelTime)
+
+					if (this.setTooltipTimeout) {
+						clearTimeout(this.setTooltipTimeout)
+					}
+				}}/>
 				<Pois/>
 				<Polygons/>
 				<Tooltip/>
@@ -168,7 +171,42 @@ export class Component extends React.Component<PropsUnion, State> {
 		)
 	}
 
-	private renderZoomControls() {
+	private animateFitToBounds = (travelTimes: NonNullable<ReduxState['travelTime']['travelTimes']>) => {
+		if (!this.mapRef.current) return
+
+		let north = 0
+		let east = 0
+		let south = 99
+		let west = 99
+
+		for (const coordinate of travelTimes.map((v) => v.res.shapes.map((s) => s.shell)).flat(2)) {
+			north = Math.max(north, coordinate.lat)
+			east = Math.max(east, coordinate.lng)
+			south = Math.min(south, coordinate.lat)
+			west = Math.min(west, coordinate.lng)
+		}
+
+		const zoomLevel = Math.min(getBoundsZoomLevel(
+			new google.maps.LatLngBounds(
+				{lat: south, lng: west},
+				{lat: north, lng: east}
+			),
+			{
+				width: window.innerWidth,
+				height: window.innerHeight
+			}), 12)
+
+		if (this.mapRef.current.getZoom() !== zoomLevel) {
+			this.zoomTo(this.mapRef.current.getZoom(), zoomLevel, this.mapRef.current.getZoom() > zoomLevel ? 'out' : 'in')
+		}
+
+		this.mapRef.current.panTo({
+			lat: (north + south) / 2,
+			lng: (east + west) / 2
+		})
+	}
+
+	private renderControls() {
 		return (
 			<StyledZoomControl>
 				<StyledZoomControlButton onClick={() => this.zoom('in')}>

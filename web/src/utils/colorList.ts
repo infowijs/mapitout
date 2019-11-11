@@ -6,5 +6,6 @@ export const colorList = [
 	colors.blue,
 	colors.green,
 	colors.purple,
-	colors.orange
+	colors.orange,
+	colors.darkGrey
 ]
