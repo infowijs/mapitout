@@ -43,7 +43,26 @@ const StyledUIContainerInner = styled.div`
 
 const StyledUIContainerInnerMainContent = styled.div`
 	flex: 1;
-	padding: 1rem;
+	padding: 1rem 1rem 60px;
+	display: flex;
+	flex-direction: column;
+`
+
+const StyledUIContainerInnerMainContentInner = styled.div<{isEditing: boolean}>`
+	flex: 1 1 auto;
+    overflow: auto;
+    height: 100px;
+    
+    ::-webkit-scrollbar {
+		display: none;
+	}
+    
+    ${(props) => !props.isEditing && css`
+		@media (min-width: 900px) {
+			pointer-events: all;
+			width: 27rem;
+		}
+	`}
 `
 
 const StyledFilterContainer = styled.div`
@@ -324,10 +343,15 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 	public addressFieldRef = React.createRef<any>()
 	public newEditTravelTimeRef = React.createRef<typeof EditTravelTime.prototype>()
+	public scrollableTravelTimesContainer = React.createRef<HTMLDivElement>()
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
 		if (this.props.newTravelTimeDetails !== prevProps.newTravelTimeDetails) {
 			this.setState({isCurrentlyAddingNewTravelTime: true})
+
+			if (this.scrollableTravelTimesContainer.current) {
+				this.scrollableTravelTimesContainer.current.scrollBy({behavior: 'smooth', top: 2000})
+			}
 
 			if (this.newEditTravelTimeRef.current) {
 				this.newEditTravelTimeRef.current.updateValues(this.props.newTravelTimeDetails)
@@ -373,9 +397,14 @@ export class Component extends React.Component<PropsUnion, State> {
 						<LogoIcon/>
 					</StyledLogoContainer>
 					<StyledUIContainerInnerMainContent>
-						{this.renderTravelTimes()}
-						{this.renderActiveNew()}
-						{this.renderLoader()}
+						<StyledUIContainerInnerMainContentInner
+							ref={this.scrollableTravelTimesContainer}
+							isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
+						>
+							{this.renderTravelTimes()}
+							{this.renderActiveNew()}
+							{this.renderLoader()}
+						</StyledUIContainerInnerMainContentInner>
 						{this.renderMapActions()}
 					</StyledUIContainerInnerMainContent>
 					<StyledFilterContainer>
@@ -443,13 +472,18 @@ export class Component extends React.Component<PropsUnion, State> {
 			<StyledActionContainer>
 				<StyledAction
 					isDisabled={!!(this.props.travelTimes && this.props.travelTimes.length >= 6)}
-					onClick={() => !(this.props.travelTimes && this.props.travelTimes.length >= 6)
-						&& this.setState({
-							isCurrentlyAddingNewTravelTime: true,
-							currentTravelTimeEditing: null,
-							currentTravelTimeEditSaving: null
-						})
-					}
+					onClick={() => {
+						if (!(this.props.travelTimes && this.props.travelTimes.length >= 6)) {
+							this.setState({
+								isCurrentlyAddingNewTravelTime: true,
+								currentTravelTimeEditing: null,
+								currentTravelTimeEditSaving: null
+							})
+						}
+						if (this.scrollableTravelTimesContainer.current) {
+							this.scrollableTravelTimesContainer.current.scrollBy({behavior: 'smooth', top: 2000})
+						}
+					}}
 				>
 					<StyledActionIcon>
 						<AddIcon/>
