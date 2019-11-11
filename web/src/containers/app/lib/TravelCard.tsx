@@ -167,7 +167,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							<StyledTravelCardInfoMetaItemIcon>
 								<ClockIcon/>
 							</StyledTravelCardInfoMetaItemIcon>
-							<p className='label'>{duration / 60} minutes</p>
+							<p className='label' style={{whiteSpace: 'nowrap'}}>{duration / 60} minutes</p>
 						</StyledTravelCardInfoMetaItem>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>
