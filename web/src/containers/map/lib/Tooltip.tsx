@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components'
 import { ReduxState, setTooltip, setNewTravelTimeDetails } from 'store'
 import { AddIcon } from 'icons'
 import { TransportType } from 'enums'
-import { shadows } from '../../../constants'
+import { colors, shadows } from '../../../constants'
 
 const StyledTooltip = styled.div`
 	position: relative;
@@ -31,7 +31,7 @@ const StyledTooltip = styled.div`
 `
 
 const StyledTooltipHeader = styled.div`
-	background-color: #1BAABD;
+	background-color: ${colors.darkGrey};
 	padding: .75rem;
 	color: #fff;
 	border-top-left-radius: 5px;
