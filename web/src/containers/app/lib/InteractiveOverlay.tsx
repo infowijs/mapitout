@@ -48,6 +48,11 @@ const StyledUIContainerInnerMainContent = styled.div`
 	flex-direction: column;
 `
 
+const StyledSlogan = styled.h1`
+	margin-bottom: 1rem;
+	margin-left: .5rem;
+`
+
 const StyledUIContainerInnerMainContentInner = styled.div<{isEditing: boolean}>`
 	flex: 1 1 auto;
     overflow: auto;
@@ -74,7 +79,9 @@ const StyledFilterContainer = styled.div`
 `
 
 const StyledLogoContainer = styled.div`
-	padding-left: 1rem;
+	position: absolute;
+	top: 0;
+	right: 1rem;
 	z-index: 10;
 `
 
@@ -368,11 +375,9 @@ export class Component extends React.Component<PropsUnion, State> {
 		if (!this.props.travelTimes || this.props.travelTimes.length === 0) {
 			return (
 				<>
-					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<StyledLogoContainer>
-							<LogoIcon/>
-						</StyledLogoContainer>
-					</div>
+					<StyledLogoContainer>
+						<LogoIcon/>
+					</StyledLogoContainer>
 					<StyledEntryTravelTimeContainer>
 						{this.props.loading ? <Loader/> : <EditTravelTime
 							color={colorList[0]}
@@ -391,27 +396,30 @@ export class Component extends React.Component<PropsUnion, State> {
 		}
 
 		return (
-			<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
-				<StyledUIContainerInner>
-					<StyledLogoContainer>
-						<LogoIcon/>
-					</StyledLogoContainer>
-					<StyledUIContainerInnerMainContent>
-						<StyledUIContainerInnerMainContentInner
-							ref={this.scrollableTravelTimesContainer}
-							isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
-						>
-							{this.renderTravelTimes()}
-							{this.renderActiveNew()}
-							{this.renderLoader()}
-						</StyledUIContainerInnerMainContentInner>
-						{this.renderMapActions()}
-					</StyledUIContainerInnerMainContent>
-					<StyledFilterContainer>
-						<Filter/>
-					</StyledFilterContainer>
-				</StyledUIContainerInner>
-			</StyledUIContainer>
+			<>
+				<StyledLogoContainer>
+					<LogoIcon/>
+				</StyledLogoContainer>
+				<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
+					<StyledUIContainerInner>
+						<StyledUIContainerInnerMainContent>
+							<StyledSlogan>How far would I live from</StyledSlogan>
+							<StyledUIContainerInnerMainContentInner
+								ref={this.scrollableTravelTimesContainer}
+								isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
+							>
+								{this.renderTravelTimes()}
+								{this.renderActiveNew()}
+								{this.renderLoader()}
+							</StyledUIContainerInnerMainContentInner>
+							{this.renderMapActions()}
+						</StyledUIContainerInnerMainContent>
+						<StyledFilterContainer>
+							<Filter/>
+						</StyledFilterContainer>
+					</StyledUIContainerInner>
+				</StyledUIContainer>
+			</>
 		)
 	}
 
