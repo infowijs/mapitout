@@ -57,37 +57,8 @@ export class Component extends React.Component<PropsUnion, State> {
 	public setTooltipTimeout: ReturnType<typeof setTimeout> | null = null
 
 	public shouldComponentUpdate(nextProps: Readonly<PropsUnion>, nextState: Readonly<State>, nextContext: any): boolean {
-		if (this.mapRef.current && nextProps.travelTimes && nextProps.travelTimes !== this.props.travelTimes) {
-			let north = 0
-			let east = 0
-			let south = 99
-			let west = 99
-
-			for (const coordinate of nextProps.travelTimes.map((v) => v.res.shapes.map((s) => s.shell)).flat(2)) {
-				north = Math.max(north, coordinate.lat)
-				east = Math.max(east, coordinate.lng)
-				south = Math.min(south, coordinate.lat)
-				west = Math.min(west, coordinate.lng)
-			}
-
-			const zoomLevel = Math.min(getBoundsZoomLevel(
-				new google.maps.LatLngBounds(
-				{lat: south, lng: west},
-				{lat: north, lng: east}
-				),
-				{
-					width: window.innerWidth,
-					height: window.innerHeight
-				}), 12)
-
-			if (this.mapRef.current.getZoom() !== zoomLevel) {
-				this.zoomTo(this.mapRef.current.getZoom(), zoomLevel, this.mapRef.current.getZoom() > zoomLevel ? 'out' : 'in')
-			}
-
-			this.mapRef.current.panTo({
-				lat: (north + south) / 2,
-				lng: (east + west) / 2
-			})
+		if (nextProps.travelTimes && nextProps.travelTimes !== this.props.travelTimes) {
+			this.animateFitToBounds(nextProps.travelTimes)
 		}
 
 		return false
@@ -154,7 +125,13 @@ export class Component extends React.Component<PropsUnion, State> {
 				}}
 			>
 				{this.renderZoomControls()}
-				<Markers/>
+				<Markers onMarkerClick={(travelTime) => {
+					this.animateFitToBounds(travelTime)
+
+					if (this.setTooltipTimeout) {
+						clearTimeout(this.setTooltipTimeout)
+					}
+				}}/>
 				<Pois/>
 				<Polygons/>
 				<Tooltip/>
@@ -167,6 +144,41 @@ export class Component extends React.Component<PropsUnion, State> {
 				mapElement={<div style={{ height: `100%` }} />}
 			/>
 		)
+	}
+
+	private animateFitToBounds = (travelTimes: NonNullable<ReduxState['travelTime']['travelTimes']>) => {
+		if (!this.mapRef.current) return
+
+		let north = 0
+		let east = 0
+		let south = 99
+		let west = 99
+
+		for (const coordinate of travelTimes.map((v) => v.res.shapes.map((s) => s.shell)).flat(2)) {
+			north = Math.max(north, coordinate.lat)
+			east = Math.max(east, coordinate.lng)
+			south = Math.min(south, coordinate.lat)
+			west = Math.min(west, coordinate.lng)
+		}
+
+		const zoomLevel = Math.min(getBoundsZoomLevel(
+			new google.maps.LatLngBounds(
+				{lat: south, lng: west},
+				{lat: north, lng: east}
+			),
+			{
+				width: window.innerWidth,
+				height: window.innerHeight
+			}), 12)
+
+		if (this.mapRef.current.getZoom() !== zoomLevel) {
+			this.zoomTo(this.mapRef.current.getZoom(), zoomLevel, this.mapRef.current.getZoom() > zoomLevel ? 'out' : 'in')
+		}
+
+		this.mapRef.current.panTo({
+			lat: (north + south) / 2,
+			lng: (east + west) / 2
+		})
 	}
 
 	private renderZoomControls() {
