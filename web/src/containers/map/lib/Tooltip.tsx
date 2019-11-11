@@ -5,7 +5,7 @@ import { OverlayView } from 'react-google-maps'
 import styled, { css } from 'styled-components'
 
 import { ReduxState, setTooltip, setNewTravelTimeDetails } from 'store'
-import { AddIcon } from 'icons'
+import { AddIcon, CrossIcon } from 'icons'
 import { TransportType } from 'enums'
 import { colors, shadows } from '../../../constants'
 
@@ -33,9 +33,21 @@ const StyledTooltip = styled.div`
 const StyledTooltipHeader = styled.div`
 	background-color: ${colors.darkGrey};
 	padding: .75rem;
-	color: #fff;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+`
+
+const StyledTooltipHeaderContent = styled.div`
+	color: #fff;
+	padding-right: .5rem;
+	flex: 1;
+`
+
+const StyledTooltipHeaderIcon = styled(CrossIcon)`
+	color: #fff;
 `
 
 const StyledContentContainer = styled.div<{isDisabled: boolean}>`
@@ -106,7 +118,10 @@ export class Component extends React.Component<PropsUnion, State> {
 				})}
 			>
 				<StyledTooltip>
-					<StyledTooltipHeader>{tooltip.title}</StyledTooltipHeader>
+					<StyledTooltipHeader>
+						<StyledTooltipHeaderContent>{tooltip.title}</StyledTooltipHeaderContent>
+						<StyledTooltipHeaderIcon/>
+					</StyledTooltipHeader>
 					<StyledContentContainer
 						isDisabled={!!(travelTimes && travelTimes.length >= 6)}
 						onClick={() => {
