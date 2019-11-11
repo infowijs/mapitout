@@ -68,7 +68,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const MapFactory = withGoogleMap((props: any) =>
 			<GoogleMap
 				ref={this.mapRef}
-				defaultZoom={10}
+				defaultZoom={9}
 				defaultCenter={{
 					lat: 52.3645568,
 					lng: 4.8958031
