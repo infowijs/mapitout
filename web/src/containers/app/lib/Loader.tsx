@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 import { colorList } from '../../../utils'
 
+const thickness = 4
+const size = 25
+
 export const Loader = styled.div`
-	border: 4px solid rgba(0, 0, 0, 0);
-	border-top: 4px solid ${colorList[0]};
+	border: ${thickness}px solid transparent;
+	border-top: ${thickness}px solid ${colorList[0]};
 	border-radius: 50%;
-	width: 1.5rem;
-	height: 1.5rem;
+	width: ${size}px;
+	height: ${size}px;
 	animation: anim 1.5s linear infinite;
 
 	@keyframes anim {
