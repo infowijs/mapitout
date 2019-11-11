@@ -2,13 +2,34 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
-import styled from 'styled-components'
+import styled, {createGlobalStyle} from 'styled-components'
 
 import { ZoomInIcon, ZoomOutIcon } from 'icons'
 import { ReduxState, setZoomLevel, setTooltip } from 'store'
 
 import { googleMapsStyles } from '../../constants'
 import { Markers, Pois, Polygons, Tooltip } from './lib'
+
+const GlobalGoogleMapsAttributionOffset = createGlobalStyle`
+	@media (max-width: 900px) {
+		.gm-style-cc {
+			transform: translate(-4.7rem,-5.5rem);
+		}
+	}
+`
+
+const StyledAttribution = styled.p`
+	position: absolute;
+	bottom: 1.5rem;
+	right: 5.5rem;
+	white-space: nowrap;
+	font-size: .75rem;
+	
+	@media (max-width: 900px) {
+		bottom: 7rem;
+    	right: 5rem;
+	}
+`
 
 const StyledZoomControl = styled.div`
 	position: absolute;
@@ -124,7 +145,11 @@ export class Component extends React.Component<PropsUnion, State> {
 					}
 				}}
 			>
-				{this.renderZoomControls()}
+				{this.renderControls()}
+				<GlobalGoogleMapsAttributionOffset/>
+				<StyledAttribution>
+					Powered by <a href='https://www.traveltimeplatform.com/' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' target='_blank'>Privacy policy</a>
+				</StyledAttribution>
 				<Markers onMarkerClick={(travelTime) => {
 					this.animateFitToBounds(travelTime)
 
@@ -181,7 +206,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		})
 	}
 
-	private renderZoomControls() {
+	private renderControls() {
 		return (
 			<StyledZoomControl>
 				<StyledZoomControlButton onClick={() => this.zoom('in')}>
