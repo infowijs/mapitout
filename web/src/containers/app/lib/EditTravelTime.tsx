@@ -404,8 +404,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				onSelect={this.handlePlacesAutocompleteSelect}
 				searchOptions={{
 					location: new google.maps.LatLng(52.3645568, 4.8958031),
-					radius: 25000,
-					types: ['address']
+					radius: 25000
 				}}
 			>
 				{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
