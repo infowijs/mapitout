@@ -8,4 +8,11 @@ export { configureStore } from './configureStore'
 
 export { getTravelTimes, removeTravelTime, purgeTravelTimes } from './travel-time/actions'
 export { getPois } from './poi/actions'
-export { setZoomLevel, setOverlapState, setTooltip, setPrimaryEducationVisibility, setSecondaryEducationVisibility } from './application/actions'
+export {
+	setZoomLevel,
+	setOverlapState,
+	setTooltip,
+	setNewTravelTimeDetails,
+	setPrimaryEducationVisibility,
+	setSecondaryEducationVisibility
+} from './application/actions'
