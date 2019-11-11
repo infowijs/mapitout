@@ -132,9 +132,7 @@ export class Component extends React.Component<PropsUnion, State> {
 									title: tooltip.title,
 									lat: tooltip.lat,
 									lng: tooltip.lng
-								},
-								duration: 30 * 60,
-								transport: TransportType.PublicTransport
+								}
 							})
 						}}
 					>

@@ -7,7 +7,7 @@ export interface State {
 	zoom: number
 	overlapVisible: boolean
 	tooltip: Tooltip | null
-	newTravelTimeDetails: TravelTimeAbstraction | null
+	newTravelTimeDetails: Partial<TravelTimeAbstraction> | null
 	primaryEducationVisible: boolean
 	secondaryEducationVisible: boolean
 }
@@ -85,7 +85,7 @@ const reduceSetTooltip = (state: State, action: SetTooltip) => {
 
 interface SetNewTravelTimeDetails {
 	type: ActionType.SetNewTravelTimeDetails
-	data: TravelTimeAbstraction | null
+	data: Partial<TravelTimeAbstraction> | null
 }
 
 const reduceSetNewTravelTimeDetails = (state: State, action: SetNewTravelTimeDetails) => {

@@ -38,7 +38,7 @@ export function setTooltip(tooltip: Tooltip | null) {
 	}
 }
 
-export function setNewTravelTimeDetails(travelTime: TravelTimeAbstraction | null) {
+export function setNewTravelTimeDetails(travelTime: Partial<TravelTimeAbstraction> | null) {
 	return (dispatch: (action: ActionDispatch) => {}) => {
 		dispatch({
 			type: ActionType.SetNewTravelTimeDetails,
