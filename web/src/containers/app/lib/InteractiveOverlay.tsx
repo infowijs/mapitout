@@ -380,6 +380,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledLogoContainer>
 					<StyledEntryTravelTimeContainer>
 						{this.props.loading ? <Loader/> : <EditTravelTime
+							ref={this.newEditTravelTimeRef}
 							color={colorList[0]}
 							onFinish={(v: TravelTimeAbstraction) => {this.addTravelTime(v)}}
 							onCancel={() => null}
