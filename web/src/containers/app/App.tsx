@@ -37,6 +37,8 @@ export class Component extends React.Component<PropsUnion, State> {
 	constructor(props: PropsUnion) {
 		super(props)
 
+		props.getPois()
+
 		const params = props.match.params
 
 		const travelsEncoded: string[] = [
@@ -76,7 +78,6 @@ export class Component extends React.Component<PropsUnion, State> {
 		})
 
 		props.getTravelTimes(travelsDecoded)
-		props.getPois()
 	}
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
