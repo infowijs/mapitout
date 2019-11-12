@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route } from 'react-router-dom'
+import * as Sentry from '@sentry/browser'
 // @ts-ignore
 import scriptjs from 'scriptjs'
 import dotenv from 'dotenv'
@@ -17,6 +18,10 @@ import '../node_modules/normalize.css/normalize.css'
 import './index.css'
 
 dotenv.config()
+
+if (process.env.REACT_APP_SENTRY_DSN) {
+	Sentry.init({dsn: process.env.REACT_APP_SENTRY_DSN})
+}
 
 const store = configureStore()
 
