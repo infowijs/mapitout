@@ -473,7 +473,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const currentOption = options.filter((t) => t.value === this.state.duration)[0] || ''
 		return (
 			<StyledSegment>
-				<StyledLabel className='label' as='p' color={this.props.color}>in</StyledLabel>
+				<StyledLabel className='label' as='p' color={this.props.color}>by</StyledLabel>
 				<StyledSelect
 					styles={{control: () => null}}
 					classNamePrefix='react-select'
