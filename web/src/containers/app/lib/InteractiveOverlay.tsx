@@ -403,7 +403,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
 					<StyledUIContainerInner>
 						<StyledUIContainerInnerMainContent>
-							<StyledSlogan>How far would I live from</StyledSlogan>
+							<StyledSlogan>How far could I live from</StyledSlogan>
 							<StyledUIContainerInnerMainContentInner
 								ref={this.scrollableTravelTimesContainer}
 								isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
