@@ -36,6 +36,7 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 	`};
     overflow: auto;
     
+    scrollbar-width: none;
     -ms-overflow-style: none;
     ::-webkit-scrollbar {
 		display: none;
