@@ -102,6 +102,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					rotateControl: false,
 					fullscreenControl: false,
 					disableDefaultUI: true,
+					clickableIcons: false,
 					styles: googleMapsStyles
 				}}
 				onZoomChanged={() => this.props.setZoomLevel(Math.round(this.mapRef.current!.getZoom()))}
