@@ -83,6 +83,42 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 		]
 	},
 	{
+		featureType: 'poi.attraction',
+		elementType: 'all',
+		stylers: [
+			{
+				visibility: 'on'
+			}
+		]
+	},
+	{
+		featureType: 'poi.business',
+		elementType: 'all',
+		stylers: [
+			{
+				visibility: 'off'
+			}
+		]
+	},
+	{
+		featureType: 'poi.government',
+		elementType: 'all',
+		stylers: [
+			{
+				visibility: 'on'
+			}
+		]
+	},
+	{
+		featureType: 'poi.medical',
+		elementType: 'all',
+		stylers: [
+			{
+				visibility: 'on'
+			}
+		]
+	},
+	{
 		featureType: 'poi.park',
 		elementType: 'geometry',
 		stylers: [
@@ -122,6 +158,15 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 		]
 	},
 	{
+		featureType: 'road.highway',
+		elementType: 'labels.icon',
+		stylers: [
+			{
+				visibility: 'off'
+			}
+		]
+	},
+	{
 		featureType: 'road.arterial',
 		elementType: 'geometry',
 		stylers: [
@@ -130,6 +175,15 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 			},
 			{
 				lightness: 18
+			}
+		]
+	},
+	{
+		featureType: 'road.arterial',
+		elementType: 'labels.icon',
+		stylers: [
+			{
+				visibility: 'off'
 			}
 		]
 	},
@@ -146,6 +200,15 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 		]
 	},
 	{
+		featureType: 'road.local',
+		elementType: 'labels.icon',
+		stylers: [
+			{
+				visibility: 'off'
+			}
+		]
+	},
+	{
 		featureType: 'transit',
 		elementType: 'geometry',
 		stylers: [
@@ -154,6 +217,15 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 			},
 			{
 				lightness: 19
+			}
+		]
+	},
+	{
+		featureType: 'transit.station',
+		elementType: 'labels.icon',
+		stylers: [
+			{
+				visibility: 'on'
 			}
 		]
 	},
