@@ -15,7 +15,7 @@ import { EditTravelTime } from './EditTravelTime'
 import { Loader } from './Loader'
 import { Filter } from './Filter'
 
-const StyledUIContainer = styled.main<{menuActive: boolean}>`
+const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -23,7 +23,6 @@ const StyledUIContainer = styled.main<{menuActive: boolean}>`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	pointer-events: none;
 	
 	@media (max-width: 900px) {
 		transition: left 300ms;
@@ -31,21 +30,24 @@ const StyledUIContainer = styled.main<{menuActive: boolean}>`
 	}
 `
 
-const StyledUIContainerInner = styled.div`
-	flex: 1;
-	display: flex;
-    flex-direction: column;
+const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
+    ${(props) => !props.isEditing && css`
+		width: 27rem;
+	`};
+    overflow: auto;
+    
+    -ms-overflow-style: none;
+    ::-webkit-scrollbar {
+		display: none;
+	}
 
 	@media (max-width: 900px) {
 		padding-left: 100vw;
 	}
 `
 
-const StyledUIContainerInnerMainContent = styled.div`
-	flex: 1;
+const StyledUIContainerInnerContent = styled.div`
 	padding: 1rem 1rem 60px;
-	display: flex;
-	flex-direction: column;
 `
 
 const StyledSlogan = styled.h1`
@@ -53,29 +55,15 @@ const StyledSlogan = styled.h1`
 	margin-left: .5rem;
 `
 
-const StyledUIContainerInnerMainContentInner = styled.div<{isEditing: boolean}>`
-	flex: 1 1 auto;
-    overflow: auto;
-    height: 100px;
-    
-    ::-webkit-scrollbar {
-		display: none;
-	}
-    
-    ${(props) => !props.isEditing && css`
-		@media (min-width: 900px) {
-			pointer-events: all;
-			width: 27rem;
-		}
-	`}
-`
-
 const StyledFilterContainer = styled.div`
+	position: absolute;
+	bottom: 0;
+	left: 0;
 	width: 27rem;
 	max-width: 100vw;
 	box-sizing: border-box;
 	
-	padding: 0 1rem 0;
+	padding: 0 1rem;
 `
 
 const StyledLogoContainer = styled.div`
@@ -102,8 +90,6 @@ const StyledAction = styled.div<{isDisabled?: boolean}>`
 	flex-direction: row;
 	align-items: center;
 	z-index: 0;
-	
-	pointer-events: auto;
 	
 	@media (max-width: 900px) {
 		margin: .25rem 0;
@@ -216,10 +202,9 @@ const sharedWrapperVisibilityAnimation = css<{visible: boolean}>`
 		max-height: 0;
 		
 		& > * {
-		opacity: 0;
+			opacity: 0;
 		}
 	`}
-	}
 `
 
 
@@ -294,7 +279,6 @@ const StyledOnboardingTooltipContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	pointer-events: none;
 `
 
 const StyledOnboardingTooltip = styled.div`
@@ -356,10 +340,6 @@ export class Component extends React.Component<PropsUnion, State> {
 		if (this.props.newTravelTimeDetails !== prevProps.newTravelTimeDetails) {
 			this.setState({isCurrentlyAddingNewTravelTime: true})
 
-			if (this.scrollableTravelTimesContainer.current) {
-				this.scrollableTravelTimesContainer.current.scrollBy({behavior: 'smooth', top: 2000})
-			}
-
 			if (this.newEditTravelTimeRef.current) {
 				this.newEditTravelTimeRef.current.updateValues(this.props.newTravelTimeDetails)
 			}
@@ -392,6 +372,9 @@ export class Component extends React.Component<PropsUnion, State> {
 							<p>Click anywhere on the map to add a location</p>
 						</StyledOnboardingTooltip>
 					</StyledOnboardingTooltipContainer>
+					<StyledFilterContainer>
+						<Filter/>
+					</StyledFilterContainer>
 				</>
 			)
 		}
@@ -402,24 +385,33 @@ export class Component extends React.Component<PropsUnion, State> {
 					<LogoIcon/>
 				</StyledLogoContainer>
 				<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
-					<StyledUIContainerInner>
-						<StyledUIContainerInnerMainContent>
+					<StyledUIContainerInner
+						ref={this.scrollableTravelTimesContainer}
+						isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
+						onClick={(e) => {
+							if (
+								(!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime)
+								&& e.target === this.scrollableTravelTimesContainer.current
+							) {
+								this.setState({
+									isCurrentlyAddingNewTravelTime: false,
+									currentTravelTimeEditing: null
+								})
+							}
+						}}
+					>
+						<StyledUIContainerInnerContent>
 							<StyledSlogan>How far could I live from</StyledSlogan>
-							<StyledUIContainerInnerMainContentInner
-								ref={this.scrollableTravelTimesContainer}
-								isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}
-							>
-								{this.renderTravelTimes()}
-								{this.renderActiveNew()}
-								{this.renderLoader()}
-							</StyledUIContainerInnerMainContentInner>
+							{this.renderTravelTimes()}
+							{this.renderActiveNew()}
+							{this.renderLoader()}
 							{this.renderMapActions()}
-						</StyledUIContainerInnerMainContent>
-						<StyledFilterContainer>
-							<Filter/>
-						</StyledFilterContainer>
+						</StyledUIContainerInnerContent>
 					</StyledUIContainerInner>
 				</StyledUIContainer>
+				<StyledFilterContainer>
+					<Filter/>
+				</StyledFilterContainer>
 			</>
 		)
 	}
@@ -488,9 +480,6 @@ export class Component extends React.Component<PropsUnion, State> {
 								currentTravelTimeEditing: null,
 								currentTravelTimeEditSaving: null
 							})
-						}
-						if (this.scrollableTravelTimesContainer.current) {
-							this.scrollableTravelTimesContainer.current.scrollBy({behavior: 'smooth', top: 2000})
 						}
 					}}
 				>
