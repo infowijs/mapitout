@@ -280,6 +280,10 @@ const StyledOnboardingTooltipContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	
+	@media (max-width: 1200px) {
+		display: none;
+	}
 `
 
 const StyledOnboardingTooltip = styled.div`

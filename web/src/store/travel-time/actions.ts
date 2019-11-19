@@ -29,11 +29,18 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
 
 	const departure_searches: TravelTimeBody['departure_searches'] = travelsWithIds.map((travel) => ({
 		id: travel.id,
-		coords: travel.location,
+		coords: {
+			lat: travel.location.lat,
+			lng: travel.location.lng
+		},
 		departure_time,
 		travel_time: travel.duration,
 		transportation: {
 			type: travel.transport
+		},
+		range: {
+			enabled: true,
+			width: 2
 		}
 	}))
 
