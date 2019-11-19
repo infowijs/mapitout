@@ -37,6 +37,10 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
 		travel_time: travel.duration,
 		transportation: {
 			type: travel.transport
+		},
+		range: {
+			enabled: true,
+			width: 2
 		}
 	}))
 
