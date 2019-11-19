@@ -1,24 +1,30 @@
 import { TransportType } from 'enums'
 
 interface DepartureSearch {
-    id: string,
+    id: string
     coords: {
-        lat: number,
+        lat: number
         lng: number
-    },
-    departure_time: string,
-    travel_time: number,
+    }
+    departure_time: string
+    travel_time: number
     transportation: {
         type: TransportType
     }
 }
 
 interface MergedType {
-    id: string,
+    id: string
     search_ids: string[]
+}
+
+interface Range {
+	enabled: boolean
+	width: number
 }
 
 export interface TravelTimeBody {
     departure_searches: DepartureSearch[]
 	intersections?: MergedType[]
+	range?: Range
 }
