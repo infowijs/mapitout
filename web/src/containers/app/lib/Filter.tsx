@@ -78,6 +78,7 @@ const StyledFilterOptionContainer = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	flex-wrap: wrap;
 `
 
 const StyledFilterOption = styled.div`
@@ -86,8 +87,15 @@ const StyledFilterOption = styled.div`
 	flex-direction: row;
 	align-items: center;
 	
-	:not(:last-child) {
-		margin-right: .5rem;
+	@media (min-width: 500px) {
+		:not(:last-child) {
+			margin-right: .5rem;
+		}
+	}
+	@media (max-width: 500px) {
+		:not(:last-child) {
+			margin-bottom: .5rem;
+		}
 	}
 	
 	p {
@@ -100,9 +108,11 @@ const StyledMarkerIcon = styled.img`
 `
 
 const StyledLabel = styled.p<{disabled: boolean}>`
+	flex: 1;
+	
 	${(props) => props.disabled && css`
 		opacity: .5;
-	`}
+	`};
 `
 
 const StyledToggle = styled.label`
