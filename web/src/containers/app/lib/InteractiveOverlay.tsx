@@ -23,6 +23,7 @@ const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	pointer-events: none;
 	
 	@media (max-width: 900px) {
 		transition: left 300ms;
@@ -35,6 +36,7 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 		width: 27rem;
 	`};
     overflow: auto;
+	pointer-events: none;
     
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -49,6 +51,7 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 
 const StyledUIContainerInnerContent = styled.div`
 	padding: 1rem 1rem 60px;
+	pointer-events: none;
 	
 	@media (max-width: 900px) {
 		padding-top: 3rem;
@@ -86,6 +89,7 @@ const StyledActionContainer = styled.div`
 `
 
 const StyledAction = styled.div<{isDisabled?: boolean}>`
+	pointer-events: auto;
 	position: relative;
 	cursor: ${(props) => props.isDisabled ? 'default' : 'pointer'};
 	transition: 100ms;
@@ -157,6 +161,9 @@ const StyledCopyNotification = styled.div`
 	background-color: #fff;
 	
 	@media (max-width: 900px) {
+		p {
+			display: initial;
+		}
 		bottom: 50%;
 		transform: translateY(50%);
 	}
