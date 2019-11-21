@@ -49,6 +49,10 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 
 const StyledUIContainerInnerContent = styled.div`
 	padding: 1rem 1rem 60px;
+	
+	@media (max-width: 900px) {
+		padding-top: 3rem;
+	}
 `
 
 const StyledSlogan = styled.h1`
