@@ -40,7 +40,7 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
 		},
 		range: {
 			enabled: true,
-			width: 2
+			width: 7200
 		}
 	}))
 
