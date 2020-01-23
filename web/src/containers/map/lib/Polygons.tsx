@@ -24,7 +24,10 @@ interface State {
 	coordinates: Array<[Coordinate[], Coordinate[]]>
 }
 
+// Outer range clamps for zoom level
 const range = [7, 12]
+// Minimum amount of points within a polygon based on the ranges described in `range`
+const minimumPolyRange = [20, 2]
 export class Component extends React.Component<PropsUnion, State> {
 	public readonly state: State = {
 		coordinates: [[[], []]]
@@ -49,7 +52,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<>
 				{overlap && overlap.shapes.map((shape, i) =>
-					shape.shell.length > 10 && this.renderPolygon(
+					 this.renderPolygon(
 						`overlap:${i}`,
 						'#000',
 						shape,
@@ -58,7 +61,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				)}
 				{travelTimes && travelTimes.map((travelTime, i) =>
 					travelTime.res.shapes.map((shape, j) =>
-						shape.shell.length > 10 && this.renderPolygon(
+						this.renderPolygon(
 							`${travelTime.res.search_id}:${j}`,
 							colorList[i],
 							shape,
@@ -71,6 +74,10 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private renderPolygon(key: string, color: string, shape: NonNullable<StateProps['overlap']>['shapes'][0], visible: boolean) {
+		const progress = Math.max(Math.min(1 - (this.props.zoom - range[0]) / (range[1] - range[0]), 1), 0)
+
+		if (shape.shell.length <= (minimumPolyRange[1] - minimumPolyRange[0]) * (1 - progress) + minimumPolyRange[0]) return null
+
 		return (
 			<Polygon
 				key={key}
@@ -83,16 +90,16 @@ export class Component extends React.Component<PropsUnion, State> {
 					fillOpacity: .1
 				}}
 				paths={[
-					this.getSmoothShape(shape.shell),
-					...shape.holes.filter((hole) => hole.length > 15).map((hole) => this.getSmoothShape(hole))
+					this.getSmoothShape(shape.shell, progress),
+					...shape.holes.filter((hole) => hole.length > 15).map((hole) => this.getSmoothShape(hole, progress))
 				]}
 				visible={visible}
 			/>
 		)
 	}
 
-	private getSmoothShape(coordinates: Array<{lat: number, lng: number}>) {
-		const progress = Math.max(Math.min(1 - (this.props.zoom - range[0]) / (range[1] - range[0]), 1), 0)
+	private getSmoothShape(coordinates: Array<{lat: number, lng: number}>, progress: number) {
+		// return coordinates
 		const simplifiedShape = simplify(coordinates.map((coordinate) => ({
 			x: coordinate.lat,
 			y: coordinate.lng
