@@ -353,6 +353,9 @@ export class Component extends React.Component<PropsUnion, State> {
 	public scrollableTravelTimesContainer = React.createRef<HTMLDivElement>()
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
+		if (this.props.overlap && this.props.overlap.shapes[0].shell.length === 0 && this.props.overlapVisible) {
+			this.props.setOverlapState(false)
+		}
 		if (this.props.newTravelTimeDetails !== prevProps.newTravelTimeDetails) {
 			this.setState({isCurrentlyAddingNewTravelTime: true})
 
