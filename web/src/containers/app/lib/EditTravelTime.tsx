@@ -406,6 +406,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					location: new google.maps.LatLng(52.3645568, 4.8958031),
 					radius: 25000
 				}}
+				debounce={1400}
 			>
 				{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 					<StyledAutocompleteContainer>
