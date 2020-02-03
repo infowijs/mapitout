@@ -8,12 +8,8 @@ import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOver
 import { TravelTimeAbstraction } from 'interfaces'
 import { AddIcon, InfoIcon, LayersIcon, LinkIcon, LogoIcon } from 'icons'
 import { colorList, hexColorToRGBA } from 'utils'
+import { EditTravelTime, Loader, Filter, TravelCard } from 'components'
 import { shadows } from '../../../constants'
-
-import { TravelCard } from './TravelCard'
-import { EditTravelTime } from './EditTravelTime'
-import { Loader } from './Loader'
-import { Filter } from './Filter'
 
 const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	position: absolute;
@@ -23,20 +19,26 @@ const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	pointer-events: none;
 	
 	@media (max-width: 900px) {
 		transition: left 300ms;
 		left: ${(props) => props.menuActive ? 0 : '-100%'};
+		${(props) => props.menuActive && css`
+			overflow: scroll;
+		`}
 	}
 `
 
 const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
     ${(props) => !props.isEditing && css`
-		width: 27rem;
+		@media (min-width: 900px) {
+			width: 27rem;
+		}
 	`};
+    @media (max-width: 900px) {
+		overflow: visible;
+    }
     overflow: auto;
-	pointer-events: none;
     
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -54,19 +56,23 @@ const StyledUIContainerInnerContent = styled.div`
 	pointer-events: none;
 	
 	@media (max-width: 900px) {
-		padding-top: 3rem;
+		padding-top: 2rem;
+		width: 2.5rem;
+		overflow: visible;
 	}
 `
 
 const StyledSlogan = styled.h1`
 	margin-bottom: 1rem;
 	margin-left: .5rem;
+	white-space: nowrap;
 `
 
 const StyledFilterContainer = styled.div`
 	position: absolute;
 	bottom: 0;
 	left: 0;
+	height: 0;
 	width: 27rem;
 	max-width: 100vw;
 	box-sizing: border-box;
@@ -83,9 +89,9 @@ const StyledLogoContainer = styled.div`
 
 const StyledActionContainer = styled.div`
 	margin-top: .5rem;
+    display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
-    display: inline-flex;
 `
 
 const StyledAction = styled.div<{isDisabled?: boolean}>`
@@ -193,39 +199,34 @@ const StyledCopyNotification = styled.div`
 `
 
 const StyledLoaderContainer = styled.div`
-	margin: 1rem 0 1rem 1rem;
+	margin: 1rem;
 `
 
 const sharedWrapperVisibilityAnimation = css<{visible: boolean}>`
 	pointer-events: ${(props) => props.visible ? 'auto' : 'none'};
 	transition: 500ms;
 	
-	& > * {
-		transition: 500ms;
-	}
 	
 	${(props) => props.visible ? css`
-		max-height: 200px;
-		
-		& > * {
+		@media (min-width: 900px) {
+			max-height: 200px;
 			opacity: 1;
 		}
 	` : css`
-		max-height: 0;
-		
-		& > * {
+		@media (min-width: 900px) {
+			max-height: 0;
 			opacity: 0;
+		}
+		@media (max-width: 900px) {
+			display: none;
 		}
 	`}
 `
 
-
-
 const StyledCardContainer = styled.div<{visible: boolean}>`	
 	${sharedWrapperVisibilityAnimation};
 	
-	width: 25rem;
-	max-width: 100vw;
+	max-width: 25rem;
 `
 
 const StyledEditWrapper = styled.div<{visible: boolean}>`
@@ -236,7 +237,7 @@ const StyledEditWrapper = styled.div<{visible: boolean}>`
 		width: 100vw;
 		top: 0;
 		left: 0;
-		padding: 5rem 1.5rem 0;
+		padding: 5rem 1rem 250px;
     	box-sizing: border-box;
     	z-index: 0;
     	
@@ -266,9 +267,11 @@ const StyledEntryTravelTimeContainer = styled.div`
 	}
 	
 	@media (max-width: 900px) {
-		padding: 6rem 1rem 0;
+		padding: 6rem 1rem 400px;
 		box-sizing: border-box;
 		z-index: 0;
+		max-height: 100%;
+		overflow: scroll;
 		
 		:before {
     		content: '';
@@ -283,7 +286,7 @@ const StyledEntryTravelTimeContainer = styled.div`
 	}
 `
 
-const StyledOnboardingTooltipContainer = styled.div`
+const StyledOnboardingTooltipContainer = styled.div`	
 	width: 100%;
 	position: absolute;
 	bottom: 0;
@@ -291,6 +294,7 @@ const StyledOnboardingTooltipContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	pointer-events: none;
 	
 	@media (max-width: 1200px) {
 		display: none;
@@ -353,7 +357,13 @@ export class Component extends React.Component<PropsUnion, State> {
 	public scrollableTravelTimesContainer = React.createRef<HTMLDivElement>()
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
-		if (this.props.overlap && this.props.overlap.shapes[0].shell.length === 0 && this.props.overlapVisible) {
+		if (
+			this.props.overlap
+			&& this.props.overlap.shapes
+			&& this.props.overlap.shapes.length > 0
+			&& this.props.overlap.shapes[0].shell.length === 0
+			&& this.props.overlapVisible
+		) {
 			this.props.setOverlapState(false)
 		}
 		if (this.props.newTravelTimeDetails !== prevProps.newTravelTimeDetails) {
@@ -392,7 +402,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						</StyledOnboardingTooltip>
 					</StyledOnboardingTooltipContainer>
 					<StyledFilterContainer>
-						<Filter/>
+						<Filter isEditing={true}/>
 					</StyledFilterContainer>
 				</>
 			)
@@ -429,7 +439,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledUIContainerInner>
 				</StyledUIContainer>
 				<StyledFilterContainer>
-					<Filter/>
+					<Filter isEditing={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}/>
 				</StyledFilterContainer>
 			</>
 		)

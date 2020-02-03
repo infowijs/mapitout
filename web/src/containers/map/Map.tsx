@@ -103,7 +103,8 @@ export class Component extends React.Component<PropsUnion, State> {
 					fullscreenControl: false,
 					disableDefaultUI: true,
 					clickableIcons: false,
-					styles: googleMapsStyles
+					styles: googleMapsStyles,
+					gestureHandling: 'greedy'
 				}}
 				onZoomChanged={() => this.props.setZoomLevel(Math.round(this.mapRef.current!.getZoom()))}
 				onDblClick={() => this.setTooltipTimeout && clearTimeout(this.setTooltipTimeout)}

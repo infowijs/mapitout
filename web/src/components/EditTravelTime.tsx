@@ -10,7 +10,7 @@ import { TravelTimeAbstraction } from 'interfaces'
 import { TransportType } from 'enums'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
 import { DropdownIcon, GoIcon, CrossIcon } from 'icons'
-import { shadows } from '../../../constants'
+import { shadows } from '../constants'
 
 // Component container styling
 const StyledContainer = styled.div`	
@@ -31,7 +31,9 @@ const StyledContainer = styled.div`
 `
 
 // Title wrapper
-const StyledTitle = styled.div`
+const StyledTitle = styled.p`
+	white-space: nowrap;
+	
 	@media (min-width: 900px) {
 		white-space: nowrap;
 		display: flex;
@@ -58,7 +60,7 @@ const StyledSegment = styled.div<{withoutRightMargin?: boolean}>`
 		`}
 	}
 	@media (max-width: 900px) {
-    	padding: 1rem 1.5rem;
+    	padding: .75rem 1rem;
     	border-radius: 99px;
     	background: #fff;
     	margin-bottom: .5rem;
@@ -110,6 +112,7 @@ const StyledSelect = styled(Select)<{color: string, minWidth: number}>`
 			position: absolute;
 			top: 100%;
 			min-width: 300px;
+			left: -.75rem;
 			margin-top: 1rem;
 			${shadows.normal};
 			border-radius: 10px;
@@ -307,7 +310,7 @@ const StyledCancelButton = styled.p`
 		display: inline-block;
 		text-align: center;
 		color: rgba(0, 0, 0, .5);
-		margin: 1rem 0;
+		margin: 1rem 0 0;
 		padding: .5rem 1rem;
 		background-color: #D9F0F3;
 		border-radius: 99px;
@@ -329,11 +332,19 @@ type PropsUnion = StateProps & DispatchProps & Props
 interface State extends Partial<TravelTimeAbstraction> {}
 
 export class Component extends React.Component<PropsUnion, State> {
+	private sharedFieldProps = {
+		onBlur: () => {
+			// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input
+			// field so that the input field is always in view, it does unfortunately not
+			// reset when you close the keyboard
+			// window.scrollTo(0, 0)
+		}
+	}
 	constructor(props: PropsUnion) {
 		super(props)
 
 		this.state = {
-			title: props.title,
+			title: props.location ? props.location.title : '',
 			location: props.location,
 			duration: props.duration,
 			transport: props.transport
@@ -344,9 +355,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<>
 				<StyledContainer>
-					<StyledTitle>
-						<p>How far could I live from</p>
-					</StyledTitle>
+					<StyledTitle>How far could I live from</StyledTitle>
 					{this.renderInputAddress()}
 					{this.renderInputDuration()}
 					{this.renderInputTraveltype()}
@@ -404,7 +413,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				onSelect={this.handlePlacesAutocompleteSelect}
 				searchOptions={{
 					location: new google.maps.LatLng(52.3645568, 4.8958031),
-					radius: 25000
+					radius: 10000
 				}}
 				debounce={1400}
 			>
@@ -416,12 +425,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								{...getInputProps({
 									placeholder: 'Address',
 									name: 'address',
-									onBlur: () => {
-										// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input
-										// field so that the input field is always in view, it does unfortunately not
-										// reset when you close the keyboard
-										window.scrollTo(0, 0)
-									}
+									...this.sharedFieldProps
 								})}
 							/>
 						</StyledSegment>
@@ -481,18 +485,13 @@ export class Component extends React.Component<PropsUnion, State> {
 					minWidth={110}
 					value={currentOption}
 					onChange={(v: Entry) => v && 'value' in v && this.setState({duration: v.value})}
-					onBlur={() => {
-						// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input field so that
-						// the input field is always in view, it does unfortunately not reset when you close the
-						// keyboard
-						window.scrollTo(0, 0)
-					}}
 					options={options}
 					components={{
 						DropdownIndicator: () => <DropdownIcon style={{marginLeft: '.25rem'}}/>,
 						IndicatorSeparator: null
 					}}
 					color={this.props.color}
+					{...this.sharedFieldProps}
 				/>
 			</StyledSegment>
 		)
@@ -519,12 +518,6 @@ export class Component extends React.Component<PropsUnion, State> {
 					minWidth={160}
 					value={currentOption}
 					onChange={(v: Entry) => v && 'value' in v && this.setState({transport: v.value})}
-					onBlur={() => {
-						// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input field so that
-						// the input field is always in view, it does unfortunately not reset when you close the
-						// keyboard
-						window.scrollTo(0, 0)
-					}}
 					options={options}
 					components={{
 						DropdownIndicator: () => <DropdownIcon style={{marginLeft: 10}}/>,
@@ -535,6 +528,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						)
 					}}
 					color={this.props.color}
+					{...this.sharedFieldProps}
 				/>
 			</StyledSegment>
 		)
