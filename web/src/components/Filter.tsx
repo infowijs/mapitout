@@ -14,18 +14,26 @@ const StyledContainer = styled.div`
 	position: relative;
 `
 
-const StyledFilter = styled.div<{isEditing: boolean, active: boolean, contentHeight: number}>`
+const StyledContainerOverflow = styled.div<{isEditing: boolean, active: boolean, contentHeight: number}>`
 	position: absolute;
-	pointer-events: auto;
-	width: 100%;
-	top: ${(props) => ((props.active ? props.contentHeight : 0) + 60) * -1}px;
+	bottom: 0;
+	height: ${(props) => (props.active ? props.contentHeight : 0) + 60}px;
 	transition: 400ms;
+	width: 100%;
+	overflow: hidden;
 	
 	${(props) => props.isEditing && css`
 		@media (max-width: 900px) {
-			top: 0;
+			height: 0;
 		}
 	`}
+`
+
+const StyledFilter = styled.div`
+	position: absolute;
+	top: 0;
+	pointer-events: auto;
+	width: 100%;
 `
 
 const StyledHeader = styled.div<{active: boolean}>`
@@ -216,22 +224,24 @@ export class Component extends React.Component<PropsUnion, State> {
 		const {isEditing} = this.props
 		return (
 			<StyledContainer>
-				<StyledFilter active={active} contentHeight={height} isEditing={isEditing}>
-					<StyledHeader active={active} onClick={() => !active && this.setState({active: true})}>
-						<p>Points of interest</p>
-						<StyledIconContainer onClick={() => active && this.setState({active: false})}>
-							<StyledIcon active={active} visible={!active} index={0}>
-								<FilterIcon/>
-							</StyledIcon>
-							<StyledIcon active={active} visible={active} index={1}>
-								<CrossIcon/>
-							</StyledIcon>
-						</StyledIconContainer>
-					</StyledHeader>
-					<StyledContent ref={this.contentRef}>
-						{this.renderFilterContent()}
-					</StyledContent>
-				</StyledFilter>
+				<StyledContainerOverflow active={active} contentHeight={height} isEditing={isEditing}>
+					<StyledFilter>
+						<StyledHeader active={active} onClick={() => !active && this.setState({active: true})}>
+							<p>Points of interest</p>
+							<StyledIconContainer onClick={() => active && this.setState({active: false})}>
+								<StyledIcon active={active} visible={!active} index={0}>
+									<FilterIcon/>
+								</StyledIcon>
+								<StyledIcon active={active} visible={active} index={1}>
+									<CrossIcon/>
+								</StyledIcon>
+							</StyledIconContainer>
+						</StyledHeader>
+						<StyledContent ref={this.contentRef}>
+							{this.renderFilterContent()}
+						</StyledContent>
+					</StyledFilter>
+				</StyledContainerOverflow>
 			</StyledContainer>
 		)
 	}
@@ -249,6 +259,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								defaultChecked={this.props.primaryEducationVisible}
 								disabled={!(this.props.primaryEducation && this.props.primaryEducation.length > 0)}
 								onChange={(e) => this.props.setPrimaryEducationVisibility(e.target.checked)}
+								onFocus={() => this.setState({active: true})}
 							/>
 							<StyledToggleVirtual/>
 						</StyledToggle>
@@ -262,6 +273,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								defaultChecked={this.props.secondaryEducationVisible}
 								disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}
 								onChange={(e) => this.props.setSecondaryEducationVisibility(e.target.checked)}
+								onFocus={() => this.setState({active: true})}
 							/>
 							<StyledToggleVirtual/>
 						</StyledToggle>
