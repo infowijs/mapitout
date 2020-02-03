@@ -19,7 +19,6 @@ const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	pointer-events: none;
 	
 	@media (max-width: 900px) {
 		transition: left 300ms;
@@ -32,7 +31,6 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 		width: 27rem;
 	`};
     overflow: auto;
-	pointer-events: none;
     
     scrollbar-width: none;
     -ms-overflow-style: none;
