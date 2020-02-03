@@ -8,12 +8,8 @@ import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOver
 import { TravelTimeAbstraction } from 'interfaces'
 import { AddIcon, InfoIcon, LayersIcon, LinkIcon, LogoIcon } from 'icons'
 import { colorList, hexColorToRGBA } from 'utils'
+import { EditTravelTime, Loader, Filter, TravelCard } from 'components'
 import { shadows } from '../../../constants'
-
-import { TravelCard } from './TravelCard'
-import { EditTravelTime } from './EditTravelTime'
-import { Loader } from './Loader'
-import { Filter } from './Filter'
 
 const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	position: absolute;
