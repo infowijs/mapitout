@@ -332,14 +332,6 @@ type PropsUnion = StateProps & DispatchProps & Props
 interface State extends Partial<TravelTimeAbstraction> {}
 
 export class Component extends React.Component<PropsUnion, State> {
-	private sharedFieldProps = {
-		onBlur: () => {
-			// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input
-			// field so that the input field is always in view, it does unfortunately not
-			// reset when you close the keyboard
-			// window.scrollTo(0, 0)
-		}
-	}
 	constructor(props: PropsUnion) {
 		super(props)
 
@@ -424,8 +416,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							<StyledAddressInput
 								{...getInputProps({
 									placeholder: 'Address',
-									name: 'address',
-									...this.sharedFieldProps
+									name: 'address'
 								})}
 							/>
 						</StyledSegment>
@@ -491,7 +482,6 @@ export class Component extends React.Component<PropsUnion, State> {
 						IndicatorSeparator: null
 					}}
 					color={this.props.color}
-					{...this.sharedFieldProps}
 				/>
 			</StyledSegment>
 		)
@@ -528,7 +518,12 @@ export class Component extends React.Component<PropsUnion, State> {
 						)
 					}}
 					color={this.props.color}
-					{...this.sharedFieldProps}
+					onBlur={() => {
+						// Devices with an on screen keyboard (e.g. a mobile phone) scroll to the input
+						// field so that the input field is always in view, it does unfortunately not
+						// reset when you close the keyboard
+						window.scrollTo(0, 0)
+					}}
 				/>
 			</StyledSegment>
 		)
