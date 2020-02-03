@@ -249,6 +249,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								defaultChecked={this.props.primaryEducationVisible}
 								disabled={!(this.props.primaryEducation && this.props.primaryEducation.length > 0)}
 								onChange={(e) => this.props.setPrimaryEducationVisibility(e.target.checked)}
+								onFocus={() => this.setState({active: true})}
 							/>
 							<StyledToggleVirtual/>
 						</StyledToggle>
@@ -262,6 +263,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								defaultChecked={this.props.secondaryEducationVisible}
 								disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}
 								onChange={(e) => this.props.setSecondaryEducationVisibility(e.target.checked)}
+								onFocus={() => this.setState({active: true})}
 							/>
 							<StyledToggleVirtual/>
 						</StyledToggle>
