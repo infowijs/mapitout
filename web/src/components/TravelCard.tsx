@@ -5,9 +5,9 @@ import styled from 'styled-components'
 
 import { ReduxState } from 'store'
 import { ClockIcon, CrossIcon, EditIcon } from 'icons'
-import { TransportType } from 'enums'
+import { TravelTimeAbstraction } from 'interfaces'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
-import { shadows } from '../../../constants'
+import { shadows } from '../constants'
 
 const StyledTravelCard = styled.div<{color: string}>`
 	border-radius: 2rem;
@@ -141,11 +141,8 @@ const StyledTravelCardActionItem = styled.div`
 
 interface StateProps {}
 interface DispatchProps {}
-interface Props {
+interface Props extends TravelTimeAbstraction {
 	color: string
-	title: string
-	duration: number
-	transport: TransportType
 	onDelete: () => any
 	onEdit: () => any
 }
@@ -157,11 +154,11 @@ export class Component extends React.Component<PropsUnion, State> {
 	public readonly state: State = {}
 
 	public render() {
-		const {color, title, duration, transport, onDelete, onEdit} = this.props
+		const {color, location, duration, transport, onDelete, onEdit} = this.props
 		return (
 			<StyledTravelCard color={color}>
 				<StyledTravelCardInfo>
-					<StyledTravelCardTitle>{title}</StyledTravelCardTitle>
+					<StyledTravelCardTitle>{location.title}</StyledTravelCardTitle>
 					<StyledTravelCardInfoMeta>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>

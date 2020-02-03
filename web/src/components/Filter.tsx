@@ -5,7 +5,7 @@ import styled, {css} from 'styled-components'
 
 import { ReduxState, setPrimaryEducationVisibility, setSecondaryEducationVisibility } from 'store'
 import { CrossIcon, FilterIcon } from 'icons'
-import { colors } from '../../../constants'
+import { colors } from '../constants'
 
 import educationPrimaryIcon from 'assets/education-primary.svg'
 import educationSecondaryIcon from 'assets/education-secondary.svg'
@@ -14,12 +14,18 @@ const StyledContainer = styled.div`
 	position: relative;
 `
 
-const StyledFilter = styled.div<{active: boolean, contentHeight: number}>`
+const StyledFilter = styled.div<{isEditing: boolean, active: boolean, contentHeight: number}>`
 	position: absolute;
 	pointer-events: auto;
 	width: 100%;
 	top: ${(props) => ((props.active ? props.contentHeight : 0) + 60) * -1}px;
 	transition: 400ms;
+	
+	${(props) => props.isEditing && css`
+		@media (max-width: 900px) {
+			top: 0;
+		}
+	`}
 `
 
 const StyledHeader = styled.div<{active: boolean}>`
@@ -176,7 +182,9 @@ interface DispatchProps {
 	setPrimaryEducationVisibility: typeof setPrimaryEducationVisibility
 	setSecondaryEducationVisibility: typeof setSecondaryEducationVisibility
 }
-interface Props {}
+interface Props {
+	isEditing: boolean
+}
 type PropsUnion = StateProps & DispatchProps & Props
 
 interface State {
@@ -204,16 +212,18 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	public render() {
+		const {active, height} = this.state
+		const {isEditing} = this.props
 		return (
 			<StyledContainer>
-				<StyledFilter active={this.state.active} contentHeight={this.state.height}>
-					<StyledHeader active={this.state.active} onClick={() => !this.state.active && this.setState({active: true})}>
+				<StyledFilter active={active} contentHeight={height} isEditing={isEditing}>
+					<StyledHeader active={active} onClick={() => !active && this.setState({active: true})}>
 						<p>Points of interest</p>
-						<StyledIconContainer onClick={() => this.state.active && this.setState({active: false})}>
-							<StyledIcon active={this.state.active} visible={!this.state.active} index={0}>
+						<StyledIconContainer onClick={() => active && this.setState({active: false})}>
+							<StyledIcon active={active} visible={!active} index={0}>
 								<FilterIcon/>
 							</StyledIcon>
-							<StyledIcon active={this.state.active} visible={this.state.active} index={1}>
+							<StyledIcon active={active} visible={active} index={1}>
 								<CrossIcon/>
 							</StyledIcon>
 						</StyledIconContainer>
