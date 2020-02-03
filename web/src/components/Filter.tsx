@@ -267,7 +267,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						</StyledToggle>
 					</StyledFilterOption>
 				</StyledFilterOptionContainer>
-				<StyledFilterInfo>Filters are only visible on lower zoom levels</StyledFilterInfo>
+				<StyledFilterInfo>Markers are only visible on lower zoom levels</StyledFilterInfo>
 			</>
 		)
 	}
