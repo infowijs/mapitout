@@ -344,9 +344,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<>
 				<StyledContainer>
-					<StyledTitle>
-						<p>How far could I live from</p>
-					</StyledTitle>
+					<StyledTitle>How far could I live from</StyledTitle>
 					{this.renderInputAddress()}
 					{this.renderInputDuration()}
 					{this.renderInputTraveltype()}
