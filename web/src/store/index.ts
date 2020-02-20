@@ -14,5 +14,7 @@ export {
 	setTooltip,
 	setNewTravelTimeDetails,
 	setPrimaryEducationVisibility,
-	setSecondaryEducationVisibility
+	setSecondaryEducationVisibility,
+	setFaqVisibility,
+	setDemoVisibility
 } from './application/actions'
