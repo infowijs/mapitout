@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="24px" viewBox="0 0 28 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>ondemand_video-24px</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-1314.000000, -743.000000)">
+            <g id="ondemand_video-24px" transform="translate(1313.000000, 740.000000)">
+                <polygon id="Path" points="0 0 30 0 30 30 0 30"></polygon>
+                <path d="M26.25,3.75 L3.75,3.75 C2.3625,3.75 1.25,4.8625 1.25,6.25 L1.25,21.25 C1.25,22.625 2.3625,23.75 3.75,23.75 L10,23.75 L10,26.25 L20,26.25 L20,23.75 L26.25,23.75 C27.625,23.75 28.7375,22.625 28.7375,21.25 L28.75,6.25 C28.75,4.8625 27.625,3.75 26.25,3.75 Z M26.25,21.25 L3.75,21.25 L3.75,6.25 L26.25,6.25 L26.25,21.25 Z M20,13.75 L11.25,18.75 L11.25,8.75 L20,13.75 Z" id="Shape" fill="#000000" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>
