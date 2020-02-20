@@ -8,7 +8,7 @@ import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOver
 import { TravelTimeAbstraction } from 'interfaces'
 import { AddIcon, InfoIcon, LayersIcon, LinkIcon, LogoIcon } from 'icons'
 import { colorList, hexColorToRGBA } from 'utils'
-import { EditTravelTime, Loader, Filter, TravelCard } from 'components'
+import { EditTravelTime, Loader, Filter, TravelCard, DemoOverlay, FAQOverlay } from 'components'
 import { shadows } from '../../../constants'
 
 const StyledUIContainer = styled.div<{menuActive: boolean}>`
@@ -384,6 +384,8 @@ export class Component extends React.Component<PropsUnion, State> {
 		if (!this.props.travelTimes || this.props.travelTimes.length === 0) {
 			return (
 				<>
+					<DemoOverlay/>
+					<FAQOverlay/>
 					<StyledLogoContainer>
 						<LogoIcon/>
 					</StyledLogoContainer>
@@ -410,6 +412,8 @@ export class Component extends React.Component<PropsUnion, State> {
 
 		return (
 			<>
+				<DemoOverlay/>
+				<FAQOverlay/>
 				<StyledLogoContainer>
 					<LogoIcon/>
 				</StyledLogoContainer>
