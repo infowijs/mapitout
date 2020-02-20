@@ -13,7 +13,7 @@ const StyledContainer = styled.div<{visible: boolean}>`
 	top: 0;
 	left: 0;
 	box-sizing: border-box;
-	z-index: 100;
+	z-index: 110;
 	overflow: scroll;
 	padding: 10rem 1rem 2rem;
 	transition: 250ms;
