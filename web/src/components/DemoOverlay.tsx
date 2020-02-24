@@ -114,6 +114,7 @@ class Component extends React.Component<PropsUnion> {
 						{this.props.demoVisible && <iframe
 							src='https://www.youtube.com/embed/ScWQ1xx2n18'
 							frameBorder='0'
+							title='Demo video'
 							allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
 							allowFullScreen
 						/>}

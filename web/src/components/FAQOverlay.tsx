@@ -66,7 +66,7 @@ const StyledContentSegment = styled.div`
 	li {
 		margin: .25rem 0;
 	}
-	a {
+	a, span.link {
 		color: rgba(0, 0, 0, .75);
 		
 		:hover {
@@ -123,8 +123,8 @@ class Component extends React.Component<PropsUnion> {
 					</StyledCloseButton>
 					<StyledContentSegment>
 						<h1>What is the MapitOut tool?</h1>
-						<p>The MapitOut tool is an interactive map that allows you to select a location to live in by entering desired travel times to different locations. You can find out more about the various parts of the Amsterdam Area on the <a href='https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area' target='_blank'>‘Living in the Amsterdam Area’ section of the I amsterdam website</a>. Internationals who have come to work in the Amsterdam Area can find reliable information about what makes the region unique, including videos and testimonials of people living there.</p>
-						<p>Please note that the tool is not intended for planning travel in real-time. Refer to real-time travel platforms such as <a href='https://www.ov9292.nl/en' target='_blank'>www.ov9292.nl/en</a> for public transport information. </p>
+						<p>The MapitOut tool is an interactive map that allows you to select a location to live in by entering desired travel times to different locations. You can find out more about the various parts of the Amsterdam Area on the <a href='https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area' target='_blank' rel='noopener noreferrer'>‘Living in the Amsterdam Area’ section of the I amsterdam website</a>. Internationals who have come to work in the Amsterdam Area can find reliable information about what makes the region unique, including videos and testimonials of people living there.</p>
+						<p>Please note that the tool is not intended for planning travel in real-time. Refer to real-time travel platforms such as <a href='https://www.ov9292.nl/en' target='_blank' rel='noopener noreferrer'>www.ov9292.nl/en</a> for public transport information. </p>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>Who is the tool for?</h1>
@@ -132,11 +132,11 @@ class Component extends React.Component<PropsUnion> {
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>How does the tool work?</h1>
-						<p>Say you would want to travel for up to half an hour to your workplace by taking public transport, while at the same time being no further than 15 minutes from your children’s school by bike – MapitOut will then show you the overlapping area. This overlapping area shows potential living areas which meet both travel time criteria. You can continue to add more locations, such as your partner’s workplace or a friend’s home.  <a href='#' onClick={() => this.props.setDemoVisibility(true)}>Watch the MapitOut tutorial video to see it in action</a>.</p>
+						<p>Say you would want to travel for up to half an hour to your workplace by taking public transport, while at the same time being no further than 15 minutes from your children’s school by bike – MapitOut will then show you the overlapping area. This overlapping area shows potential living areas which meet both travel time criteria. You can continue to add more locations, such as your partner’s workplace or a friend’s home.  <span className='link' onClick={() => this.props.setDemoVisibility(true)}>Watch the MapitOut tutorial video to see it in action</span>.</p>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>How can I access the tool?</h1>
-						<p>The MapitOut tool can be accessed through the ‘Living in the Amsterdam Area’ page mentioned above or directly at <a href='https://mapitout.iamsterdam.com' target='_blank'>https://mapitout.iamsterdam.com</a>.</p>
+						<p>The MapitOut tool can be accessed through the ‘Living in the Amsterdam Area’ page mentioned above or directly at <a href='https://mapitout.iamsterdam.com' target='_blank' rel='noopener noreferrer'>https://mapitout.iamsterdam.com</a>.</p>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>What should I do if the tool isn’t working?</h1>
@@ -144,7 +144,7 @@ class Component extends React.Component<PropsUnion> {
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>Which travel information does it use?</h1>
-						<p>Travel times are calculated using various data sources. Google Maps is used to create the base level map to show where paths, roads and stations are located. Public transport timetable data is then layered on top including agencies such as GVB, FlixBus, NS, R-Net and more. Driving, cycling and walking time models are developed by TravelTime platform. <a href='https://www.traveltimeplatform.com/turn-radius-maps-into-travel-time' target='_blank'>Find more information about the TravelTime platform.</a></p>
+						<p>Travel times are calculated using various data sources. Google Maps is used to create the base level map to show where paths, roads and stations are located. Public transport timetable data is then layered on top including agencies such as GVB, FlixBus, NS, R-Net and more. Driving, cycling and walking time models are developed by TravelTime platform. <a href='https://www.traveltimeplatform.com/turn-radius-maps-into-travel-time' target='_blank' rel='noopener noreferrer'>Find more information about the TravelTime platform.</a></p>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>How is the reach of a cycling and public transport search determined?</h1>
@@ -159,7 +159,7 @@ class Component extends React.Component<PropsUnion> {
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>I would like to offer this tool as well, is that possible?</h1>
-						<p>That is great, maybe we can help. You can always refer to the MapitOut tool. However, you might want to apply the functionality of the tool to your own website. The application is built as open-source, which means you can fork the tool. To make the tool work like the MapitOut tool, you do need to close separate data contracts (e.g. the TravelTime platform). You can find the information required on <a href='https://github.com/infowijs/mapitout' target='_blank'>Github</a>.</p>
+						<p>That is great, maybe we can help. You can always refer to the MapitOut tool. However, you might want to apply the functionality of the tool to your own website. The application is built as open-source, which means you can fork the tool. To make the tool work like the MapitOut tool, you do need to close separate data contracts (e.g. the TravelTime platform). You can find the information required on <a href='https://github.com/infowijs/mapitout' target='_blank' rel='noopener noreferrer'>Github</a>.</p>
 					</StyledContentSegment>
 				</StyledContent>
 			</StyledContainer>
