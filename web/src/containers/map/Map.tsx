@@ -4,8 +4,8 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled, {createGlobalStyle} from 'styled-components'
 
-import { ZoomInIcon, ZoomOutIcon } from 'icons'
-import { ReduxState, setZoomLevel, setTooltip } from 'store'
+import { ZoomInIcon, ZoomOutIcon, HelpIcon, OndemandVideoIcon } from 'icons'
+import { ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility } from 'store'
 
 import { googleMapsStyles } from '../../constants'
 import { Markers, Pois, Polygons, Tooltip } from './lib'
@@ -31,7 +31,7 @@ const StyledAttribution = styled.p`
 	}
 `
 
-const StyledZoomControl = styled.div`
+const StyledControls = styled.div`
 	position: absolute;
 
 	@media (min-width: 900px) {
@@ -43,19 +43,26 @@ const StyledZoomControl = styled.div`
 		bottom: 4.75rem;
 		right: 1rem;
 	}
-
-	background: #fff;
-	border-radius: 3px;
-	padding: 10px;
-
-	& > *:first-child {
-		padding-bottom: 5px;
-	}
 `
 
-const StyledZoomControlButton = styled.div`
+const StyledControlsGroup = styled.div`
+	padding: .5rem;
+	margin-top: .5rem;
+	background: #fff;
+	border-radius: 3px;
+`
+
+const StyledControlsItem = styled.div`
 	cursor: pointer;
 	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	&:not(:first-child) {
+		margin-top: .5rem;
+	}
 `
 
 interface StateProps {
@@ -65,6 +72,8 @@ interface StateProps {
 interface DispatchProps {
 	setZoomLevel: typeof setZoomLevel
 	setTooltip: typeof setTooltip
+	setFaqVisibility: typeof setFaqVisibility
+	setDemoVisibility: typeof setDemoVisibility
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
@@ -210,14 +219,26 @@ export class Component extends React.Component<PropsUnion, State> {
 
 	private renderControls() {
 		return (
-			<StyledZoomControl>
-				<StyledZoomControlButton onClick={() => this.zoom('in')}>
-					<ZoomInIcon/>
-				</StyledZoomControlButton>
-				<StyledZoomControlButton onClick={() => this.zoom('out')}>
-					<ZoomOutIcon/>
-				</StyledZoomControlButton>
-			</StyledZoomControl>
+			<StyledControls>
+				<StyledControlsGroup>
+					<StyledControlsItem onClick={() => this.props.setFaqVisibility(true)}>
+						<HelpIcon/>
+					</StyledControlsItem>
+				</StyledControlsGroup>
+				<StyledControlsGroup>
+					<StyledControlsItem onClick={() => this.props.setDemoVisibility(true)}>
+						<OndemandVideoIcon/>
+					</StyledControlsItem>
+				</StyledControlsGroup>
+				<StyledControlsGroup>
+					<StyledControlsItem onClick={() => this.zoom('in')}>
+						<ZoomInIcon/>
+					</StyledControlsItem>
+					<StyledControlsItem onClick={() => this.zoom('out')}>
+						<ZoomOutIcon/>
+					</StyledControlsItem>
+				</StyledControlsGroup>
+			</StyledControls>
 		)
 	}
 
@@ -283,7 +304,9 @@ const mapStateToProps = (state: ReduxState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	setZoomLevel,
-	setTooltip
+	setTooltip,
+	setFaqVisibility,
+	setDemoVisibility
 }, dispatch)
 
 export const Map = connect<StateProps, DispatchProps, Props, ReduxState>(
