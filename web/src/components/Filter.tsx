@@ -16,7 +16,7 @@ import addresses from 'assets/schools.json'
 
 import educationPrimaryIcon from 'assets/primary.svg'
 import educationSecondaryIcon from 'assets/secondary.svg'
-import { Address } from '../interfaces'
+import { Address } from 'interfaces'
 
 const StyledContainer = styled.div`
 	position: relative;

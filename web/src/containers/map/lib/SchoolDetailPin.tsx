@@ -11,7 +11,7 @@ import { colors, shadows } from '../../../constants'
 import iconPrimary from 'assets/primary.svg'
 import iconSecondary from 'assets/secondary.svg'
 import iconMixed from 'assets/mixed.svg'
-import { getValidUrl } from '../../../utils'
+import { getValidUrl } from 'utils'
 
 const StyledTooltip = styled.div`
 	position: relative;
@@ -140,7 +140,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledTooltipHeader>
 					<StyledContent>
 						{schoolDetailPin && schoolDetailPin.schools.map((school) => (
-							<StyledContentItem href={getValidUrl(school.url)} target='_blank'>
+							<StyledContentItem key={school.name} href={getValidUrl(school.url)} target='_blank'>
 								<StyledContentItemIcon>
 									{school.type === 'primary' && <img src={iconPrimary} alt='Primary school icon'/>}
 									{school.type === 'secondary' && <img src={iconSecondary} alt='Secondary school icon'/>}

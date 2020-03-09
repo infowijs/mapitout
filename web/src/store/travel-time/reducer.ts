@@ -1,6 +1,6 @@
 import { ActionType } from './actions'
 import { Reducer } from 'redux'
-import { TravelTimeResponse, TravelTimeStored } from '../../interfaces'
+import { TravelTimeResponse, TravelTimeStored } from 'interfaces'
 
 export interface State {
     loading: boolean
