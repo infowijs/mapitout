@@ -189,7 +189,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				{availableAddresses && availableAddresses.length > 0 && <MarkerClusterer
 					enableRetinaIcons
 					ignoreHidden
-					gridSize={240}
+					gridSize={120}
 					calculator={(markers: any[], numStyles: number) => {
 						return {
 							text: `
