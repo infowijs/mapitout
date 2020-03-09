@@ -96,7 +96,6 @@ const StyledFilterInfo = styled.p`
 `
 
 const StyledFilterOptionContainer = styled.div`
-	//margin-bottom: 1rem;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
