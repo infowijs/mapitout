@@ -33,6 +33,7 @@ const StyledAttribution = styled.p`
 
 const StyledControls = styled.div`
 	position: absolute;
+	z-index: 100;
 
 	@media (min-width: 900px) {
 		bottom: 1.5rem;
