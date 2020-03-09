@@ -7,9 +7,9 @@ MapItOut is a tool to calculate how far you can travel with certain types of tra
 
 # Tech
 ## Backend
-The backend consists out of several python scripts that serve as database wrappers, endpoint server and a proxy to the [Travel Time Platform's API](https://www.traveltimeplatform.com/).
+The only backend component to this application is a simple AWS Lambda (written in JavaScript) to proxy the [Travel Time Platform's API](https://www.traveltimeplatform.com/).
 
-The backend specific documentation can be found inside the `api` directory.
+It is deployed via [Serverless](https://serverless.com/).
 
 ## Frontend
 The front-end is a React application generated with the [Create React App](https://github.com/facebook/create-react-app) project. It uses Google Maps to display the map and some other self explanatory packages and methods in the app.

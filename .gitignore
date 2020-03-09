@@ -1,3 +1,11 @@
-.DS_Store
-.idea
-.vscode
+# Distribution / packaging
+build/
+dist/
+
+# Serverless directories
+.serverless
+
+# Packaging
+node_modules
+*.log
+package-lock.json

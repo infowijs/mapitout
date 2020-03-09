@@ -1,0 +1,38 @@
+service: mapitout-proxy
+
+plugins:
+  - serverless-offline
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    number: 20
+
+package:
+  include:
+    - functions/**
+    - node_modules/**
+    - package.json
+  exclude:
+    - web/**
+    - docs/**
+    - .circleci/**
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: production
+  region: eu-west-1
+  environment:
+    TRAVELTIME_APP_ID: ${env:TRAVELTIME_APP_ID}
+    TRAVELTIME_APP_KEY: ${env:TRAVELTIME_APP_KEY}
+
+functions:
+  time-map:
+    handler: functions/time-map.handler
+    events:
+      - http:
+          path: time-map
+          method: post
+          cors: true
