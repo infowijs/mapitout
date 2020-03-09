@@ -187,6 +187,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			<>
 				<ClusterMarkerGlobalStyles/>
 				{availableAddresses && availableAddresses.length > 0 && <MarkerClusterer
+					averageCenter
 					enableRetinaIcons
 					ignoreHidden
 					gridSize={120}
