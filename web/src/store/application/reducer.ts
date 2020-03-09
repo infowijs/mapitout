@@ -2,7 +2,7 @@ import { ActionType } from './actions'
 import { Reducer } from 'redux'
 import { Tooltip } from './lib/Tooltip'
 import { TravelTimeAbstraction } from 'interfaces'
-import {SchoolDetailPin} from './lib/SchoolDetailPin'
+import { SchoolDetailPin } from './lib/SchoolDetailPin'
 
 export interface State {
 	zoom: number

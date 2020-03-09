@@ -1,7 +1,7 @@
 import { ActionDispatch } from './reducer'
 import { Tooltip } from './lib/Tooltip'
-import {TravelTimeAbstraction} from '../../interfaces'
-import {SchoolDetailPin} from './lib/SchoolDetailPin'
+import { TravelTimeAbstraction } from 'interfaces'
+import { SchoolDetailPin } from './lib/SchoolDetailPin'
 
 export enum ActionType {
 	SetZoomLevel = '@@application/zoom',

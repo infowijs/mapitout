@@ -5,10 +5,10 @@ import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled, {createGlobalStyle} from 'styled-components'
 
 import { ZoomInIcon, ZoomOutIcon, HelpIcon, OndemandVideoIcon } from 'icons'
-import {ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility, setSchoolDetailPin} from 'store'
+import { ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility, setSchoolDetailPin } from 'store'
 
 import { googleMapsStyles } from '../../constants'
-import {Markers, Pois, Polygons, SchoolDetailPin, Tooltip} from './lib'
+import { Markers, Pois, Polygons, SchoolDetailPin, Tooltip } from './lib'
 
 const GlobalGoogleMapsAttributionOffset = createGlobalStyle`
 	@media (max-width: 900px) {
