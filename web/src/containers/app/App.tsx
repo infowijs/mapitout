@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { RouteComponentProps } from 'react-router-dom'
 
-import { ReduxState, getTravelTimes, getPois } from 'store'
+import { ReduxState, getTravelTimes } from 'store'
 import { TransportType } from 'enums'
 
 import { InteractiveOverlay } from './lib'
@@ -13,7 +13,6 @@ interface StateProps {
 }
 interface DispatchProps {
 	getTravelTimes: typeof getTravelTimes
-	getPois: typeof getPois
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props & RouteComponentProps<Params>
@@ -36,8 +35,6 @@ export class Component extends React.Component<PropsUnion, State> {
 
 	constructor(props: PropsUnion) {
 		super(props)
-
-		props.getPois()
 
 		const params = props.match.params
 
@@ -116,8 +113,7 @@ const mapStateToProps = (state: ReduxState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-	getTravelTimes,
-	getPois
+	getTravelTimes
 }, dispatch)
 
 export const App = connect<StateProps, DispatchProps, Props, ReduxState>(
