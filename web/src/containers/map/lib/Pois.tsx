@@ -191,6 +191,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					enableRetinaIcons
 					ignoreHidden
 					gridSize={120}
+					maxZoom={14}
 					calculator={(markers: any[], numStyles: number) => {
 						return {
 							text: `
