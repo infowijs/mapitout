@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="24px" viewBox="0 0 13 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>ic_navigate_next_48px</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-267.000000, -135.000000)">
+            <g id="ic_navigate_next_48px" transform="translate(249.000000, 123.000000)">
+                <path d="M18.585,13.415 C17.8035171,14.1964829 17.8035171,15.4635171 18.585,16.245 L24.9257864,22.5857864 C25.706835,23.366835 25.706835,24.633165 24.9257864,25.4142136 L18.585,31.755 C17.8035171,32.5364829 17.8035171,33.8035171 18.585,34.585 C19.3664829,35.3664829 20.6335171,35.3664829 21.415,34.585 L29.1715729,26.8284271 C30.73367,25.26633 30.73367,22.73367 29.1715729,21.1715729 L21.415,13.415 C20.6335171,12.6335171 19.3664829,12.6335171 18.585,13.415 Z" id="Path" fill="currentColor" fill-rule="nonzero"></path>
+                <polygon id="Path" points="0 0 48 0 48 48 0 48"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
