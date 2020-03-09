@@ -18,6 +18,10 @@ const StyledContainer = styled.div<{visible: boolean}>`
 	padding: 10rem 1rem 2rem;
 	transition: 250ms;
 	
+	@media (max-width: 900px) {
+		padding-top: 1rem;
+	}
+	
 	${(props) => props.visible ? css`
 		backdrop-filter: blur(2px);
 		background-color: rgba(0, 0, 0, .25);
