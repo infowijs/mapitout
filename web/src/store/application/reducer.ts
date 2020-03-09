@@ -10,6 +10,7 @@ export interface State {
 	newTravelTimeDetails: Partial<TravelTimeAbstraction> | null
 	primaryEducationVisible: boolean
 	secondaryEducationVisible: boolean
+	onlyInternationalVisibility: boolean
 	faqVisible: boolean
 	demoVisible: boolean
 }
@@ -21,6 +22,7 @@ const initialState: State = {
 	newTravelTimeDetails: null,
 	primaryEducationVisible: false,
 	secondaryEducationVisible: false,
+	onlyInternationalVisibility: false,
 	faqVisible: false,
 	demoVisible: false
 }
@@ -31,6 +33,7 @@ export type ActionDispatch = SetZoomLevel
 	| SetNewTravelTimeDetails
 	| SetPrimaryEducationVisibility
 	| SetSecondaryEducationVisibility
+	| SetOnlyInternationalVisibility
 	| SetFaqVisibility
 	| SetDemoVisibility
 
@@ -48,6 +51,8 @@ export const reducer: Reducer<State, ActionDispatch> = (state: State = initialSt
 			return reduceSetPrimaryEducationVisibility(state, action)
 		case ActionType.SetSecondaryEducationVisibility:
 			return reduceSetSecondaryEducationVisibility(state, action)
+		case ActionType.SetOnlyInternationalVisibility:
+			return reduceSetOnlyInternationalVisibility(state, action)
 		case ActionType.SetFaqVisibility:
 			return reduceSetFaqVisibility(state, action)
 		case ActionType.SetDemoVisibility:
@@ -126,6 +131,18 @@ const reduceSetSecondaryEducationVisibility = (state: State, action: SetSecondar
 	return {
 		...state,
 		secondaryEducationVisible: action.data
+	}
+}
+
+interface SetOnlyInternationalVisibility {
+	type: ActionType.SetOnlyInternationalVisibility
+	data: boolean
+}
+
+const reduceSetOnlyInternationalVisibility = (state: State, action: SetOnlyInternationalVisibility) => {
+	return {
+		...state,
+		onlyInternationalVisibility: action.data
 	}
 }
 
