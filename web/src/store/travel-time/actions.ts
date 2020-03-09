@@ -61,7 +61,7 @@ export function getTravelTimes(travels: TravelTimeAbstraction[]) {
             type: ActionType.SetLoading
         })
 
-        api.post('/TravelTimeApi/v4/time-map', data)
+        api.post('https://hkm8hkibpg.execute-api.eu-west-1.amazonaws.com/production/time-map', data)
             .then((res: AxiosResponse<TravelTimeResponse>) => {
                 dispatch({
                     type: ActionType.GetTravelTimes,

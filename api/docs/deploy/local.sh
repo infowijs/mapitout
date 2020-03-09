@@ -1,1 +1,0 @@
-export OVERRIDE_DATABASE=True

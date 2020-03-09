@@ -1,9 +1,0 @@
-version: '3.0'
-services:
-  tests:
-    build: ../../
-    environment:
-      ENVIRONMENT: test
-    volumes:
-        - ./run_tests.sh:/app/run_tests.sh
-    command: /app/run_tests.sh

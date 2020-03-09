@@ -1,0 +1,17 @@
+{
+  "name": "mapitout",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "deploy": "serverless deploy --stage production"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "serverless": "^1.66.0",
+    "serverless-offline": "^5.12.1",
+    "serverless-prune-plugin": "^1.4.2"
+  }
+}
