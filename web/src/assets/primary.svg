@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="31px" height="31px" viewBox="0 0 31 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
-    <title>Group</title>
+    <!-- Generator: Sketch 61.2 (89653) - https://sketch.com -->
+    <title>primary</title>
     <desc>Created with Sketch.</desc>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Artboard" transform="translate(-82.000000, -81.000000)">
-            <g id="Group" transform="translate(82.500000, 81.500000)">
+        <g id="Artboard" transform="translate(-82.000000, -119.000000)">
+            <g id="primary" transform="translate(82.500000, 119.500000)">
                 <circle id="Oval" fill-opacity="0.2" fill="#30A0CF" cx="15" cy="15" r="15"></circle>
                 <g id="Group-2" transform="translate(8.000000, 7.000000)" fill="#3699DC">
                     <path d="M14,1 L14,5.97299438 C14,6.52527913 13.5522847,6.97299438 13,6.97299438 L8.967,6.972 L8.96733031,5.97299438 C8.96733031,5.19329826 8.37244223,4.5525457 7.61179032,4.47986096 L7.46733031,4.47299438 L6.53266969,4.47299438 C5.70424256,4.47299438 5.03266969,5.14456726 5.03266969,5.97299438 L5.03266969,5.97299438 L5.032,6.972 L1,6.97299438 C0.44771525,6.97299438 5.58162771e-16,6.52527913 0,5.97299438 L0,1 L14,1 Z" id="Combined-Shape"></path>

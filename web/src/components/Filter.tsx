@@ -3,12 +3,20 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import styled, {css} from 'styled-components'
 
-import { ReduxState, setPrimaryEducationVisibility, setSecondaryEducationVisibility } from 'store'
+import {
+	ReduxState,
+	setOnlyInternationalVisibility,
+	setPrimaryEducationVisibility,
+	setSecondaryEducationVisibility
+} from 'store'
 import { CrossIcon, FilterIcon } from 'icons'
 import { colors } from '../constants'
 
-import educationPrimaryIcon from 'assets/education-primary.svg'
-import educationSecondaryIcon from 'assets/education-secondary.svg'
+import addresses from 'assets/schools.json'
+
+import educationPrimaryIcon from 'assets/primary.svg'
+import educationSecondaryIcon from 'assets/secondary.svg'
+import { Address } from 'interfaces'
 
 const StyledContainer = styled.div`
 	position: relative;
@@ -88,7 +96,6 @@ const StyledFilterInfo = styled.p`
 `
 
 const StyledFilterOptionContainer = styled.div`
-	margin-bottom: 1rem;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -180,15 +187,79 @@ const StyledToggleVirtual = styled.span`
 	}
 `
 
+const StyledInternationalFilter = styled.label`
+	position: relative;
+	display: block;
+	cursor: pointer;
+`
+
+const StyledInternationalFilterInput = styled.input`
+	opacity: 0;
+	width: 0;
+	height: 0;
+	display: none;
+`
+
+const StyledInternationalFilterVirtual = styled.span`
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	border: 1px solid #26AFB6;
+	border-radius: 99px;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	overflow: hidden;
+	z-index: 0;
+	
+	span {
+		width: 50%;
+		padding: .25rem 0;
+		text-align: center;
+		transition: 100ms;
+		
+		&:nth-child(1) {
+			color: #fff;
+		}
+		&:nth-child(2) {
+			color: #26AFB6;
+		}
+	}
+	
+	:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 50%;
+		height: 100%;
+		background-color: #26AFB6;
+		transition: 100ms;
+		z-index: -1;
+	}
+	
+	${StyledInternationalFilterInput}:checked + & {
+		:before {
+			left: 50%;
+		}
+		span {
+			:nth-child(1) {
+				color: #26AFB6;
+			}
+			:nth-child(2) {
+				color: #fff;
+			}
+		}
+	}
+`
+
 interface StateProps {
 	primaryEducationVisible: ReduxState['application']['primaryEducationVisible']
 	secondaryEducationVisible: ReduxState['application']['secondaryEducationVisible']
-	primaryEducation: ReduxState['poi']['primaryEducation']
-	secondaryEducation: ReduxState['poi']['secondaryEducation']
 }
 interface DispatchProps {
 	setPrimaryEducationVisibility: typeof setPrimaryEducationVisibility
 	setSecondaryEducationVisibility: typeof setSecondaryEducationVisibility
+	setOnlyInternationalVisibility: typeof setOnlyInternationalVisibility
 }
 interface Props {
 	isEditing: boolean
@@ -197,13 +268,22 @@ type PropsUnion = StateProps & DispatchProps & Props
 
 interface State {
 	active: boolean,
-	height: number
+	height: number,
+	primaryEducationAvailable: boolean
+	secondaryEducationAvailable: boolean
 }
 
 export class Component extends React.Component<PropsUnion, State> {
+	private isEducationGroupAvailable = (type: string) =>
+		!!(addresses as Address[]).find((address) =>
+			!!address.schools.find((school) =>
+				[type, 'mixed'].includes(school.type)))
+
 	public readonly state: State = {
 		active: false,
-		height: 0
+		height: 0,
+		primaryEducationAvailable: this.isEducationGroupAvailable('primary'),
+		secondaryEducationAvailable: this.isEducationGroupAvailable('secondary')
 	}
 	public contentRef = React.createRef<HTMLDivElement>()
 
@@ -252,12 +332,13 @@ export class Component extends React.Component<PropsUnion, State> {
 				<StyledFilterOptionContainer>
 					<StyledFilterOption>
 						<StyledMarkerIcon src={educationPrimaryIcon} alt='Primary education icon'/>
-						<StyledLabel disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}>Primary education</StyledLabel>
+						<StyledLabel disabled={!this.state.primaryEducationAvailable}
+						>Primary education</StyledLabel>
 						<StyledToggle>
 							<StyledToggleInput
 								type='checkbox'
 								defaultChecked={this.props.primaryEducationVisible}
-								disabled={!(this.props.primaryEducation && this.props.primaryEducation.length > 0)}
+								disabled={!this.state.primaryEducationAvailable}
 								onChange={(e) => this.props.setPrimaryEducationVisibility(e.target.checked)}
 								onFocus={() => this.setState({active: true})}
 							/>
@@ -266,12 +347,12 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledFilterOption>
 					<StyledFilterOption>
 						<StyledMarkerIcon src={educationSecondaryIcon} alt='Secondary education icon'/>
-						<StyledLabel disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}>Secondary education</StyledLabel>
+						<StyledLabel disabled={!this.state.secondaryEducationAvailable}>Secondary education</StyledLabel>
 						<StyledToggle>
 							<StyledToggleInput
 								type='checkbox'
 								defaultChecked={this.props.secondaryEducationVisible}
-								disabled={!(this.props.secondaryEducation && this.props.secondaryEducation.length > 0)}
+								disabled={!this.state.secondaryEducationAvailable}
 								onChange={(e) => this.props.setSecondaryEducationVisibility(e.target.checked)}
 								onFocus={() => this.setState({active: true})}
 							/>
@@ -279,6 +360,18 @@ export class Component extends React.Component<PropsUnion, State> {
 						</StyledToggle>
 					</StyledFilterOption>
 				</StyledFilterOptionContainer>
+				<StyledInternationalFilter>
+					<StyledInternationalFilterInput
+						type='checkbox'
+						defaultChecked={this.props.secondaryEducationVisible}
+						onChange={(e) => this.props.setOnlyInternationalVisibility(e.target.checked)}
+						onFocus={() => this.setState({active: true})}
+					/>
+					<StyledInternationalFilterVirtual>
+						<span>all schools</span>
+						<span>only international</span>
+					</StyledInternationalFilterVirtual>
+				</StyledInternationalFilter>
 				<StyledFilterInfo>Markers are only visible on lower zoom levels</StyledFilterInfo>
 			</>
 		)
@@ -287,14 +380,13 @@ export class Component extends React.Component<PropsUnion, State> {
 
 const mapStateToProps = (state: ReduxState) => ({
 	primaryEducationVisible: state.application.primaryEducationVisible,
-	secondaryEducationVisible: state.application.secondaryEducationVisible,
-	primaryEducation: state.poi.primaryEducation,
-	secondaryEducation: state.poi.secondaryEducation
+	secondaryEducationVisible: state.application.secondaryEducationVisible
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	setPrimaryEducationVisibility,
-	setSecondaryEducationVisibility
+	setSecondaryEducationVisibility,
+	setOnlyInternationalVisibility
 }, dispatch)
 
 export const Filter = connect<StateProps, DispatchProps, Props, ReduxState>(

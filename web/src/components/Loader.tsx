@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { colorList } from '../utils'
+import { colorList } from 'utils'
 
 const thickness = 4
 const size = 25
