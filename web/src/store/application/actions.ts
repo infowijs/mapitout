@@ -1,11 +1,13 @@
 import { ActionDispatch } from './reducer'
 import { Tooltip } from './lib/Tooltip'
 import {TravelTimeAbstraction} from '../../interfaces'
+import {SchoolDetailPin} from './lib/SchoolDetailPin'
 
 export enum ActionType {
 	SetZoomLevel = '@@application/zoom',
 	SetOverlapState = '@@application/overlap',
 	SetTooltip = '@@application/tooltip',
+	SetSchoolDetailPin = '@@application/school-detail-pin',
 	SetNewTravelTimeDetails = '@@application/new-travel-time',
 	SetPrimaryEducationVisibility = '@@application/primary-education',
 	SetSecondaryEducationVisibility = '@@application/secondary-education',
@@ -37,6 +39,15 @@ export function setTooltip(tooltip: Tooltip | null) {
 		dispatch({
 			type: ActionType.SetTooltip,
 			data: tooltip
+		})
+	}
+}
+
+export function setSchoolDetailPin(pin: SchoolDetailPin | null) {
+	return (dispatch: (action: ActionDispatch) => {}) => {
+		dispatch({
+			type: ActionType.SetSchoolDetailPin,
+			data: pin
 		})
 	}
 }

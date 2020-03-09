@@ -11,6 +11,7 @@ export {
 	setZoomLevel,
 	setOverlapState,
 	setTooltip,
+	setSchoolDetailPin,
 	setNewTravelTimeDetails,
 	setPrimaryEducationVisibility,
 	setSecondaryEducationVisibility,

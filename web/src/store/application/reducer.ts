@@ -2,11 +2,13 @@ import { ActionType } from './actions'
 import { Reducer } from 'redux'
 import { Tooltip } from './lib/Tooltip'
 import { TravelTimeAbstraction } from 'interfaces'
+import {SchoolDetailPin} from './lib/SchoolDetailPin'
 
 export interface State {
 	zoom: number
 	overlapVisible: boolean
 	tooltip: Tooltip | null
+	schoolDetailPin: SchoolDetailPin | null
 	newTravelTimeDetails: Partial<TravelTimeAbstraction> | null
 	primaryEducationVisible: boolean
 	secondaryEducationVisible: boolean
@@ -19,6 +21,7 @@ const initialState: State = {
 	zoom: 10,
 	overlapVisible: false,
 	tooltip: null,
+	schoolDetailPin: null,
 	newTravelTimeDetails: null,
 	primaryEducationVisible: false,
 	secondaryEducationVisible: false,
@@ -30,6 +33,7 @@ const initialState: State = {
 export type ActionDispatch = SetZoomLevel
 	| SetOverlapState
 	| SetTooltip
+	| SetSchoolDetailPin
 	| SetNewTravelTimeDetails
 	| SetPrimaryEducationVisibility
 	| SetSecondaryEducationVisibility
@@ -45,6 +49,8 @@ export const reducer: Reducer<State, ActionDispatch> = (state: State = initialSt
 			return reduceSetOverlapState(state, action)
 		case ActionType.SetTooltip:
 			return reduceSetTooltip(state, action)
+		case ActionType.SetSchoolDetailPin:
+			return reduceSetSchoolDetailPin(state, action)
 		case ActionType.SetNewTravelTimeDetails:
 			return reduceSetNewTravelTimeDetails(state, action)
 		case ActionType.SetPrimaryEducationVisibility:
@@ -95,6 +101,18 @@ const reduceSetTooltip = (state: State, action: SetTooltip) => {
 	return {
 		...state,
 		tooltip: action.data
+	}
+}
+
+interface SetSchoolDetailPin {
+	type: ActionType.SetSchoolDetailPin
+	data: SchoolDetailPin | null
+}
+
+const reduceSetSchoolDetailPin = (state: State, action: SetSchoolDetailPin) => {
+	return {
+		...state,
+		schoolDetailPin: action.data
 	}
 }
 
