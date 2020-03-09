@@ -5,10 +5,10 @@ import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled, {createGlobalStyle} from 'styled-components'
 
 import { ZoomInIcon, ZoomOutIcon, HelpIcon, OndemandVideoIcon } from 'icons'
-import { ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility } from 'store'
+import {ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility, setSchoolDetailPin} from 'store'
 
 import { googleMapsStyles } from '../../constants'
-import { Markers, Pois, Polygons, Tooltip } from './lib'
+import {Markers, Pois, Polygons, SchoolDetailPin, Tooltip} from './lib'
 
 const GlobalGoogleMapsAttributionOffset = createGlobalStyle`
 	@media (max-width: 900px) {
@@ -68,12 +68,14 @@ const StyledControlsItem = styled.div`
 interface StateProps {
 	travelTimes: ReduxState['travelTime']['travelTimes']
 	tooltip: ReduxState['application']['tooltip']
+	schoolDetailPin: ReduxState['application']['schoolDetailPin']
 }
 interface DispatchProps {
 	setZoomLevel: typeof setZoomLevel
 	setTooltip: typeof setTooltip
 	setFaqVisibility: typeof setFaqVisibility
 	setDemoVisibility: typeof setDemoVisibility
+	setSchoolDetailPin: typeof setSchoolDetailPin
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
@@ -121,9 +123,14 @@ export class Component extends React.Component<PropsUnion, State> {
 					if (this.props.tooltip) {
 						this.setTooltipTimeout = setTimeout(() => {
 							this.props.setTooltip(null)
+							this.props.setSchoolDetailPin(null)
 						}, 250)
 					} else {
 						this.setTooltipTimeout = setTimeout(() => {
+							if (this.props.schoolDetailPin) {
+								this.props.setSchoolDetailPin(null)
+								return
+							}
 							const location = {
 								lat: e.latLng.lat(),
 								lng: e.latLng.lng()
@@ -169,6 +176,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					}
 				}}/>
 				<Pois/>
+				<SchoolDetailPin/>
 				<Polygons/>
 				<Tooltip/>
 			</GoogleMap>
@@ -299,14 +307,16 @@ function getBoundsZoomLevel(bounds: google.maps.LatLngBounds, mapDim: {width: nu
 
 const mapStateToProps = (state: ReduxState) => ({
 	travelTimes: state.travelTime.travelTimes,
-	tooltip: state.application.tooltip
+	tooltip: state.application.tooltip,
+	schoolDetailPin: state.application.schoolDetailPin
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	setZoomLevel,
 	setTooltip,
 	setFaqVisibility,
-	setDemoVisibility
+	setDemoVisibility,
+	setSchoolDetailPin
 }, dispatch)
 
 export const Map = connect<StateProps, DispatchProps, Props, ReduxState>(

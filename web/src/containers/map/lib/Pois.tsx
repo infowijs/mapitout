@@ -6,7 +6,7 @@ import MarkerClusterer from 'react-google-maps/lib/components/addons/MarkerClust
 import { createGlobalStyle } from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { ReduxState } from 'store'
+import {ReduxState, setSchoolDetailPin, setTooltip} from 'store'
 
 import iconPrimary from 'assets/primary.svg'
 import iconSecondary from 'assets/secondary.svg'
@@ -64,7 +64,10 @@ interface StateProps {
 	secondaryEducationVisible: ReduxState['application']['secondaryEducationVisible']
 	onlyInternationalVisibility: ReduxState['application']['onlyInternationalVisibility']
 }
-interface DispatchProps {}
+interface DispatchProps {
+	setSchoolDetailPin: typeof setSchoolDetailPin
+	setTooltip: typeof setTooltip
+}
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
 
@@ -237,6 +240,15 @@ export class Component extends React.Component<PropsUnion, State> {
 									lng: address.lng
 								}}
 								icon={icon}
+								onClick={(e) => {
+									const addr = this.state.addresses
+										.find((addr) => addr.id === address.id)
+
+									if (addr) {
+										this.props.setSchoolDetailPin(addr)
+										this.props.setTooltip(null)
+									}
+								}}
 							/>
 						)
 					})}
@@ -252,7 +264,10 @@ const mapStateToProps = (state: ReduxState) => ({
 	secondaryEducationVisible: state.application.secondaryEducationVisible,
 	onlyInternationalVisibility: state.application.onlyInternationalVisibility
 })
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({}, dispatch)
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
+	setSchoolDetailPin,
+	setTooltip
+}, dispatch)
 
 export const Pois = connect<StateProps, DispatchProps, Props, ReduxState>(
 	mapStateToProps,
