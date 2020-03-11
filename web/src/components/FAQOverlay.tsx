@@ -165,6 +165,16 @@ class Component extends React.Component<PropsUnion> {
 						<h1>I would like to offer this tool as well, is that possible?</h1>
 						<p>That is great, maybe we can help. You can always refer to the MapitOut tool. However, you might want to apply the functionality of the tool to your own website. The application is built as open-source, which means you can fork the tool. To make the tool work like the MapitOut tool, you do need to close separate data contracts (e.g. the TravelTime platform). You can find the information required on <a href='https://github.com/infowijs/mapitout' target='_blank' rel='noopener noreferrer'>Github</a>.</p>
 					</StyledContentSegment>
+					<StyledContentSegment>
+						<h1>A few disclaimers</h1>
+						<p>- Pinpoints on the map. Due to pinpoints placed on the map by Google which can be further than in reality, your search result could be different than expected. One solution could be that if you get multiple suggestions for e.g. a station (or other location), you try several and see if that changes the result.</p>
+						<p>- Please note that the tool is not a real-time travel tool. The tool shows results (ranges) assuming the public transport journey takes place anytime between a timeslot of two hours during the day but does not take into account the exact time you wish to travel. It could be that the actual travel will take longer, or there is no public transport at a certain time, or you will have to wait longer for a train. Please refer to real-time travel platforms to make sure you can reach your destination (e.g. <a href='https://9292.nl/en' target='_blank' rel='noopener noreferrer'>www.9292.nl/en</a>).</p>
+						<p>- The shape of the ranges (results of your searches) is adjusted with a processing layer. This means the amount of points have been reduced for better performance of the application. The remaining points are smoothed based on the current zoom level.</p>
+					</StyledContentSegment>
+					<StyledContentSegment>
+						<h1>Questions?</h1>
+						<p>For any questions or suggestions please contact <a href='mailto:welcome@amsterdam.nl' target='_blank' rel='noopener noreferrer'>welcome@amsterdam.nl</a>.</p>
+					</StyledContentSegment>
 				</StyledContent>
 			</StyledContainer>
 		)
