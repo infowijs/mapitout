@@ -128,7 +128,7 @@ class Component extends React.Component<PropsUnion> {
 					<StyledContentSegment>
 						<h1>What is the MapitOut tool?</h1>
 						<p>The MapitOut tool is an interactive map that allows you to select a location to live in by entering desired travel times to different locations. You can find out more about the various parts of the Amsterdam Area on the <a href='https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area' target='_blank' rel='noopener noreferrer'>‘Living in the Amsterdam Area’ section of the I amsterdam website</a>. Internationals who have come to work in the Amsterdam Area can find reliable information about what makes the region unique, including videos and testimonials of people living there.</p>
-						<p>Please note that the tool is not intended for planning travel in real-time. Refer to real-time travel platforms such as <a href='https://www.ov9292.nl/en' target='_blank' rel='noopener noreferrer'>www.ov9292.nl/en</a> for public transport information. </p>
+						<p>Please note that the tool is not intended for planning travel in real-time. Refer to real-time travel platforms such as <a href='https://9292.nl/en' target='_blank' rel='noopener noreferrer'>www.9292.nl/en</a> for public transport information. </p>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>Who is the tool for?</h1>
