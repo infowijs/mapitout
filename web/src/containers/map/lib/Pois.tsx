@@ -172,7 +172,7 @@ export class Component extends React.Component<PropsUnion, State> {
 
 		for (const address of availableAddresses) {
 			if (address.visible) {
-				address.schools.find((school) => [
+				address.visible = !!address.schools.find((school) => [
 					primaryEducationVisible ? 'primary' : 'secondary',
 					'mixed'
 				].includes(school.type))
