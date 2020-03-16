@@ -130,7 +130,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				mapPaneName={OverlayView.FLOAT_PANE}
 				getPixelPositionOffset={(width, height) => ({
 					x: -(width / 2),
-					y: -height
+					y: -(height + 48)
 				})}
 			>
 				<StyledTooltip>
