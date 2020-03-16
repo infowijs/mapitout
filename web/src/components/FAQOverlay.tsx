@@ -167,9 +167,11 @@ class Component extends React.Component<PropsUnion> {
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>A few disclaimers</h1>
-						<p>- Pinpoints on the map. Due to pinpoints placed on the map by Google which can be further than in reality, your search result could be different than expected. One solution could be that if you get multiple suggestions for e.g. a station (or other location), you try several and see if that changes the result.</p>
-						<p>- Please note that the tool is not a real-time travel tool. The tool shows results (ranges) assuming the public transport journey takes place anytime between a timeslot of two hours during the day but does not take into account the exact time you wish to travel. It could be that the actual travel will take longer, or there is no public transport at a certain time, or you will have to wait longer for a train. Please refer to real-time travel platforms to make sure you can reach your destination (e.g. <a href='https://9292.nl/en' target='_blank' rel='noopener noreferrer'>www.9292.nl/en</a>).</p>
-						<p>- The shape of the ranges (results of your searches) is adjusted with a processing layer. This means the amount of points have been reduced for better performance of the application. The remaining points are smoothed based on the current zoom level.</p>
+						<ul>
+							<li>Pinpoints on the map. Due to pinpoints placed on the map by Google which can be further than in reality, your search result could be different than expected. One solution could be that if you get multiple suggestions for e.g. a station (or other location), you try several and see if that changes the result.</li>
+							<li>Please note that the tool is not a real-time travel tool. The tool shows results (ranges) assuming the public transport journey takes place anytime between a timeslot of two hours during the day but does not take into account the exact time you wish to travel. It could be that the actual travel will take longer, or there is no public transport at a certain time, or you will have to wait longer for a train. Please refer to real-time travel platforms to make sure you can reach your destination (e.g. <a href='https://9292.nl/en' target='_blank' rel='noopener noreferrer'>www.9292.nl/en</a>).</li>
+							<li>The shape of the ranges (results of your searches) is adjusted with a processing layer. This means the amount of points have been reduced for better performance of the application. The remaining points are smoothed based on the current zoom level.</li>
+						</ul>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>Questions?</h1>
