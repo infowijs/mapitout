@@ -416,7 +416,9 @@ export class Component extends React.Component<PropsUnion, State> {
 							<StyledAddressInput
 								{...getInputProps({
 									placeholder: 'Address',
-									name: 'address'
+									name: 'address',
+									type: 'search',
+									autocomplete: 'off'
 								})}
 							/>
 						</StyledSegment>
