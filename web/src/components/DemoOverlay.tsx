@@ -116,7 +116,7 @@ class Component extends React.Component<PropsUnion> {
 					</StyledCloseButton>
 					<StyledVideoContainer>
 						{this.props.demoVisible && <iframe
-							src='https://www.youtube.com/embed/ScWQ1xx2n18'
+							src='https://www.youtube.com/embed/_01cZwF2_bk'
 							frameBorder='0'
 							title='Demo video'
 							allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
