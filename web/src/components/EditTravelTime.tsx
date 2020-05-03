@@ -379,7 +379,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		)
 	}
 
-	private updateValues(value: Partial<TravelTimeAbstraction> | null) {
+	public updateValues(value: Partial<TravelTimeAbstraction> | null) {
 		if (value) {
 			this.setState({
 				title: value.title,
