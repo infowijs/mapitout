@@ -144,7 +144,7 @@ class Component extends React.Component<PropsUnion> {
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>What should I do if the tool isn’t working?</h1>
-						<p>Oh no! First, try refreshing the url or try another browser (e.g. Firefox or Chrome). If you still have issues, contact us by email: <a href='mailto:welcome@amsterdam.nl'>welcome@amsterdam.nl</a> mentioning you have a question/remark regarding the MapitOut tool. Feel free to include print screens and details of your browser.</p>
+						<p>Oh no! First, try refreshing the url or try another browser (e.g. Firefox or Chrome). When searching for a location you can enter an establishment or an address, if so please put a comma between the street address and the city. Always click on the appropriate dropdown suggestion. If you still have issues, contact us by email: <a href='mailto:welcome@amsterdam.nl'>welcome@amsterdam.nl</a> mentioning you have a question/remark regarding the MapitOut tool. Feel free to include print screens and details of your browser.</p>
 					</StyledContentSegment>
 					<StyledContentSegment>
 						<h1>Which travel information does it use?</h1>
