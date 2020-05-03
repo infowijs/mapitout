@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
+import PlacesAutocomplete, { geocodeByAddress, getLatLng, Suggestion } from 'react-places-autocomplete'
 import styled, { css } from 'styled-components'
 import Select from 'react-select'
 
@@ -418,7 +418,8 @@ export class Component extends React.Component<PropsUnion, State> {
 									placeholder: 'Address',
 									name: 'address',
 									type: 'search',
-									autocomplete: 'off'
+									autocomplete: 'off',
+                                    onBlur: () => this.handlePlacesAutoCompleteBlur(suggestions)
 								})}
 							/>
 						</StyledSegment>
@@ -441,6 +442,11 @@ export class Component extends React.Component<PropsUnion, State> {
 			</PlacesAutocomplete>
 		)
 	}
+
+	private handlePlacesAutoCompleteBlur = (suggestions: readonly Suggestion[]) => {
+        if (this.state.location || suggestions.length === 0) return
+        this.handlePlacesAutocompleteSelect(suggestions[0].description)
+    }
 
 	private handlePlacesAutocompleteChange = (title: string) => {
 		this.setState({title})
