@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled, {createGlobalStyle} from 'styled-components'
+import { Trans } from '@lingui/macro'
 
 import { ZoomInIcon, ZoomOutIcon, HelpIcon, OndemandVideoIcon } from 'icons'
 import { ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility, setSchoolDetailPin } from 'store'
@@ -167,7 +168,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				{this.renderControls()}
 				<GlobalGoogleMapsAttributionOffset/>
 				<StyledAttribution>
-					Powered by <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' rel='noopener noreferrer' target='_blank'>Privacy policy</a>
+					<Trans>Powered by</Trans> <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' rel='noopener noreferrer' target='_blank'>Privacy policy</a>
 				</StyledAttribution>
 				<Markers onMarkerClick={(travelTime) => {
 					this.animateFitToBounds(travelTime)

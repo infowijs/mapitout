@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import styled from 'styled-components'
+import { i18n } from '@lingui/core'
 
 import { ReduxState } from 'store'
 import { ClockIcon, CrossIcon, EditIcon } from 'icons'
@@ -170,7 +171,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							<StyledTravelCardInfoMetaItemIcon>
 								{getTravelTypeInfo(transport).icon}
 							</StyledTravelCardInfoMetaItemIcon>
-							<p className='label'>{getTravelTypeInfo(transport).name}</p>
+							<p className='label'>{i18n._(getTravelTypeInfo(transport).name)}</p>
 						</StyledTravelCardInfoMetaItem>
 					</StyledTravelCardInfoMeta>
 				</StyledTravelCardInfo>

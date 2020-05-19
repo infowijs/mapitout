@@ -17,6 +17,7 @@ import addresses from 'assets/schools.json'
 import educationPrimaryIcon from 'assets/primary.svg'
 import educationSecondaryIcon from 'assets/secondary.svg'
 import { Address } from 'interfaces'
+import {Trans} from '@lingui/macro'
 
 const StyledContainer = styled.div`
 	position: relative;
@@ -92,7 +93,8 @@ const StyledContent = styled.div`
 `
 
 const StyledFilterInfo = styled.p`
-	opacity: .25
+	opacity: .25;
+	text-align: center;
 `
 
 const StyledFilterOptionContainer = styled.div`
@@ -307,7 +309,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				<StyledContainerOverflow active={active} contentHeight={height} isEditing={isEditing}>
 					<StyledFilter>
 						<StyledHeader active={active} onClick={() => !active && this.setState({active: true})}>
-							<p>Points of interest</p>
+							<p><Trans>Points of interest</Trans></p>
 							<StyledIconContainer onClick={() => active && this.setState({active: false})}>
 								<StyledIcon active={active} visible={!active} index={0}>
 									<FilterIcon/>
@@ -333,7 +335,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					<StyledFilterOption>
 						<StyledMarkerIcon src={educationPrimaryIcon} alt='Primary education icon'/>
 						<StyledLabel disabled={!this.state.primaryEducationAvailable}
-						>Primary education</StyledLabel>
+						><Trans>Primary education</Trans></StyledLabel>
 						<StyledToggle>
 							<StyledToggleInput
 								type='checkbox'
@@ -347,7 +349,8 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledFilterOption>
 					<StyledFilterOption>
 						<StyledMarkerIcon src={educationSecondaryIcon} alt='Secondary education icon'/>
-						<StyledLabel disabled={!this.state.secondaryEducationAvailable}>Secondary education</StyledLabel>
+						<StyledLabel disabled={!this.state.secondaryEducationAvailable}
+						><Trans>Secondary education</Trans></StyledLabel>
 						<StyledToggle>
 							<StyledToggleInput
 								type='checkbox'
@@ -368,11 +371,11 @@ export class Component extends React.Component<PropsUnion, State> {
 						onFocus={() => this.setState({active: true})}
 					/>
 					<StyledInternationalFilterVirtual>
-						<span>all schools</span>
-						<span>only international</span>
+						<span><Trans>all schools</Trans></span>
+						<span><Trans>only international</Trans></span>
 					</StyledInternationalFilterVirtual>
 				</StyledInternationalFilter>
-				<StyledFilterInfo>Markers are only visible on lower zoom levels</StyledFilterInfo>
+				<StyledFilterInfo><Trans>Markers are only visible on lower zoom levels</Trans></StyledFilterInfo>
 			</>
 		)
 	}

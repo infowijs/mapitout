@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { OverlayView } from 'react-google-maps'
 import styled from 'styled-components'
+import { Trans } from '@lingui/macro'
 
 import { ReduxState } from 'store'
 import { CrossIcon, ChevronRightIcon } from 'icons'
@@ -148,7 +149,7 @@ export class Component extends React.Component<PropsUnion, State> {
 								</StyledContentItemIcon>
 								<StyledContentItemTitle>
 									{school.name}
-									{school.international && <StyledContentItemInternationalFlag>international</StyledContentItemInternationalFlag>}
+									{school.international && <StyledContentItemInternationalFlag><Trans>international</Trans></StyledContentItemInternationalFlag>}
 								</StyledContentItemTitle>
 								<StyledOpenWebsiteIcon/>
 							</StyledContentItem>
