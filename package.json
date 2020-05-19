@@ -1,7 +1,7 @@
 {
   "name": "mapitout",
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "private": true,
   "scripts": {
     "deploy": "serverless deploy --stage production"
