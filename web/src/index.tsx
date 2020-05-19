@@ -10,11 +10,11 @@ import dotenv from 'dotenv'
 import { setupI18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 
-import catalogEn from './locales/en/messages.js'
-import catalogNl from './locales/nl/messages.js'
-
 import { configureStore } from 'store'
 import { Map, App } from 'containers'
+import { determineLanguage } from './locales/utils'
+import catalogEn from './locales/en/messages.js'
+import catalogNl from './locales/nl/messages.js'
 
 import 'react-app-polyfill/ie11'
 import 'react-app-polyfill/stable'
@@ -32,7 +32,7 @@ if (process.env.REACT_APP_SENTRY_DSN) {
 const store = configureStore()
 
 export const i18n = setupI18n({
-	language: window.location.href.indexOf('nl') > 0 ? 'nl' : 'en',
+	language: determineLanguage(),
 	catalogs: {
 		en: catalogEn,
 		nl: catalogNl
