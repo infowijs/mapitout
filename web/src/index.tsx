@@ -7,6 +7,12 @@ import * as Sentry from '@sentry/browser'
 import scriptjs from 'scriptjs'
 import dotenv from 'dotenv'
 
+import { setupI18n } from '@lingui/core'
+import { I18nProvider } from '@lingui/react'
+
+import catalogEn from './locales/en/messages.js'
+import catalogNl from './locales/nl/messages.js'
+
 import { configureStore } from 'store'
 import { Map, App } from 'containers'
 
@@ -25,6 +31,14 @@ if (process.env.REACT_APP_SENTRY_DSN) {
 
 const store = configureStore()
 
+export const i18n = setupI18n({
+	language: window.location.href.indexOf('nl') > 0 ? 'nl' : 'en',
+	catalogs: {
+		en: catalogEn,
+		nl: catalogNl
+	}
+})
+
 class Root extends React.Component<{}, {loaded: boolean}> {
 	public readonly state = {
 		loaded: false
@@ -37,12 +51,14 @@ class Root extends React.Component<{}, {loaded: boolean}> {
 		if (!this.state.loaded) return null
 
 		return (
-			<Provider store={store}>
-				<Map/>
-				<BrowserRouter>
-					<Route component={App} path='/:travelOne?/:travelTwo?/:travelThree?/:travelFour?/:travelFive?/:travelSix?'/>
-				</BrowserRouter>
-			</Provider>
+			<I18nProvider language={i18n.language} i18n={i18n}>
+				<Provider store={store}>
+					<Map/>
+					<BrowserRouter>
+						<Route component={App} path='/:travelOne?/:travelTwo?/:travelThree?/:travelFour?/:travelFive?/:travelSix?'/>
+					</BrowserRouter>
+				</Provider>
+			</I18nProvider>
 		)
 	}
 }
