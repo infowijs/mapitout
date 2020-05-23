@@ -5,7 +5,7 @@ import { StyledContentSegment } from './styles'
 export const FaqNL = ({ setDemoVisibility }: any) => (
 	<>
 		<StyledContentSegment>
-			<h1>Wat is de MapItOut tool?</h1>
+			<h1>Wat is de MapitOut tool?</h1>
 			<p>The MapitOut tool is an interactive map that allows you to select a location to live in by
 				entering desired travel times to different locations. You can find out more about the various
 				parts of the Amsterdam Area on the <a
