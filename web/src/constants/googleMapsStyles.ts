@@ -87,7 +87,7 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 		elementType: 'all',
 		stylers: [
 			{
-				visibility: 'on'
+				visibility: 'off'
 			}
 		]
 	},
@@ -122,6 +122,9 @@ export const googleMapsStyles: NonNullable<GoogleMapProps['defaultOptions']>['st
 		featureType: 'poi.park',
 		elementType: 'geometry',
 		stylers: [
+			{
+				visibility: 'on'
+			},
 			{
 				color: '#dedede'
 			},
