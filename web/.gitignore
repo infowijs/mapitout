@@ -28,3 +28,6 @@ yarn-error.log*
 .idea
 .vscode
 
+# lingui
+src/locales/_build
+src/locales/*/*.js

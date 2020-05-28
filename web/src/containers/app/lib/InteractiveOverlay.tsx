@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import styled, { css } from 'styled-components'
 import CopyToClipboard from 'react-copy-to-clipboard'
+import { Trans } from '@lingui/macro'
 
 import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOverlapState } from 'store'
 import { TravelTimeAbstraction } from 'interfaces'
@@ -400,7 +401,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					<StyledOnboardingTooltipContainer>
 						<StyledOnboardingTooltip>
 							<InfoIcon/>
-							<p>Click anywhere on the map to add a location</p>
+							<p><Trans>Click anywhere on the map to add a location</Trans></p>
 						</StyledOnboardingTooltip>
 					</StyledOnboardingTooltipContainer>
 					<StyledFilterContainer>
@@ -434,7 +435,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						}}
 					>
 						<StyledUIContainerInnerContent>
-							<StyledSlogan>How far could I live from</StyledSlogan>
+							<StyledSlogan><Trans>How far could I live from</Trans></StyledSlogan>
 							{this.renderTravelTimes()}
 							{this.renderActiveNew()}
 							{this.renderLoader()}
@@ -519,7 +520,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					<StyledActionIcon>
 						<AddIcon/>
 					</StyledActionIcon>
-					<p>Add new location</p>
+					<p><Trans>Add new location</Trans></p>
 				</StyledAction>
 				<StyledAction
 					isDisabled={!this.isOverlapAvailable()}
@@ -535,9 +536,9 @@ export class Component extends React.Component<PropsUnion, State> {
 					<p>{
 						this.isOverlapAvailable()
 							? (this.props.overlapVisible
-								? 'Back to normal'
-								: 'Show overlapping area')
-							: 'No overlapping area'
+								? (<Trans>Back to normal</Trans>)
+								: (<Trans>Show overlapping area</Trans>))
+							: (<Trans>No overlapping area</Trans>)
 					}</p>
 				</StyledAction>
 				<CopyToClipboard text={window.location.href} onCopy={this.handleCopy}>
@@ -546,11 +547,12 @@ export class Component extends React.Component<PropsUnion, State> {
 							<LinkIcon/>
 						</StyledActionIcon>
 						<p>{this.props.travelTimes && this.props.travelTimes.length > 1
-							? 'Share these locations'
-							: 'Share this location'}</p>
+							? (<Trans>Share these locations</Trans>)
+							: (<Trans>Share this location</Trans>)
+						}</p>
 						{this.state.justCopied && (
 							<StyledCopyNotification>
-								<p className="label">Copied to clipboard</p>
+								<p className="label"><Trans>Copied to clipboard</Trans></p>
 							</StyledCopyNotification>
 						)}
 					</StyledAction>

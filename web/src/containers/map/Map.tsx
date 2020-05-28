@@ -3,12 +3,15 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import styled, {createGlobalStyle} from 'styled-components'
+import { Trans, t } from '@lingui/macro'
 
-import { ZoomInIcon, ZoomOutIcon, HelpIcon, OndemandVideoIcon } from 'icons'
+import { ZoomInIcon, ZoomOutIcon, HelpIcon, OndemandVideoIcon, FlagIcon } from 'icons'
 import { ReduxState, setZoomLevel, setTooltip, setFaqVisibility, setDemoVisibility, setSchoolDetailPin } from 'store'
 
 import { googleMapsStyles } from '../../constants'
 import { Markers, Pois, Polygons, SchoolDetailPin, Tooltip } from './lib'
+import { i18n } from '../../index'
+import { determineLanguage, setLanguage } from '../../locales/utils'
 
 const GlobalGoogleMapsAttributionOffset = createGlobalStyle`
 	@media (max-width: 900px) {
@@ -152,7 +155,7 @@ export class Component extends React.Component<PropsUnion, State> {
 										: '')
 									+ (city
 										? ', ' + city.short_name
-										: '')) || 'Somewhere on a boat'
+										: '')) || i18n._(t`Somewhere on a boat`)
 
 								this.props.setTooltip({
 									title,
@@ -167,7 +170,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				{this.renderControls()}
 				<GlobalGoogleMapsAttributionOffset/>
 				<StyledAttribution>
-					Powered by <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' rel='noopener noreferrer' target='_blank'>Privacy policy</a>
+					<Trans>Powered by</Trans> <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' rel='noopener noreferrer' target='_blank'>Privacy policy</a>
 				</StyledAttribution>
 				<Markers onMarkerClick={(travelTime) => {
 					this.animateFitToBounds(travelTime)
@@ -227,6 +230,8 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private renderControls() {
+		const newLanguage = determineLanguage() === 'nl' ? 'en' : 'nl'
+
 		return (
 			<StyledControls>
 				<StyledControlsGroup>
@@ -237,6 +242,11 @@ export class Component extends React.Component<PropsUnion, State> {
 				<StyledControlsGroup>
 					<StyledControlsItem onClick={() => this.props.setDemoVisibility(true)}>
 						<OndemandVideoIcon/>
+					</StyledControlsItem>
+				</StyledControlsGroup>
+				<StyledControlsGroup>
+					<StyledControlsItem onClick={() => setLanguage(newLanguage)}>
+						<FlagIcon language={newLanguage}/>
 					</StyledControlsItem>
 				</StyledControlsGroup>
 				<StyledControlsGroup>

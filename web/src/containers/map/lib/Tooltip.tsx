@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { OverlayView } from 'react-google-maps'
 import styled, { css } from 'styled-components'
+import { Trans } from '@lingui/macro'
 
 import { ReduxState, setTooltip, setNewTravelTimeDetails } from 'store'
 import { AddIcon, CrossIcon } from 'icons'
@@ -140,7 +141,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						>
 							<AddIcon/>
 						</StyledIconContainer>
-						<p>Add this location</p>
+						<p><Trans>Add this location</Trans></p>
 					</StyledContentContainer>
 				</StyledTooltip>
 			</OverlayView>

@@ -4,6 +4,8 @@ import { bindActionCreators, Dispatch } from 'redux'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng, Suggestion } from 'react-places-autocomplete'
 import styled, { css } from 'styled-components'
 import Select from 'react-select'
+import { Trans, t } from '@lingui/macro'
+import { i18n } from '../index'
 
 import { ReduxState } from 'store'
 import { TravelTimeAbstraction } from 'interfaces'
@@ -347,7 +349,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		return (
 			<>
 				<StyledContainer>
-					<StyledTitle>How far could I live from</StyledTitle>
+					<StyledTitle><Trans>How far could I live from</Trans></StyledTitle>
 					{this.renderInputAddress()}
 					{this.renderInputDuration()}
 					{this.renderInputTraveltype()}
@@ -371,8 +373,8 @@ export class Component extends React.Component<PropsUnion, State> {
 				<StyledCancelButtonContainer>
 					<StyledCancelButton className="label" onClick={() => this.props.onCancel()}>
 						{this.props.new
-							? 'cancel new location'
-							: 'cancel'}
+							? (<Trans>cancel new location</Trans>)
+							: (<Trans>cancel</Trans>)}
 					</StyledCancelButton>
 				</StyledCancelButtonContainer>
 			</>
@@ -412,10 +414,11 @@ export class Component extends React.Component<PropsUnion, State> {
 				{({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
 					<StyledAutocompleteContainer>
 						<StyledSegment>
-							<StyledLabel htmlFor='address' className='label' color={this.props.color}>From</StyledLabel>
+							<StyledLabel htmlFor='address' className='label' color={this.props.color}
+							><Trans>From</Trans></StyledLabel>
 							<StyledAddressInput
 								{...getInputProps({
-									placeholder: 'Address',
+									placeholder: i18n._(t`Address`),
 									name: 'address',
 									type: 'search',
 									autocomplete: 'off',
@@ -424,7 +427,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							/>
 						</StyledSegment>
 						<StyledAutocompleteDropdownContainer>
-							{loading && <StyledLoader>Loading...</StyledLoader>}
+							{loading && <StyledLoader><Trans>Loading...</Trans></StyledLoader>}
 							{suggestions.map(suggestion => {
 								return (
 									<StyledAutocompleteSuggestion
@@ -468,17 +471,18 @@ export class Component extends React.Component<PropsUnion, State> {
 	private renderInputDuration() {
 		type Entry = {value: number, label: string}
 		const options: Entry[] = [
-			{ value: 900, label: '15 minutes' },
-			{ value: 1800, label: '30 minutes' },
-			{ value: 2700, label: '45 minutes' },
-			{ value: 3600, label: '60 minutes' },
+			{ value: 900, label: i18n._(t`15 minutes`) },
+			{ value: 1800, label: i18n._(t`30 minutes`) },
+			{ value: 2700, label: i18n._(t`45 minutes`) },
+			{ value: 3600, label: i18n._(t`60 minutes`) },
 		]
 
-		const currentOption = options.filter((t) => t.value === this.state.duration)[0] || ''
+		const currentOption = options.filter((option) => option.value === this.state.duration)[0] || ''
 		return (
 			<StyledSegment>
-				<StyledLabel className='label' as='p' color={this.props.color}>within</StyledLabel>
+				<StyledLabel className='label' as='p' color={this.props.color}><Trans>within</Trans></StyledLabel>
 				<StyledSelect
+					placeholder={i18n._(t`Select...`)}
 					styles={{control: () => null}}
 					classNamePrefix='react-select'
 					minWidth={110}
@@ -498,19 +502,20 @@ export class Component extends React.Component<PropsUnion, State> {
 	private renderInputTraveltype() {
 		type Entry = {value: TransportType, label: React.ReactNode}
 		const options: Entry[] = [
-			{ value: TransportType.Walking, label: getTravelTypeInfo(TransportType.Walking).name },
-			{ value: TransportType.Cycling_PublicTransport, label: getTravelTypeInfo(TransportType.Cycling_PublicTransport).name },
-			{ value: TransportType.PublicTransport, label: getTravelTypeInfo(TransportType.PublicTransport).name },
-			{ value: TransportType.Cycling, label: getTravelTypeInfo(TransportType.Cycling).name },
-			{ value: TransportType.Driving, label: getTravelTypeInfo(TransportType.Driving).name }
+			{ value: TransportType.Walking, label: i18n._(getTravelTypeInfo(TransportType.Walking).name) },
+			{ value: TransportType.Cycling_PublicTransport, label: i18n._(getTravelTypeInfo(TransportType.Cycling_PublicTransport).name) },
+			{ value: TransportType.PublicTransport, label: i18n._(getTravelTypeInfo(TransportType.PublicTransport).name) },
+			{ value: TransportType.Cycling, label: i18n._(getTravelTypeInfo(TransportType.Cycling).name) },
+			{ value: TransportType.Driving, label: i18n._(getTravelTypeInfo(TransportType.Driving).name) }
 		]
 
-		const currentOption = options.filter((t) => t.value === this.state.transport)[0] || ''
+		const currentOption = options.filter((option) => option.value === this.state.transport)[0] || ''
 
 		return (
 			<StyledSegment withoutRightMargin={true}>
-				<StyledLabel className='label' as='p' color={this.props.color}>by</StyledLabel>
+				<StyledLabel className='label' as='p' color={this.props.color}><Trans>by</Trans></StyledLabel>
 				<StyledSelect
+					placeholder={i18n._(t`Select...`)}
 					styles={{control: () => null}}
 					classNamePrefix='react-select'
 					minWidth={160}
