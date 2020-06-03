@@ -23,7 +23,7 @@ export const FaqEN = ({ setDemoVisibility }: any) => (
 			<h1>Who is the tool for?</h1>
 			<p>Anyone interested in learning more about travel times in the Netherlands can use the MapitOut
 				tool! It was designed in English to help internationals who have come to work in the Amsterdam
-				Area, but it also uses symbols and visual elements to assist non-English speakers.</p>
+				Area, but now also has a Dutch version. Furthermore it uses many symbols and visual elements.</p>
 		</StyledContentSegment>
 		<StyledContentSegment>
 			<h1>How does the tool work?</h1>
@@ -58,7 +58,7 @@ export const FaqEN = ({ setDemoVisibility }: any) => (
 				is then layered on top including agencies such as GVB, FlixBus, NS, R-Net and more. Driving,
 				cycling and walking time models are developed by TravelTime platform. <a
 					href='https://www.traveltimeplatform.com/turn-radius-maps-into-travel-time' target='_blank'
-					rel='noopener noreferrer'>Find more information about the TravelTime platform.</a></p>
+					rel='noopener noreferrer'>Find more information about TravelTime.</a></p>
 		</StyledContentSegment>
 		<StyledContentSegment>
 			<h1>How is the reach of a cycling and public transport search determined?</h1>
