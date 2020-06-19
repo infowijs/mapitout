@@ -6,7 +6,7 @@ export const FaqNL = ({ setDemoVisibility }: any) => (
 	<>
 		<StyledContentSegment>
 			<h1>Wat is de MapitOut tool?</h1>
-			<p>De MapitOut tool is een interactieve kaart die helpt mogelijke woonlocaties te vinden door de gewenste max. reistijd naar verschillende locaties in te voeren. NB: de tool is niet bedoeld voor het real-time plannen van een reis, daarvoor kunt u gebruik maken van real-time platforms zoals <a href='https://9292.nl/' target='_blank' rel='noopener noreferrer'>www.9292.nl/</a> voor openbaar vervoer.</p>
+			<p>De MapitOut tool is een interactieve kaart die helpt mogelijke woonlocaties te vinden door de gewenste max. reistijd naar verschillende locaties in te voeren. NB: de tool is niet bedoeld voor het real-time plannen van een reis, daarvoor kunt u gebruik maken van real-time platforms zoals <a href='https://9292.nl/' target='_blank' rel='noopener noreferrer'>www.9292.nl/</a> (openbaar vervoer) en <a href='https://maps.google.com' target='_blank' rel='noopener noreferrer'>Google Maps</a>.</p>
 			<p>Internationals die in regio Amsterdam komen werken en de regio nog niet kennen kunnen meer informatie over de verschillende deelgebieden van metropoolregio Amsterdam vinden op het <a href='https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area' target='_blank' rel='noopener noreferrer'>‘Living in the Amsterdam Area’</a>.</p>
 		</StyledContentSegment>
 		<StyledContentSegment>
