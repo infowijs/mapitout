@@ -16,8 +16,8 @@ export const FaqEN = ({ setDemoVisibility }: any) => (
 				people living there.</p>
 			<p>Please note that the tool is not intended for planning travel in real-time. Refer to real-time
 				travel platforms such as <a
-					href='https://9292.nl/en' target='_blank' rel='noopener noreferrer'>www.9292.nl/en</a> for
-				public transport information. </p>
+					href='https://9292.nl/en' target='_blank' rel='noopener noreferrer'>www.9292.nl/en</a> (public transport information) and <a
+					href='https://maps.google.com' target='_blank' rel='noopener noreferrer'>Google Maps</a>. </p>
 		</StyledContentSegment>
 		<StyledContentSegment>
 			<h1>Who is the tool for?</h1>
