@@ -159,7 +159,7 @@ export class Component extends React.Component<PropsUnion, State> {
 		const {color, location, duration, transport, onDelete, onEdit} = this.props
 
 		let durationLabel = `${duration / 60} minutes`
-		switch(duration / 60) {
+		switch(duration) {
 			case 900:
 				durationLabel = i18n._(t`15 minutes`);
 				break;
