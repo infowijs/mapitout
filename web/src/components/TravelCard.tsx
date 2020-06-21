@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import styled from 'styled-components'
-import { i18n } from '@lingui/core'
+import { t } from '@lingui/macro'
+import { i18n } from '../index'
 
 import { ReduxState } from 'store'
 import { ClockIcon, CrossIcon, EditIcon } from 'icons'
@@ -12,17 +13,17 @@ import { shadows } from '../constants'
 
 const StyledTravelCard = styled.div<{color: string}>`
 	border-radius: 2rem;
-	
+
 	background-color: ${(props) => hexColorToRGBA(props.color, .9)};
 	color: #fff;
 	${shadows.normal};
-	
+
 	@media (min-width: 900px) {
 		display: flex;
 		flex-direction: row;
 		margin-bottom: 16px;
 	}
-	
+
 	@media (max-width: 900px) {
 		height: 2.5rem;
 		width: 2.5rem;
@@ -48,7 +49,7 @@ const StyledTravelCardTitle = styled.h1`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-bottom: 1rem;
-	
+
 	@media (max-width: 900px) {
 		display: none;
 	}
@@ -61,16 +62,16 @@ const StyledTravelCardInfoMeta = styled.div`
 	}
 `
 
-const StyledTravelCardInfoMetaItem = styled.div`	
+const StyledTravelCardInfoMetaItem = styled.div`
 	@media (min-width: 900px) {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
-	
+
 	&:not(:last-child) {
 		margin-right: 2rem;
-		
+
 		@media (max-width: 900px) {
 			display: none;
 		}
@@ -90,7 +91,7 @@ const StyledTravelCardInfoMetaItemIcon = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	
+
 	@media (min-width: 900px) {
 		margin-right: .5rem;
 	}
@@ -98,7 +99,7 @@ const StyledTravelCardInfoMetaItemIcon = styled.div`
 
 const StyledTravelCardAction = styled.div`
 	padding: 1rem 1rem 0 0;
-	
+
 	@media (max-width: 900px) {
 		display: none;
 	}
@@ -114,7 +115,7 @@ const StyledTravelCardActionItem = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	
+
 	:before {
 		content: '';
 		position: absolute;
@@ -129,12 +130,12 @@ const StyledTravelCardActionItem = styled.div`
 	:hover:before {
 		transform: scale(1.25);
 	}
-	
+
 	svg {
 		max-width: 1rem;
 		max-height: 1rem;
 	}
-	
+
 	&:not(:last-child) {
 		margin-bottom: .5rem;
 	}
@@ -156,6 +157,23 @@ export class Component extends React.Component<PropsUnion, State> {
 
 	public render() {
 		const {color, location, duration, transport, onDelete, onEdit} = this.props
+
+		let durationLabel = `${duration / 60} minutes`
+		switch(duration / 60) {
+			case 900:
+				durationLabel = i18n._(t`15 minutes`);
+				break;
+			case 1800:
+				durationLabel = i18n._(t`30 minutes`);
+				break;
+			case 2700:
+				durationLabel = i18n._(t`45 minutes`);
+				break;
+			case 3600:
+				durationLabel = i18n._(t`60 minutes`);
+				break;
+		}
+
 		return (
 			<StyledTravelCard color={color}>
 				<StyledTravelCardInfo>
@@ -165,7 +183,7 @@ export class Component extends React.Component<PropsUnion, State> {
 							<StyledTravelCardInfoMetaItemIcon>
 								<ClockIcon/>
 							</StyledTravelCardInfoMetaItemIcon>
-							<p className='label' style={{whiteSpace: 'nowrap'}}>{duration / 60} minutes</p>
+							<p className='label' style={{whiteSpace: 'nowrap'}}>{durationLabel}</p>
 						</StyledTravelCardInfoMetaItem>
 						<StyledTravelCardInfoMetaItem>
 							<StyledTravelCardInfoMetaItemIcon>
