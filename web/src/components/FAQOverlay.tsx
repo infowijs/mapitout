@@ -21,11 +21,11 @@ const StyledContainer = styled.div<{visible: boolean}>`
 	overflow: scroll;
 	padding: 10rem 1rem 2rem;
 	transition: 250ms;
-	
+
 	@media (max-width: 900px) {
 		padding-top: 1rem;
 	}
-	
+
 	${(props) => props.visible ? css`
 		backdrop-filter: blur(2px);
 		background-color: rgba(0, 0, 0, .25);
@@ -46,12 +46,12 @@ const StyledContent = styled.div<{visible: boolean}>`
 	border-radius: 30px;
 	box-sizing: border-box;
 	transition: 250ms;
-	
+
 	${(props) => !props.visible && css`
 		margin-top: 70vh;
 		opacity: 0;
 	`}
-	
+
 	@media (max-width: 900px) {
 		padding-top: 4rem;
 	}
@@ -59,7 +59,7 @@ const StyledContent = styled.div<{visible: boolean}>`
 
 const StyledCloseButton = styled.div`
 	cursor: pointer;
-	
+
 	@media (min-width: 900px) {
 		width: 35px;
 		height: 35px;
@@ -72,7 +72,7 @@ const StyledCloseButton = styled.div`
 		top: -.5rem;
 		right: -.5rem;
 		transform: translate(100%, -100%);
-		
+
 		svg {
 			color: white;
 		}
@@ -103,7 +103,11 @@ class Component extends React.Component<PropsUnion> {
 					<StyledCloseButton onClick={() => this.props.setFaqVisibility(false)}>
 						<CrossIcon/>
 					</StyledCloseButton>
-					{i18n.language === 'en' ? (<FaqEN/>) : (<FaqNL/>)}
+					{i18n.language === 'en' ? (
+						<FaqEN setDemoVisibility={this.props.setDemoVisibility}/>
+					) : (
+						<FaqNL setDemoVisibility={this.props.setDemoVisibility}/>
+					)}
 				</StyledContent>
 			</StyledContainer>
 		)
