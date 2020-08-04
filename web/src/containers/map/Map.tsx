@@ -101,6 +101,11 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	public render() {
+		const lang = determineLanguage();
+		const privacyUrl = lang === 'nl' 
+			? 'https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-mapitout-tool/'
+			: 'https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-tool-mapitout/';
+
 		const MapFactory = withGoogleMap((props: any) =>
 			<GoogleMap
 				ref={this.mapRef}
@@ -170,7 +175,7 @@ export class Component extends React.Component<PropsUnion, State> {
 				{this.renderControls()}
 				<GlobalGoogleMapsAttributionOffset/>
 				<StyledAttribution>
-					<Trans>Powered by</Trans> <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href='https://www.amsterdam.nl/privacy/specifieke/' rel='noopener noreferrer' target='_blank'>Privacy policy</a>
+					<Trans>Powered by</Trans> <a href='https://www.traveltimeplatform.com/' rel='noopener noreferrer' target='_blank'>Travel Time</a> | <a href={privacyUrl} rel='noopener noreferrer' target='_blank'>Privacy policy</a>
 				</StyledAttribution>
 				<Markers onMarkerClick={(travelTime) => {
 					this.animateFitToBounds(travelTime)
