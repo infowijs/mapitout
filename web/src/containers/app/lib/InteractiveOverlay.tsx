@@ -426,9 +426,14 @@ export class Component extends React.Component<PropsUnion, State> {
 			<>
 				<DemoOverlay/>
 				<FAQOverlay/>
-				<StyledLogoContainer>
+				<StyledLogoContainer onMouseEnter={() => {
+					if (this.props.blogVisible < 1) {
+						this.props.setBlogVisibility(1)
+					}
+				}}>
 					<LogoIcon/>
 				</StyledLogoContainer>
+				<BlogLink />
 				<StyledUIContainer menuActive={!!this.state.currentTravelTimeEditing || this.state.isCurrentlyAddingNewTravelTime}>
 					<StyledUIContainerInner
 						ref={this.scrollableTravelTimesContainer}
