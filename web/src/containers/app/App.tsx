@@ -47,7 +47,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			params.travelSix
 		].filter((v) => !!v)
 
-		if (travelsEncoded.length === 0) return
+		if (travelsEncoded.length === 0) { return }
 
 		const travelsDecoded: Parameters<typeof getTravelTimes>[0] = travelsEncoded.map((encodedTravel) => {
 			const [
@@ -91,7 +91,9 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private updatePath() {
-		if (!this.props.travelTimes) return
+		if (!this.props.travelTimes) {
+			return
+		}
 
 		const path: string = this.props.travelTimes.map((travelTime) => {
 			return [

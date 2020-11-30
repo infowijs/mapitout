@@ -17,5 +17,6 @@ export {
 	setSecondaryEducationVisibility,
 	setOnlyInternationalVisibility,
 	setFaqVisibility,
-	setDemoVisibility
+	setDemoVisibility,
+	setBlogVisibility
 } from './application/actions'

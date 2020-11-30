@@ -5,11 +5,11 @@ import styled, { css } from 'styled-components'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { Trans } from '@lingui/macro'
 
-import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOverlapState } from 'store'
+import { ReduxState, getTravelTimes, removeTravelTime, purgeTravelTimes, setOverlapState, setBlogVisibility } from 'store'
 import { TravelTimeAbstraction } from 'interfaces'
 import { AddIcon, InfoIcon, LayersIcon, LinkIcon, LogoIcon } from 'icons'
 import { colorList, hexColorToRGBA } from 'utils'
-import { EditTravelTime, Loader, Filter, TravelCard, DemoOverlay, FAQOverlay } from 'components'
+import { EditTravelTime, Loader, Filter, TravelCard, DemoOverlay, FAQOverlay, BlogLink } from 'components'
 import { shadows } from '../../../constants'
 
 const StyledUIContainer = styled.div<{menuActive: boolean}>`
@@ -20,7 +20,7 @@ const StyledUIContainer = styled.div<{menuActive: boolean}>`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	
+
 	@media (max-width: 900px) {
 		transition: left 300ms;
 		left: ${(props) => props.menuActive ? 0 : '-100%'};
@@ -40,7 +40,7 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 		overflow: visible;
     }
     overflow: auto;
-    
+
     scrollbar-width: none;
     -ms-overflow-style: none;
     ::-webkit-scrollbar {
@@ -55,7 +55,7 @@ const StyledUIContainerInner = styled.div<{isEditing: boolean}>`
 const StyledUIContainerInnerContent = styled.div`
 	padding: 1rem 1rem 60px;
 	pointer-events: none;
-	
+
 	@media (max-width: 900px) {
 		padding-top: 2rem;
 		width: 2.5rem;
@@ -77,7 +77,7 @@ const StyledFilterContainer = styled.div`
 	width: 27rem;
 	max-width: 100vw;
 	box-sizing: border-box;
-	
+
 	padding: 0 1rem;
 `
 
@@ -106,15 +106,15 @@ const StyledAction = styled.div<{isDisabled?: boolean}>`
 	flex-direction: row;
 	align-items: center;
 	z-index: 0;
-	
+
 	@media (max-width: 900px) {
 		margin: .25rem 0;
-		
+
 		p {
 			display: none;
 		}
 	}
-	
+
 	${(props) => !props.isDisabled && css`
 		:before {
 			content: '';
@@ -128,7 +128,7 @@ const StyledAction = styled.div<{isDisabled?: boolean}>`
 			width: 0;
 			z-index: -1;
 		}
-		
+
 		@media (min-width: 900px) {
 			:hover:before {
 				width: 100%;
@@ -149,7 +149,7 @@ const StyledActionIcon = styled.div<{isDisabled?: boolean, isActive?: boolean}>`
 	align-items: center;
 	justify-content: center;
 	transition: 100ms;
-	
+
 	${(props) => !props.isDisabled && css`
 		${StyledAction}:hover & {
 			transform: scale(1.1);
@@ -166,7 +166,7 @@ const StyledCopyNotification = styled.div`
 	animation-duration: 3000ms;
 	white-space: nowrap;
 	background-color: #fff;
-	
+
 	@media (max-width: 900px) {
 		p {
 			display: initial;
@@ -174,7 +174,7 @@ const StyledCopyNotification = styled.div`
 		bottom: 50%;
 		transform: translateY(50%);
 	}
-	
+
 	p {
 		font-size: .625rem !important;
 	}
@@ -206,8 +206,8 @@ const StyledLoaderContainer = styled.div`
 const sharedWrapperVisibilityAnimation = css<{visible: boolean}>`
 	pointer-events: ${(props) => props.visible ? 'auto' : 'none'};
 	transition: 500ms;
-	
-	
+
+
 	${(props) => props.visible ? css`
 		@media (min-width: 900px) {
 			max-height: 200px;
@@ -224,15 +224,15 @@ const sharedWrapperVisibilityAnimation = css<{visible: boolean}>`
 	`}
 `
 
-const StyledCardContainer = styled.div<{visible: boolean}>`	
+const StyledCardContainer = styled.div<{visible: boolean}>`
 	${sharedWrapperVisibilityAnimation};
-	
+
 	max-width: 25rem;
 `
 
 const StyledEditWrapper = styled.div<{visible: boolean}>`
 	${sharedWrapperVisibilityAnimation};
-	
+
 	@media (max-width: 900px) {
 		position: absolute;
 		width: 100vw;
@@ -241,7 +241,7 @@ const StyledEditWrapper = styled.div<{visible: boolean}>`
 		padding: 5rem 1rem 250px;
     	box-sizing: border-box;
     	z-index: 0;
-    	
+
     	:before {
     		content: '';
     		position: absolute;
@@ -259,21 +259,21 @@ const StyledEntryTravelTimeContainer = styled.div`
 	position: absolute;
 	left: 0;
 	width: 100%;
-	
+
 	@media (min-width: 900px) {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		padding-top: 4rem;
 	}
-	
+
 	@media (max-width: 900px) {
 		padding: 6rem 1rem 400px;
 		box-sizing: border-box;
 		z-index: 0;
 		max-height: 100%;
 		overflow: scroll;
-		
+
 		:before {
     		content: '';
     		position: absolute;
@@ -287,7 +287,7 @@ const StyledEntryTravelTimeContainer = styled.div`
 	}
 `
 
-const StyledOnboardingTooltipContainer = styled.div`	
+const StyledOnboardingTooltipContainer = styled.div`
 	width: 100%;
 	position: absolute;
 	bottom: 0;
@@ -296,7 +296,7 @@ const StyledOnboardingTooltipContainer = styled.div`
 	flex-direction: column;
 	align-items: center;
 	pointer-events: none;
-	
+
 	@media (max-width: 1200px) {
 		display: none;
 	}
@@ -312,11 +312,11 @@ const StyledOnboardingTooltip = styled.div`
 	align-items: center;
 	color: white;
 	padding: 0 .75rem;
-	
+
 	@media (max-width: 900px) {
 		padding: .25rem .75rem;
 	}
-	
+
 	& > *:first-child {
 		min-width: 1rem;
 		margin-right: .5rem;
@@ -329,12 +329,14 @@ interface StateProps {
 	overlap: ReduxState['travelTime']['overlap']
 	overlapVisible: ReduxState['application']['overlapVisible']
 	newTravelTimeDetails: ReduxState['application']['newTravelTimeDetails']
+	blogVisible: ReduxState['application']['blogVisible']
 }
 interface DispatchProps {
 	getTravelTimes: typeof getTravelTimes
 	removeTravelTime: typeof removeTravelTime
 	purgeTravelTimes: typeof purgeTravelTimes
 	setOverlapState: typeof setOverlapState
+	setBlogVisibility: typeof setBlogVisibility
 }
 interface Props {}
 type PropsUnion = StateProps & DispatchProps & Props
@@ -356,6 +358,10 @@ export class Component extends React.Component<PropsUnion, State> {
 	public addressFieldRef = React.createRef<any>()
 	public newEditTravelTimeRef = React.createRef<typeof EditTravelTime.prototype>()
 	public scrollableTravelTimesContainer = React.createRef<HTMLDivElement>()
+
+	public componentDidMount() {
+
+	}
 
 	public componentDidUpdate(prevProps: Readonly<PropsUnion>, prevState: Readonly<State>, snapshot?: any): void {
 		if (
@@ -387,9 +393,14 @@ export class Component extends React.Component<PropsUnion, State> {
 				<>
 					<DemoOverlay/>
 					<FAQOverlay/>
-					<StyledLogoContainer>
+					<StyledLogoContainer onMouseEnter={() => {
+						if (this.props.blogVisible < 1) {
+							this.props.setBlogVisibility(1)
+						}
+					}}>
 						<LogoIcon/>
 					</StyledLogoContainer>
+					<BlogLink />
 					<StyledEntryTravelTimeContainer>
 						{this.props.loading ? <Loader/> : <EditTravelTime
 							ref={this.newEditTravelTimeRef}
@@ -493,7 +504,7 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private renderLoader() {
-		if (!this.props.loading) return null
+		if (!this.props.loading) { return null }
 
 		return (
 			<StyledLoaderContainer>
@@ -524,8 +535,13 @@ export class Component extends React.Component<PropsUnion, State> {
 				</StyledAction>
 				<StyledAction
 					isDisabled={!this.isOverlapAvailable()}
-					onClick={() => this.isOverlapAvailable()
-						&& this.props.setOverlapState(!this.props.overlapVisible)}
+					onClick={() => {
+						this.isOverlapAvailable()
+						this.props.setOverlapState(!this.props.overlapVisible)
+						if (this.props.blogVisible < 1) {
+							this.props.setBlogVisibility(1)
+						}
+					}}
 				>
 					<StyledActionIcon
 						isDisabled={!this.isOverlapAvailable()}
@@ -552,7 +568,7 @@ export class Component extends React.Component<PropsUnion, State> {
 						}</p>
 						{this.state.justCopied && (
 							<StyledCopyNotification>
-								<p className="label"><Trans>Copied to clipboard</Trans></p>
+								<p className='label'><Trans>Copied to clipboard</Trans></p>
 							</StyledCopyNotification>
 						)}
 					</StyledAction>
@@ -654,8 +670,8 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private isOverlapAvailable(): boolean {
-		if (!this.props.overlap) return false
-		if (!this.props.travelTimes) return false
+		if (!this.props.overlap) { return false }
+		if (!this.props.travelTimes) { return false }
 
 		return this.props.overlap.shapes[0].shell.length > 0 && this.props.travelTimes.length > 1
 	}
@@ -666,14 +682,16 @@ const mapStateToProps = (state: ReduxState) => ({
 	travelTimes: state.travelTime.travelTimes,
 	overlap: state.travelTime.overlap,
 	overlapVisible: state.application.overlapVisible,
-	newTravelTimeDetails: state.application.newTravelTimeDetails
+	newTravelTimeDetails: state.application.newTravelTimeDetails,
+	blogVisible: state.application.blogVisible
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
 	getTravelTimes,
 	removeTravelTime,
 	purgeTravelTimes,
-	setOverlapState
+	setOverlapState,
+	setBlogVisibility
 }, dispatch)
 
 export const InteractiveOverlay = connect<StateProps, DispatchProps, Props, ReduxState>(

@@ -13,7 +13,8 @@ export enum ActionType {
 	SetSecondaryEducationVisibility = '@@application/secondary-education',
 	SetOnlyInternationalVisibility = '@@application/international',
 	SetFaqVisibility = '@@application/faqVisiblity',
-	SetDemoVisibility = '@@application/demoVisiblity'
+	SetDemoVisibility = '@@application/demoVisiblity',
+	SetBlogVisibility = '@@application/blogVisiblity',
 }
 
 export function setZoomLevel(level: number) {
@@ -93,6 +94,15 @@ export function setFaqVisibility(visible: boolean) {
 		dispatch({
 			type: ActionType.SetFaqVisibility,
 			data: visible
+		})
+	}
+}
+
+export function setBlogVisibility(status: number) {
+	return (dispatch: (action: ActionDispatch) => {}) => {
+		dispatch({
+			type: ActionType.SetBlogVisibility,
+			data: status
 		})
 	}
 }
