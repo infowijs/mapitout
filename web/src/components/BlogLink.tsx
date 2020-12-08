@@ -102,7 +102,7 @@ class Component extends React.Component<PropsUnion> {
 					target='_blank'
 					href='https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area'>
 					<span>
-						{i18n.language === 'en' ? 'Discover life in Amsterdam' : 'Ontdek het leven in Amsterdam'}
+						{i18n.language === 'en' ? 'Discover the Amsterdam region' : 'Ontdek regio Amsterdam'}
 					</span>
 					iamsterdam.com
 				</StyledContent>
