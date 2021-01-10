@@ -30,7 +30,8 @@ const StyledContainerOverflow = styled.div<{isEditing: boolean, active: boolean,
 	transition: 400ms;
 	width: 100%;
 	overflow: hidden;
-	
+	z-index: 200;
+
 	${(props) => props.isEditing && css`
 		@media (max-width: 900px) {
 			height: 0;
@@ -218,7 +219,11 @@ const StyledInternationalFilterVirtual = styled.span`
 		padding: .25rem 0;
 		text-align: center;
 		transition: 100ms;
-		
+
+		@media(max-width: 400px) {
+			font-size: 92%;
+		}
+
 		&:nth-child(1) {
 			color: #fff;
 		}
