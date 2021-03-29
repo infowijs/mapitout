@@ -27,6 +27,12 @@ const StyledAttribution = styled.p`
 	right: 5.5rem;
 	white-space: nowrap;
 	font-size: .75rem;
+	color: #888;
+
+	a {
+		color: #4286f4;
+		text-decoration: none;
+	}
 
 	@media (max-width: 900px) {
 		bottom: 7rem;
@@ -63,7 +69,7 @@ const StyledControlsItem = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	
+
 	&:not(:first-child) {
 		margin-top: .5rem;
 	}
@@ -101,10 +107,10 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	public render() {
-		const lang = determineLanguage();
-		const privacyUrl = lang === 'nl' 
+		const lang = determineLanguage()
+		const privacyUrl = lang === 'nl'
 			? 'https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-mapitout-tool/'
-			: 'https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-tool-mapitout/';
+			: 'https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-tool-mapitout/'
 
 		const MapFactory = withGoogleMap((props: any) =>
 			<GoogleMap
@@ -145,18 +151,18 @@ export class Component extends React.Component<PropsUnion, State> {
 								lng: e.latLng.lng()
 							}
 							const geocoder = new google.maps.Geocoder()
-							geocoder.geocode({location}, (results, status) => {
+							geocoder.geocode({location}, (results) => {
 								const address = (results && results.length > 0 && results[0].address_components) || []
 
 								const city = address.filter((a) => a.types.indexOf('locality') !== -1)[0]
 								const streetName = address.filter((a) => a.types.indexOf('route') !== -1)[0]
-								const number = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
+								const streetNumber = address.filter((a) => a.types.indexOf('street_number') !== -1)[0]
 
 								const title = ((streetName
 									? streetName.short_name
 									: '')
-									+ (number
-										? ' ' + number.short_name
+									+ (streetNumber
+										? ' ' + streetNumber.short_name
 										: '')
 									+ (city
 										? ', ' + city.short_name
@@ -200,7 +206,7 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private animateFitToBounds = (travelTimes: NonNullable<ReduxState['travelTime']['travelTimes']>) => {
-		if (!this.mapRef.current) return
+		if (!this.mapRef.current) { return }
 
 		let north = 0
 		let east = 0
@@ -267,9 +273,9 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private zoom = (zoomDirection: 'in' | 'out') => {
-		if (!this.mapRef.current) return
+		if (!this.mapRef.current) { return }
 		const currentZoom = this.mapRef.current.getZoom()
-		if (currentZoom < 7 && currentZoom > 15) return
+		if (currentZoom < 7 && currentZoom > 15) { return }
 		this.zoomTo(currentZoom, zoomDirection === 'in' ? currentZoom + 1 : currentZoom - 1, zoomDirection)
 	}
 
@@ -278,8 +284,7 @@ export class Component extends React.Component<PropsUnion, State> {
 			!this.mapRef.current ||
 			(zoomDirection === 'in' && currentZoom >= endStop) ||
 			(zoomDirection === 'out' && currentZoom <= endStop)
-		) return
-
+		) { return }
 
 		const nextZoom = Math.round((currentZoom + (zoomDirection === 'in'
 			? + 0.2
@@ -294,31 +299,31 @@ export class Component extends React.Component<PropsUnion, State> {
 }
 
 function getBoundsZoomLevel(bounds: google.maps.LatLngBounds, mapDim: {width: number, height: number}): number {
-	const WORLD_DIM = { height: 256, width: 256 };
-	const ZOOM_MAX = 21;
+	const WORLD_DIM = { height: 256, width: 256 }
+	const ZOOM_MAX = 21
 
 	function latRad(lat: number) {
-		const sin = Math.sin(lat * Math.PI / 180);
-		const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
-		return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
+		const sin = Math.sin(lat * Math.PI / 180)
+		const radX2 = Math.log((1 + sin) / (1 - sin)) / 2
+		return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2
 	}
 
 	function zoom(mapPx: number, worldPx: number, fraction: number) {
-		return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
+		return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2)
 	}
 
-	const ne = bounds.getNorthEast();
-	const sw = bounds.getSouthWest();
+	const ne = bounds.getNorthEast()
+	const sw = bounds.getSouthWest()
 
-	const latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI;
+	const latFraction = (latRad(ne.lat()) - latRad(sw.lat())) / Math.PI
 
-	const lngDiff = ne.lng() - sw.lng();
-	const lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360;
+	const lngDiff = ne.lng() - sw.lng()
+	const lngFraction = ((lngDiff < 0) ? (lngDiff + 360) : lngDiff) / 360
 
-	const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction);
-	const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
+	const latZoom = zoom(mapDim.height, WORLD_DIM.height, latFraction)
+	const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction)
 
-	return Math.min(latZoom, lngZoom, ZOOM_MAX);
+	return Math.min(latZoom, lngZoom, ZOOM_MAX)
 }
 
 const mapStateToProps = (state: ReduxState) => ({

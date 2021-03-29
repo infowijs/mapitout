@@ -12,10 +12,11 @@ import { TravelTimeAbstraction } from 'interfaces'
 import { TransportType } from 'enums'
 import { getTravelTypeInfo, hexColorToRGBA } from 'utils'
 import { DropdownIcon, GoIcon, CrossIcon } from 'icons'
+import { AutocompleteDropdown } from './AutocompleteDropdown'
 import { shadows } from '../constants'
 
 // Component container styling
-const StyledContainer = styled.div`	
+const StyledContainer = styled.div`
 	@media (min-width: 900px) {
 		display: flex;
 		flex-direction: row;
@@ -35,7 +36,7 @@ const StyledContainer = styled.div`
 // Title wrapper
 const StyledTitle = styled.p`
 	white-space: nowrap;
-	
+
 	@media (min-width: 900px) {
 		white-space: nowrap;
 		display: flex;
@@ -55,7 +56,7 @@ const StyledTitle = styled.p`
 const StyledSegment = styled.div<{withoutRightMargin?: boolean}>`
 	display: flex;
 	flex-direction: column;
-	
+
 	@media (min-width: 900px) {
 		${(props) => !props.withoutRightMargin && css`
 			margin-right: 1rem;
@@ -84,7 +85,7 @@ const StyledLabel = styled.label<{color: string}>`
 const StyledSelect = styled(Select)<{color: string, minWidth: number}>`
 	.react-select {
 		position: relative;
-		
+
 		&__control {
 			cursor: pointer;
 			display: flex;
@@ -92,10 +93,10 @@ const StyledSelect = styled(Select)<{color: string, minWidth: number}>`
 			background: #fff;
 			min-width: ${(props) => props.minWidth}px;
 			height: 1.5rem;
-			
+
 			@media (min-width: 900px) {
 				border-bottom: 2px solid #d8d8d8;
-				
+
 				&--is-focused, &--menu-is-open {
 					border-bottom: 3px solid #d8d8d8;
 					// Fixes the height difference created by the focus effect -> prevents elements from jumping within the layout
@@ -131,7 +132,7 @@ const StyledSelect = styled(Select)<{color: string, minWidth: number}>`
 			transition: background-color 80ms;
 			padding: 10px 5px;
 			overflow: auto;
-			
+
 			:before {
 				content: '';
 				position: absolute;
@@ -141,19 +142,19 @@ const StyledSelect = styled(Select)<{color: string, minWidth: number}>`
 				width: 0;
 				background-color: ${(props) => props.color}
 			}
-			&--is-focused, &--is-selected {					
+			&--is-focused, &--is-selected {
 				:before {
 					width: 2px;
 				}
 			}
-			
+
 			&--is-focused {
 				background: ${(props) => `linear-gradient(to right,
 					${hexColorToRGBA(props.color, 0.25)},
 					${hexColorToRGBA(props.color, 0.1)}
 					)`};
 			}
-			
+
 			&--is-selected {
 				color: inherit;
 				background: ${(props) => `linear-gradient(to right,
@@ -176,64 +177,17 @@ const StyledAddressInput = styled.input`
 	height: 1.5rem;
 	outline: none;
 	border: none;
-	
+
 	@media (min-width: 900px) {
 		width: 200px;
 		border-bottom: 2px solid #d8d8d8;
-		
+
 		:focus {
 			border-bottom: 3px solid #d8d8d8;
 			// Fixes the height difference created by the focus effect -> prevents elements from jumping within the layout
 			margin-bottom: -1px;
 		}
 	}
-`
-
-// Styling for the autocomplete dropdown container used with the `react-places-autocomplete` package
-const StyledAutocompleteDropdownContainer = styled.div`
-	position: absolute;
-	top: 100%;
-	min-width: 300px;
-	margin-top: 1rem;
-	${shadows.normal};
-	border-radius: 10px;
-	background-color: #fff;
-	overflow: hidden;
-	z-index: 10;
-`
-
-// Styling for the loader used with the `react-places-autocomplete` package
-const StyledLoader = styled.div`
-	padding: 10px;
-`
-
-// Styling for the autocomplete dropdown item used with the `react-places-autocomplete` package
-const StyledAutocompleteSuggestion = styled.div<{active: boolean, color: string}>`
-	position: relative;
-	cursor: pointer;
-	transition: background-color 80ms;
-	padding: 10px 5px;
-	overflow: auto;
-	
-	:before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		height: 100%;
-		width: 0;
-		background-color: ${(props) => props.color}
-	}
-	${(props) => props.active && css`
-		background: linear-gradient(to right,
-			${hexColorToRGBA(props.color, 0.25)},
-			${hexColorToRGBA(props.color, 0.1)}
-			);
-			
-		:before {
-			width: 2px;
-		}
-	`};
 `
 
 // Container for the actions
@@ -264,7 +218,7 @@ const StyledActionButton = styled.div<{color: string, isDisabled?: boolean, only
 	justify-content: center;
 	transition: 100ms;
 	z-index: 0;
-	
+
 	${(props) => !props.isDisabled && css`
 		:before {
 			content: '';
@@ -323,7 +277,7 @@ interface StateProps {}
 interface DispatchProps {}
 interface Props extends Partial<TravelTimeAbstraction> {
 	ref?: React.RefObject<Component>
-	color: string;
+	color: string
 	onFinish: (v: TravelTimeAbstraction) => any
 	onCancel: () => any
 	onDelete?: (v: TravelTimeAbstraction) => any
@@ -371,7 +325,7 @@ export class Component extends React.Component<PropsUnion, State> {
 					</StyledActionContainer>
 				</StyledContainer>
 				<StyledCancelButtonContainer>
-					<StyledCancelButton className="label" onClick={() => this.props.onCancel()}>
+					<StyledCancelButton className='label' onClick={() => this.props.onCancel()}>
 						{this.props.new
 							? (<Trans>cancel new location</Trans>)
 							: (<Trans>cancel</Trans>)}
@@ -422,24 +376,15 @@ export class Component extends React.Component<PropsUnion, State> {
 									name: 'address',
 									type: 'search',
 									autocomplete: 'off',
-                                    onBlur: () => this.handlePlacesAutoCompleteBlur(suggestions)
+									onBlur: () => this.handlePlacesAutoCompleteBlur(suggestions)
 								})}
 							/>
 						</StyledSegment>
-						<StyledAutocompleteDropdownContainer>
-							{loading && <StyledLoader><Trans>Loading...</Trans></StyledLoader>}
-							{suggestions.map(suggestion => {
-								return (
-									<StyledAutocompleteSuggestion
-										{...getSuggestionItemProps(suggestion)}
-										active={suggestion.active}
-										color={this.props.color}
-									>
-										<p>{suggestion.description}</p>
-									</StyledAutocompleteSuggestion>
-								);
-							})}
-						</StyledAutocompleteDropdownContainer>
+						<AutocompleteDropdown
+							color={this.props.color}
+							getSuggestionItemProps={getSuggestionItemProps}
+							loading={loading}
+							suggestions={suggestions}/>
 					</StyledAutocompleteContainer>
 				)}
 			</PlacesAutocomplete>
@@ -447,9 +392,9 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private handlePlacesAutoCompleteBlur = (suggestions: readonly Suggestion[]) => {
-        if (this.state.location || suggestions.length === 0) return
-        this.handlePlacesAutocompleteSelect(suggestions[0].description)
-    }
+		if (this.state.location || suggestions.length === 0) { return }
+		this.handlePlacesAutocompleteSelect(suggestions[0].description)
+	}
 
 	private handlePlacesAutocompleteChange = (title: string) => {
 		this.setState({title})
@@ -469,7 +414,7 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private renderInputDuration() {
-		type Entry = {value: number, label: string}
+		interface Entry {value: number, label: string}
 		const options: Entry[] = [
 			{ value: 900, label: i18n._(t`15 minutes`) },
 			{ value: 1800, label: i18n._(t`30 minutes`) },
@@ -500,7 +445,7 @@ export class Component extends React.Component<PropsUnion, State> {
 	}
 
 	private renderInputTraveltype() {
-		type Entry = {value: TransportType, label: React.ReactNode}
+		interface Entry {value: TransportType, label: React.ReactNode}
 		const options: Entry[] = [
 			{ value: TransportType.Walking, label: i18n._(getTravelTypeInfo(TransportType.Walking).name) },
 			{ value: TransportType.Cycling_PublicTransport, label: i18n._(getTravelTypeInfo(TransportType.Cycling_PublicTransport).name) },
