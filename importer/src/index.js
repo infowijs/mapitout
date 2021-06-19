@@ -173,7 +173,7 @@ async function start() {
     );
 
     if (i + 1 !== addresses.length) {
-      setTimeout(() => getAddress(i + 1), 10);
+      setTimeout(() => getAddress(i + 1), 5);
     } else {
       if (errors.length > 0) {
         await fs.writeFile(
@@ -217,13 +217,17 @@ async function postprocess(addresses) {
         address.lng
       );
 
-      return distance <= 100;
+      return distance <= 100; // anything within 100 km
     })
     .map((address) => {
       const { lat, lng, schools } = address;
 
       return { lat, lng, schools };
     });
+
+  console.log(
+    `Filtered down from ${addresses.length} to ${filteredAddresses.length} relevant addresses.`
+  );
 
   try {
     await fsPromises.writeFile(

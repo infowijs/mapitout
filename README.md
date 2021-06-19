@@ -58,7 +58,7 @@ schools (depending on configuration), it can be generated using the import scrip
 The generation of this file can be done using this command:
 
 ```shell
-cd import && yarn start
+cd importer && yarn start
 ```
 
 The main script merges the data from three CSV files, geocodes the addresses and saves the data as a JSON file.
