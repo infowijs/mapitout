@@ -2,30 +2,36 @@ const fs = require("fs").promises;
 const csv = require("csvtojson");
 const axios = require("axios");
 const get = require("async-get-file");
+const pool = require("@ricokahler/pool");
 
 start();
 
-const addressCache = async (url = null) => {
-  let addresses = {};
+let cache;
+const loadCache = async () => {
+  if (cache) {
+    return;
+  }
+  cache = {};
   try {
-    addresses = JSON.parse(
-      await fs.readFile("input/address-cache.json", "utf8")
-    );
+    cache = JSON.parse(await fs.readFile("input/address-cache.json", "utf8"));
+    console.log(`\nLoaded ${Object.values(cache).length} addresses\n\n`);
   } catch (e) {}
-  const address = addresses[url];
-  if (address /*&& Array.isArray(address) && address.length > 0*/) {
-    return address;
+};
+
+const addressCache = async (address) => {
+  const url = encodeURI(
+    `https://nominatim.openstreetmap.org/search?street=${`${address.houseNumber} ${address.street}`.trim()}&postalcode=${
+      address.postalCode
+    }&city=${address.city}&format=json&addressdetails=1&limit=1`
+  );
+
+  if (cache[url]) {
+    return cache[url];
   }
 
   const { data } = await axios.get(url);
-  // if (Array.isArray(data) && data.length > 0) {
-  addresses[url] = data;
-  await fs.writeFile(
-    "input/address-cache.json",
-    JSON.stringify(addresses),
-    "utf8"
-  );
-  // }
+  cache[url] = data;
+  await fs.writeFile("input/address-cache.json", JSON.stringify(cache), "utf8");
 
   return data;
 };
@@ -60,20 +66,28 @@ async function start() {
         (
           (await csv({ delimiter: "auto" }).fromFile(`input/${domain}.csv`)) ||
           []
-        ).map((v) => ({
-          name: v["VESTIGINGSNAAM"] || v["INSTELLINGSNAAM"],
-          url: v["INTERNETADRES"] || "",
-          type: ["primary", "secondary"].includes(domain)
-            ? domain
-            : v["TYPE"] === "primary,secondary"
-            ? "mixed"
-            : v["TYPE"],
-          international: domain === "international",
-          street: v["STRAATNAAM"],
-          houseNumber: (v["HUISNUMMER-TOEVOEGING"] || "").replace(" ", ""),
-          postalCode: v["POSTCODE"].replace(" ", ""),
-          city: v["PLAATSNAAM"].toUpperCase(),
-        }))
+        )
+          // .filter(
+          //   (v) =>
+          //     !v.PROVINCIE ||
+          //     v.PROVINCIE.includes("Holland") ||
+          //     v.PROVINCIE.includes("Utrecht") ||
+          //     v.PROVINCIE.includes("Flevoland")
+          // )
+          .map((v) => ({
+            name: v["VESTIGINGSNAAM"] || v["INSTELLINGSNAAM"],
+            url: v["INTERNETADRES"] || "",
+            type: ["primary", "secondary"].includes(domain)
+              ? domain
+              : v["TYPE"] === "primary,secondary"
+              ? "mixed"
+              : v["TYPE"],
+            international: domain === "international",
+            street: v["STRAATNAAM"],
+            houseNumber: (v["HUISNUMMER-TOEVOEGING"] || "").replace(" ", ""),
+            postalCode: v["POSTCODE"].replace(" ", ""),
+            city: v["PLAATSNAAM"].toUpperCase(),
+          }))
       );
       process.stderr.write(`✔ Successfully loaded "input/${domain}.csv"\n`);
     } catch (e) {
@@ -138,58 +152,55 @@ async function start() {
     }
   }
 
-  writeProgress(false, 0, addresses.length, 0);
-
   const errors = [];
 
-  async function getAddress(i) {
-    const address = addresses[i];
+  await loadCache();
 
-    const url = encodeURI(
-      `https://nominatim.openstreetmap.org/search?street=${`${address.houseNumber} ${address.street}`.trim()}&postalcode=${
-        address.postalCode
-      }&city=${address.city}&format=json&addressdetails=1&limit=1`
-    );
-    const data = await addressCache(url);
+  writeProgress(false, 0, addresses.length, 0);
 
-    if (data && Array.isArray(data) && data.length > 0) {
-      address.lat = parseFloat(data[0].lat);
-      address.lng = parseFloat(data[0].lon);
+  const res = await pool({
+    collection: addresses,
+    maxConcurrency: 3,
+    task: async (address) => {
+      const data = await addressCache(address);
 
-      const addressData = data[0]["address"];
+      if (data && Array.isArray(data) && data.length > 0) {
+        address.lat = parseFloat(data[0].lat);
+        address.lng = parseFloat(data[0].lon);
 
-      address.houseNumber = addressData["house_number"] || address.houseNumber;
-      address.street = addressData["road"] || address.street;
-      address.city = addressData["city"] || addressData["town"] || address.city;
-    } else {
-      errors.push({ address, url });
-    }
+        const addressData = data[0]["address"];
 
-    writeProgress(
-      true,
-      addresses.filter((v) => v.lat !== -1).length,
-      addresses.length,
-      errors.length
-    );
-
-    if (i + 1 !== addresses.length) {
-      setTimeout(() => getAddress(i + 1), 5);
-    } else {
-      if (errors.length > 0) {
-        await fs.writeFile(
-          __dirname + "/../input/errors.json",
-          JSON.stringify(errors),
-          "utf8"
-        );
+        address.houseNumber =
+          addressData["house_number"] || address.houseNumber;
+        address.street = addressData["road"] || address.street;
+        address.city =
+          addressData["city"] || addressData["town"] || address.city;
+      } else {
+        errors.push({ address });
       }
 
-      process.stdout.write("\nDone!\n");
+      writeProgress(
+        true,
+        addresses.filter((v) => v.lat !== -1).length,
+        addresses.length,
+        errors.length
+      );
 
-      await postprocess(addresses);
-    }
+      return address;
+    },
+  });
+
+  if (errors.length > 0) {
+    await fs.writeFile(
+      __dirname + "/../input/errors.json",
+      JSON.stringify(errors),
+      "utf8"
+    );
   }
 
-  await getAddress(0);
+  process.stdout.write("\nDone!\n");
+
+  await postprocess(res);
 }
 
 function writeProgress(shouldRemove, completed, total, numberOfErrors) {
@@ -229,21 +240,17 @@ async function postprocess(addresses) {
     `Filtered down from ${addresses.length} to ${filteredAddresses.length} relevant addresses.`
   );
 
-  try {
-    await fsPromises.writeFile(
-      __dirname + "/../../src/assets/schools.json",
-      JSON.stringify(filteredAddresses),
-      "utf8"
-    );
-    process.stderr.write(
-      `✔ Successfully stored the trimmed file in "${
-        __dirname + "/../../src/assets/schools.json"
-      }"\n`
-    );
-    process.stdout.write("Done!\n\n");
-  } catch (e) {
-    process.stderr.write(JSON.stringify(e));
-  }
+  await fs.writeFile(
+    __dirname + "/../../src/assets/schools.json",
+    JSON.stringify(filteredAddresses),
+    "utf8"
+  );
+  console.log(
+    `✔ Successfully stored the trimmed file in "${
+      __dirname + "/../../src/assets/schools.json"
+    }"\n`
+  );
+  console.log("Done!\n\n");
 }
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
