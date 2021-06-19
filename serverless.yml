@@ -21,15 +21,18 @@ custom:
         - "/*"
 
 package:
-  include:
-    - functions/**
-    - node_modules/axios/**
-    - node_modules/follow-redirects/**
-    - package.json
-  exclude:
-    - web/**
-    - docs/**
-    - .circleci/**
+  patterns:
+    - "!src/**"
+    - "!public/**"
+    - "!build/**"
+    - "!docs/**"
+    - "!importer/**"
+    - "!.circleci/**"
+    - "!node_modules/**"
+    - "functions/**"
+    - "node_modules/axios/**"
+    - "node_modules/follow-redirects/**"
+    - "package.json"
 
 provider:
   name: aws
