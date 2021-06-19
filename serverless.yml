@@ -3,16 +3,28 @@ service: mapitout-proxy
 plugins:
   - serverless-offline
   - serverless-prune-plugin
+  - serverless-s3-sync
+  - serverless-cloudfront-invalidate
 
 custom:
   prune:
     automatic: true
     number: 20
+  s3Sync:
+    - bucketName: mapitout.iamsterdam.com
+      localDir: build/
+      acl: public-read
+  cloudfrontInvalidate:
+    - distributionId: E5M144WQ6D3CE
+      items:
+        - /index.html
+        - "/*"
 
 package:
   include:
     - functions/**
-    - node_modules/**
+    - node_modules/axios/**
+    - node_modules/follow-redirects/**
     - package.json
   exclude:
     - web/**

@@ -1,0 +1,26 @@
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+* {
+  font-family: Avenir, sans-serif;
+  font-weight: 500;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+p.label,
+label.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}

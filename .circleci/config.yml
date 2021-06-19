@@ -4,7 +4,7 @@ orbs:
   aws-s3: circleci/aws-s3@1.0.9
 
 jobs:
-  build_backend:
+  build:
     docker:
       - image: circleci/node:12
     working_directory: /home/circleci/app
@@ -16,39 +16,13 @@ jobs:
           command: yarn
       - run:
           name: Deploy application
-          command: yarn deploy
-
-  build_frontend:
-    working_directory: /home/circleci/app/web
-    docker:
-      - image: circleci/node:8.15.0
-    steps:
-      - checkout:
-          path: /home/circleci/app
-      - run: sudo apt-get install python-dev
-      - run:
-          name: Install dependencies
-          command: yarn
-      - run:
-          name: Build React app
-          command: yarn build
-      - aws-s3/sync:
-          from: build
-          to: 's3://mapitout.iamsterdam.com'
-          arguments: --acl public-read --cache-control "max-age=86400"
-          overwrite: true
-      - run: aws cloudfront create-invalidation --distribution-id E5M144WQ6D3CE --paths /\*
+          command: yarn deploy --stage production
 
 workflows:
   version: 2
   workflow:
     jobs:
-      - build_backend:
-          context: includable-ecs
-          filters:
-            branches:
-              only: master
-      - build_frontend:
+      - build:
           context: includable-ecs
           filters:
             branches:

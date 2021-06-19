@@ -4,14 +4,84 @@
   "license": "LGPL-3.0-or-later",
   "private": true,
   "scripts": {
-    "deploy": "serverless deploy --stage production"
+    "prepare": "husky install && husky add .husky/pre-commit 'yarn lint-staged'",
+    "start": "lingui extract && lingui compile && react-scripts start",
+    "build": "lingui compile && react-scripts build",
+    "deploy": "yarn build && serverless deploy"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "@lingui/react": "^2.9.1",
+    "@sentry/browser": "^5.7.1",
+    "axios": "^0.19.0",
+    "dotenv": "^8.1.0",
+    "flexibility": "^2.0.1",
+    "moment": "^2.24.0",
+    "normalize.css": "^8.0.1",
+    "react": "^16.10.2",
+    "react-app-polyfill": "^1.0.4",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-dom": "^16.10.2",
+    "react-google-maps": "^9.4.5",
+    "react-places-autocomplete": "^7.2.1",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "react-select": "^3.0.8",
+    "redux": "^4.0.4",
+    "redux-thunk": "^2.3.0",
+    "scriptjs": "^2.5.9",
+    "simplify-js": "^1.2.3",
+    "styled-components": "^4.4.0",
+    "typescript": "3.6.3",
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
-    "serverless": "^1.66.0",
-    "serverless-offline": "^5.12.1",
-    "serverless-prune-plugin": "^1.4.2"
+    "@babel/core": "^7.9.6",
+    "@lingui/cli": "^2.9.1",
+    "@lingui/macro": "^2.9.1",
+    "@types/dotenv": "^6.1.1",
+    "@types/googlemaps": "^3.39.3",
+    "@types/jest": "24.0.18",
+    "@types/lingui__core": "^2.7.0",
+    "@types/lingui__macro": "^2.7.3",
+    "@types/lingui__react": "^2.8.2",
+    "@types/markerclustererplus": "^2.1.33",
+    "@types/node": "12.7.11",
+    "@types/react": "16.9.5",
+    "@types/react-copy-to-clipboard": "^4.3.0",
+    "@types/react-dom": "16.9.1",
+    "@types/react-places-autocomplete": "^7.2.5",
+    "@types/react-redux": "^7.1.4",
+    "@types/react-router-dom": "^5.1.0",
+    "@types/react-select": "^3.0.5",
+    "@types/styled-components": "^4.1.19",
+    "@types/uuid": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.1",
+    "redux-devtools-extension": "^2.13.8",
+    "serverless": "^2.47.0",
+    "serverless-offline": "^7.0.0",
+    "serverless-prune-plugin": "^1.5.0",
+    "tslint": "^5.20.0",
+    "tslint-react": "^4.1.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "ie 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "ie 11"
+    ]
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }

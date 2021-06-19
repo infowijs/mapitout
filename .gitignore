@@ -4,8 +4,22 @@ dist/
 
 # Serverless directories
 .serverless
+.webpack
+
+# Editor configs
+.vscode
+.idea
+.husky
 
 # Packaging
 node_modules
 *.log
 package-lock.json
+
+# Lingui
+src/locales/_build
+src/locales/*/*.js
+
+# Importer
+import/**/*.json
+import/yarn.lock
