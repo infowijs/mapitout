@@ -97,8 +97,8 @@ export const FaqEN = ({ setDemoVisibility }: any) => (
       <p>
         Travel times are calculated using various data sources.
         Google Maps is used to create the base level map to show where paths, roads and stations are located.
-        Public transport timetable data, derived from OpenStreetMaps, is then layered on top including agencies such as GVB, FlixBus, NS, R-Net and more.
-        Driving, cycling and walking time models are developed by TravelTime platform{" "}
+        Public transport timetable data is then layered on top including agencies such as GVB, FlixBus, NS, R-Net and more.
+        Driving, cycling and walking time models are developed by TravelTime platform, derived from OpenStreetMaps.{" "}
         <a
           href="https://www.traveltimeplatform.com/turn-radius-maps-into-travel-time"
           target="_blank"
