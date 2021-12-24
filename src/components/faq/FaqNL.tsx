@@ -97,15 +97,14 @@ export const FaqNL = ({ setDemoVisibility }: any) => (
       </p>
     </StyledContentSegment>
     <StyledContentSegment>
-      <h1>Which travel information does it use?</h1>
+      <h1>Wat voor reisinformatie wordt gebruikt?</h1>
       <p>
         De reistijden worden op basis van verschillende databronnen berekend.
-        OpenStreetMap wordt gebruikt voor het basiniveau waarin wegen, straten
+        OpenStreetMap word gebruikt voor het basiniveau waarin wegen, straten
         en stations worden aangegeven. Daar bovenop komt een laag met openbaar
         vervoer (OV) dat gebruikt maakt van verschillende reisschema’s incl. van
-        agentschappen zoals NS, GVB, Flixbus, R-net en meer. De reistijd
-        modellen voor rijden, fietsen en lopen zijn ontwikkeld door het
-        Traveltime Plaform.{" "}
+        agentschappen zoals NS, GVB, Flixbus, R-net en meer. De reistijd modellen
+        voor rijden, fietsen en lopen zijn ontwikkeld door het Traveltime Plaform.{" "}
         <a
           href="https://www.traveltimeplatform.com/turn-radius-maps-into-travel-time"
           target="_blank"
