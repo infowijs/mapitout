@@ -15,7 +15,7 @@
     "axios": "^0.21.1",
     "dotenv": "^8.1.0",
     "flexibility": "^2.0.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
     "react": "^16.10.2",
     "react-app-polyfill": "^1.0.4",
