@@ -131,7 +131,7 @@ export class Component extends React.Component<PropsUnion, State> {
     const privacyUrl =
       lang === "nl"
         ? "https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-mapitout-tool/"
-        : "https://www.amsterdam.nl/privacy/specifieke/privacyverklaringen-wonen/online-tool-mapitout/";
+        : "https://www.amsterdam.nl/en/general-items/items-footer/privacy-statement-online-mapitout-tool/";
 
     const MapFactory = withGoogleMap((props: any) => (
       <GoogleMap
