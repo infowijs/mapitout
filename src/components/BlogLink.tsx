@@ -103,7 +103,7 @@ class Component extends React.Component<PropsUnion> {
       <StyledContainer visible={this.props.blogVisible === 1}>
         <StyledContent
           target="_blank"
-          href="https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area"
+          href="https://www.iamsterdam.com/en/live-work-study/living"
         >
           <span>
             {i18n.language === "en"
