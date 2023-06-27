@@ -36,7 +36,7 @@ package:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   stage: production
   region: eu-west-1
   environment:
