@@ -17,7 +17,7 @@ module.exports.handler = async (event) => {
   return {
     statusCode: res.status,
     headers: {
-      ...res.headers,
+      "Content-type": "application/json",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
     },
