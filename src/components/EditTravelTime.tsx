@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import PlacesAutocomplete, {
   geocodeByAddress,
+  geocodeByPlaceId,
   getLatLng,
   Suggestion,
 } from "react-places-autocomplete";
@@ -453,7 +454,19 @@ export class Component extends React.Component<PropsUnion, State> {
     this.setState({ title });
   };
 
-  private handlePlacesAutocompleteSelect = (title: string) => {
+  private handlePlacesAutocompleteSelect = (title: string, placeId: ?string) => {
+    if (placeId) {
+	return geocodeByPlaceId(placeId).then(async (results) => {
+	      this.setState({
+		title,
+		location: {
+		  title,
+		  ...(await getLatLng(results[0])),
+		},
+	      });
+	    });
+    }
+
     geocodeByAddress(title).then(async (results) => {
       this.setState({
         title,
