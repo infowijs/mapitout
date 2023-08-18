@@ -454,7 +454,7 @@ export class Component extends React.Component<PropsUnion, State> {
     this.setState({ title });
   };
 
-  private handlePlacesAutocompleteSelect = (title: string, placeId: ?string) => {
+  private handlePlacesAutocompleteSelect = (title: string, placeId: string) => {
     if (placeId) {
 	return geocodeByPlaceId(placeId).then(async (results) => {
 	      this.setState({
