@@ -447,7 +447,7 @@ export class Component extends React.Component<PropsUnion, State> {
     if (this.state.location || suggestions.length === 0) {
       return;
     }
-    this.handlePlacesAutocompleteSelect(suggestions[0].description);
+    this.handlePlacesAutocompleteSelect(suggestions[0].description, suggestions[0].placeId);
   };
 
   private handlePlacesAutocompleteChange = (title: string) => {
