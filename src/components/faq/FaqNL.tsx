@@ -30,7 +30,7 @@ export const FaqNL = ({ setDemoVisibility }: any) => (
         kennen kunnen meer informatie over de verschillende deelgebieden van
         metropoolregio Amsterdam vinden op het{" "}
         <a
-          href="https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area"
+          href="https://www.iamsterdam.com/en/live-work-study/living"
           target="_blank"
           rel="noopener noreferrer"
         >
