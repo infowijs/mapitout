@@ -12,7 +12,7 @@ export const FaqEN = ({ setDemoVisibility }: any) => (
         locations. You can find out more about the various parts of the
         Amsterdam Area on the{" "}
         <a
-          href="https://www.iamsterdam.com/en/living/about-living-in-amsterdam/living-in-the-amsterdam-area"
+          href="https://www.iamsterdam.com/en/live-work-study/living"
           target="_blank"
           rel="noopener noreferrer"
         >
