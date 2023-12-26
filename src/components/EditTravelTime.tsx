@@ -493,6 +493,8 @@ export class Component extends React.Component<PropsUnion, State> {
       { value: 2700, label: i18n._(t`45 minutes`) },
       // @ts-ignore
       { value: 3600, label: i18n._(t`60 minutes`) },
+       // @ts-ignore
+       { value: 5400, label: i18n._(t`90 minutes`) },
     ];
 
     const currentOption =
